@@ -425,6 +425,65 @@
       white-space: nowrap;
     }
 
+    .dashboard-controls {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 12px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .dashboard-control-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .dashboard-control {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .dashboard-control label {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    .dashboard-control select {
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid #cbd4e2;
+      border-radius: 8px;
+      padding: 7px 9px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font: inherit;
+      font-size: 0.82rem;
+    }
+
+    .dashboard-control select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.12);
+    }
+
+    .dashboard-count {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 720;
+    }
+
+    .empty-row td {
+      color: var(--muted);
+      font-weight: 720;
+      text-align: center;
+    }
+
     tr:last-child td {
       border-bottom: 0;
     }
@@ -543,6 +602,121 @@
       background: #dbeafe;
       border-color: #84adff;
       color: var(--blue-dark);
+    }
+
+    .detail-view {
+      display: grid;
+      gap: 12px;
+    }
+
+    .detail-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-title {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .detail-title h2 {
+      margin: 0;
+      color: #1f2d47;
+      font-size: 1.08rem;
+      line-height: 1.2;
+    }
+
+    .detail-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 720;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      border: 1px solid #c7d7fe;
+      font-size: 0.76rem;
+      font-weight: 780;
+      white-space: nowrap;
+    }
+
+    .status-badge.good {
+      background: #eaf7f1;
+      border-color: #a7e6cf;
+      color: var(--green);
+    }
+
+    .status-badge.watch {
+      background: #fff6e8;
+      border-color: #fedf89;
+      color: var(--amber);
+    }
+
+    .status-badge.support {
+      background: #fff1f1;
+      border-color: #fecdca;
+      color: var(--red);
+    }
+
+    .detail-progress {
+      display: grid;
+      gap: 6px;
+      min-width: 150px;
+    }
+
+    .detail-progress strong {
+      color: #1d2939;
+      font-size: 0.86rem;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-section {
+      min-width: 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .detail-section.full {
+      grid-column: 1 / -1;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 6px;
+      color: #344058;
+      font-size: 0.78rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .detail-section p {
+      margin: 0;
+    }
+
+    .detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 2px;
     }
 
     .quick-actions {
@@ -933,6 +1107,12 @@
         min-width: 860px;
       }
 
+      .dashboard-control-grid,
+      .detail-grid,
+      .detail-header {
+        grid-template-columns: 1fr;
+      }
+
       .assignment-grid {
         grid-template-columns: 1fr;
       }
@@ -1044,6 +1224,12 @@
       },
       pendingEmailConfirmation: false,
       dashboardShown: false,
+      dashboardFilters: {
+        status: "all",
+        blocker: "all",
+        track: "all",
+        sort: "progress-desc"
+      },
       assignments: {},
       aiHistory: [],
       customInternNames: []
@@ -1276,10 +1462,64 @@
       return bubble;
     }
 
-    function progressTone(progress) {
-      if (progress >= 80) return "good";
-      if (progress >= 60) return "watch";
-      return "support";
+    function internProgressStatus(intern) {
+      if (intern.progress >= 80) return { key: "on-track", label: "On track", tone: "good" };
+      if (intern.progress >= 60) return { key: "needs-clarity", label: "Needs clarity", tone: "watch" };
+      return { key: "needs-support", label: "Needs support", tone: "support" };
+    }
+
+    function isInternBlocked(intern) {
+      return !intern.blockers.toLowerCase().includes("none");
+    }
+
+    function getAssignmentDueDate(intern) {
+      return state.assignments[intern.name]?.dueDate || "";
+    }
+
+    function compareDashboardInterns(left, right) {
+      const sort = state.dashboardFilters.sort;
+
+      if (sort === "progress-asc") {
+        return left.progress - right.progress || left.name.localeCompare(right.name);
+      }
+
+      if (sort === "name-asc") {
+        return left.name.localeCompare(right.name);
+      }
+
+      if (sort === "blocker-first") {
+        const leftBlocked = isInternBlocked(left) ? 0 : 1;
+        const rightBlocked = isInternBlocked(right) ? 0 : 1;
+        return leftBlocked - rightBlocked || left.progress - right.progress || left.name.localeCompare(right.name);
+      }
+
+      if (sort === "due-date") {
+        const leftDue = getAssignmentDueDate(left);
+        const rightDue = getAssignmentDueDate(right);
+        if (leftDue && rightDue) return leftDue.localeCompare(rightDue) || left.name.localeCompare(right.name);
+        if (leftDue) return -1;
+        if (rightDue) return 1;
+        return left.name.localeCompare(right.name);
+      }
+
+      return right.progress - left.progress || left.name.localeCompare(right.name);
+    }
+
+    function filteredDashboardInterns(interns) {
+      const filters = state.dashboardFilters;
+      return interns
+        .filter(intern => {
+          const status = internProgressStatus(intern);
+          const blocked = isInternBlocked(intern);
+          const track = getInternTrack(intern);
+
+          if (filters.status !== "all" && filters.status !== status.key) return false;
+          if (filters.blocker === "blocked" && !blocked) return false;
+          if (filters.blocker === "clear" && blocked) return false;
+          if (filters.track !== "all" && filters.track !== track) return false;
+          return true;
+        })
+        .sort(compareDashboardInterns);
     }
 
     function isValidIbmEmail(email) {
@@ -1486,10 +1726,61 @@
       `;
     }
 
+    function dashboardControlsHtml(allInterns, visibleInterns) {
+      const filters = state.dashboardFilters;
+      const tracks = [...new Set(allInterns.map(intern => getInternTrack(intern)).filter(Boolean))];
+      const trackOptions = tracks.map(track => `
+        <option value="${escapeHtml(track)}"${filters.track === track ? " selected" : ""}>${escapeHtml(track)}</option>
+      `).join("");
+
+      return `
+        <div class="dashboard-controls" aria-label="Dashboard filters and sorting">
+          <div class="dashboard-control-grid">
+            <div class="dashboard-control">
+              <label>Status</label>
+              <select data-dashboard-filter="status">
+                <option value="all"${filters.status === "all" ? " selected" : ""}>All statuses</option>
+                <option value="on-track"${filters.status === "on-track" ? " selected" : ""}>On track</option>
+                <option value="needs-clarity"${filters.status === "needs-clarity" ? " selected" : ""}>Needs clarity</option>
+                <option value="needs-support"${filters.status === "needs-support" ? " selected" : ""}>Needs support</option>
+              </select>
+            </div>
+            <div class="dashboard-control">
+              <label>Blockers</label>
+              <select data-dashboard-filter="blocker">
+                <option value="all"${filters.blocker === "all" ? " selected" : ""}>All interns</option>
+                <option value="blocked"${filters.blocker === "blocked" ? " selected" : ""}>Has blockers</option>
+                <option value="clear"${filters.blocker === "clear" ? " selected" : ""}>No blockers</option>
+              </select>
+            </div>
+            <div class="dashboard-control">
+              <label>Track</label>
+              <select data-dashboard-filter="track">
+                <option value="all"${filters.track === "all" ? " selected" : ""}>All tracks</option>
+                ${trackOptions}
+              </select>
+            </div>
+            <div class="dashboard-control">
+              <label>Sort</label>
+              <select data-dashboard-filter="sort">
+                <option value="progress-desc"${filters.sort === "progress-desc" ? " selected" : ""}>Progress high to low</option>
+                <option value="progress-asc"${filters.sort === "progress-asc" ? " selected" : ""}>Progress low to high</option>
+                <option value="name-asc"${filters.sort === "name-asc" ? " selected" : ""}>Name A-Z</option>
+                <option value="blocker-first"${filters.sort === "blocker-first" ? " selected" : ""}>Blockers first</option>
+                <option value="due-date"${filters.sort === "due-date" ? " selected" : ""}>Due date</option>
+              </select>
+            </div>
+          </div>
+          <div class="dashboard-count">Showing ${visibleInterns.length} of ${allInterns.length} interns</div>
+        </div>
+      `;
+    }
+
     function dashboardRowActionsHtml(intern) {
       const internName = escapeHtml(intern.name);
       return `
         <div class="row-actions" aria-label="Actions for ${internName}">
+          <button type="button" class="row-action" data-intern-action="details" data-intern-name="${internName}">Details</button>
           <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
           <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
           <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${internName}">Follow-up</button>
@@ -1499,10 +1790,11 @@
     }
 
     function dashboardHtml() {
-      const interns = getInterns();
+      const allInterns = getInterns();
+      const interns = filteredDashboardInterns(allInterns);
       const rows = interns.map(intern => {
         const blockerClass = intern.blockers.toLowerCase().includes("none") ? "none" : "";
-        const tone = progressTone(intern.progress);
+        const status = internProgressStatus(intern);
         return `
           <tr class="dashboard-row" data-intern-name="${escapeHtml(intern.name)}">
             <td>
@@ -1512,9 +1804,9 @@
             <td class="progress-cell">
               <div class="progress-label">
                 <span>${intern.progress}%</span>
-                <span>${intern.progress >= 80 ? "On track" : intern.progress >= 60 ? "Needs clarity" : "Needs support"}</span>
+                <span>${status.label}</span>
               </div>
-              <div class="bar ${tone}" aria-label="${intern.progress}% progress">
+              <div class="bar ${status.tone}" aria-label="${intern.progress}% progress">
                 <span style="width: ${intern.progress}%"></span>
               </div>
             </td>
@@ -1528,11 +1820,16 @@
             </td>
           </tr>
         `;
-      }).join("");
+      }).join("") || `
+        <tr class="empty-row">
+          <td colspan="7">No interns match the current filters.</td>
+        </tr>
+      `;
 
       return `
         ${managerSummaryHtml()}
         <div class="section-title">Oracle Cloud ERP Interns Progress Dashboard</div>
+        ${dashboardControlsHtml(allInterns, interns)}
         <div class="table-wrap">
           <table class="dashboard-table">
             <colgroup>
@@ -1564,6 +1861,87 @@
     function showDashboard() {
       state.dashboardShown = true;
       addAgentMessage(dashboardHtml(), { includeActions: true });
+    }
+
+    function detailTextHtml(value) {
+      return escapeHtml(value || "None reported.").replace(/\n/g, "<br>");
+    }
+
+    function internDetailHtml(internName) {
+      const intern = findInternByName(internName);
+      if (!intern) {
+        return appendActionOptions("<p>I could not find that intern in the current dashboard.</p>");
+      }
+
+      const status = internProgressStatus(intern);
+      const assignment = state.assignments[intern.name];
+      const dueText = assignment?.dueDate ? `Due ${escapeHtml(assignment.dueDate)}` : "No due date";
+      const assignmentHtml = assignment
+        ? `
+            <p><strong>${escapeHtml(assignment.title)}</strong></p>
+            <p>${dueText}</p>
+            <p>${detailTextHtml(assignment.details)}</p>
+          `
+        : "<p>No custom assignment has been added yet.</p>";
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="detail-view">
+          <div class="inline-note">Intern detail view</div>
+          <div class="detail-header">
+            <div class="detail-title">
+              <h2>${escapeHtml(intern.name)}</h2>
+              <div class="detail-meta">
+                <span>${escapeHtml(intern.role)}</span>
+                <span>${escapeHtml(getInternTrack(intern))} track</span>
+              </div>
+            </div>
+            <div class="detail-progress">
+              <span class="status-badge ${status.tone}">${escapeHtml(status.label)}</span>
+              <strong>${intern.progress}% progress</strong>
+              <div class="bar ${status.tone}" aria-label="${intern.progress}% progress">
+                <span style="width: ${intern.progress}%"></span>
+              </div>
+            </div>
+          </div>
+          <div class="detail-grid">
+            <section class="detail-section">
+              <h3>Completed work</h3>
+              <p>${detailTextHtml(intern.completed)}</p>
+            </section>
+            <section class="detail-section">
+              <h3>Current focus</h3>
+              <p>${detailTextHtml(intern.focus)}</p>
+            </section>
+            <section class="detail-section">
+              <h3>Blockers</h3>
+              <p><span class="blocker ${isInternBlocked(intern) ? "" : "none"}">${escapeHtml(intern.blockers)}</span></p>
+            </section>
+            <section class="detail-section">
+              <h3>Manager action</h3>
+              <p>${detailTextHtml(intern.managerAction)}</p>
+            </section>
+            <section class="detail-section full">
+              <h3>Recommended next step</h3>
+              <p>${detailTextHtml(intern.nextStep)}</p>
+            </section>
+            <section class="detail-section full">
+              <h3>Active assignment</h3>
+              ${assignmentHtml}
+            </section>
+          </div>
+          <div class="detail-actions" aria-label="Actions for ${escapeHtml(intern.name)}">
+            <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${escapeHtml(intern.name)}">Assign</button>
+            <button type="button" class="row-action" data-intern-action="email" data-intern-name="${escapeHtml(intern.name)}">Email</button>
+            <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
+            <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${escapeHtml(intern.name)}">Capstone</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showInternDetail(internName) {
+      addAgentMessage(internDetailHtml(internName), { includeActions: true });
     }
 
     function emailDraftHtml(intern, index, variant = "standard") {
@@ -1638,9 +2016,17 @@
       `);
     }
 
-    function draftEmails(text) {
+    function internsMentionedInText(text) {
       const lower = text.toLowerCase();
-      const selected = getInterns().filter(intern => lower.includes(intern.name.toLowerCase().split(" ")[0]) || lower.includes(intern.name.toLowerCase()));
+      return getInterns().filter(intern => {
+        const fullName = intern.name.toLowerCase();
+        const firstName = fullName.split(" ")[0];
+        return lower.includes(firstName) || lower.includes(fullName);
+      });
+    }
+
+    function draftEmails(text) {
+      const selected = internsMentionedInText(text);
       const interns = selected.length ? selected : getInterns();
       draftEmailsForInterns(interns);
     }
@@ -1839,6 +2225,17 @@
         return;
       }
 
+      const detailRequest = /\b(detail|details|profile)\b/i.test(lower) || (/\bview\b/i.test(lower) && internsMentionedInText(text).length);
+      if (detailRequest) {
+        const selected = internsMentionedInText(text);
+        if (selected.length) {
+          showInternDetail(selected[0].name);
+        } else {
+          addAgentMessage("<p>Which intern would you like to view? You can also open details from the dashboard row actions.</p>");
+        }
+        return;
+      }
+
       if (/\b(dashboard|progress|status|blocker|blockers|recommendation|recommendations|interns)\b/i.test(lower)) {
         showDashboard();
         return;
@@ -2001,6 +2398,24 @@
       }
     }
 
+    function handleDashboardFilterChange(select, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      const filterName = select.dataset.dashboardFilter;
+      if (!filterName || !(filterName in state.dashboardFilters)) return;
+
+      state.dashboardFilters[filterName] = select.value;
+      const bubble = select.closest(".message");
+      const updatedHtml = appendActionOptions(dashboardHtml());
+      if (bubble) {
+        renderBubbleContent(bubble, updatedHtml);
+      } else {
+        showDashboard();
+      }
+    }
+
     function handleInternTableAction(button, event) {
       if (event) {
         event.preventDefault();
@@ -2012,6 +2427,7 @@
       if (!intern) return;
 
       const action = button.dataset.internAction;
+      if (action === "details") showInternDetail(intern.name);
       if (action === "assign") showAssignmentPanel(intern.name);
       if (action === "email") draftEmailsForInterns([intern]);
       if (action === "followup") draftEmailsForInterns([intern], "followup");
@@ -2068,6 +2484,12 @@
     });
 
     messages.addEventListener("change", event => {
+      const dashboardSelect = event.target.closest('select[data-dashboard-filter]');
+      if (dashboardSelect) {
+        handleDashboardFilterChange(dashboardSelect, event);
+        return;
+      }
+
       const internSelect = event.target.closest('select[data-assignment-field="intern"]');
       if (internSelect) {
         handleAssignmentInternChange(internSelect);
