@@ -965,51 +965,51 @@
     const defaultInterns = [
       {
         name: "Maya Chen",
-        role: "Software Engineering Intern",
+        role: "Oracle Cloud ERP Software Engineering Intern",
         progress: 82,
-        completed: "Built the authentication UI flow and added unit tests for form validation.",
-        focus: "API error handling and integration testing.",
-        blockers: "Waiting on a staging API endpoint contract.",
-        nextStep: "Pair on a mock API fallback, then complete one integration test path for sign-in errors.",
-        managerAction: "Review her pull request and confirm the endpoint response format."
+        completed: "Configured a sample Oracle Cloud ERP supplier onboarding REST API call and added payload validation tests.",
+        focus: "FBDI import error handling and integration coverage for Payables invoices.",
+        blockers: "Waiting on approved sandbox payloads and endpoint field mapping.",
+        nextStep: "Complete Oracle Cloud ERP REST API training, then pair on a mocked Payables import path and document expected error responses.",
+        managerAction: "Confirm the invoice import field mapping and review the integration test checklist."
       },
       {
         name: "Jordan Patel",
-        role: "Data Analytics Intern",
+        role: "Oracle Cloud ERP Data Analytics Intern",
         progress: 68,
-        completed: "Cleaned the survey dataset and created first-pass retention visuals.",
-        focus: "Cohort retention dashboard.",
-        blockers: "Needs clearer definitions for active user and retained user metrics.",
-        nextStep: "Complete the data dictionary training and validate KPI definitions before extending visuals.",
-        managerAction: "Schedule a 20-minute metric review and approve the dashboard success criteria."
+        completed: "Built first-pass OTBI-style visuals for procure-to-pay cycle time and invoice exception trends.",
+        focus: "Oracle Cloud ERP Financials dashboard definitions and KPI validation.",
+        blockers: "Needs clearer definitions for invoice hold, approval aging, and paid-on-time metrics.",
+        nextStep: "Complete OTBI and BI Publisher reporting training, then validate KPI formulas before extending dashboard filters.",
+        managerAction: "Schedule a metric review with the Finance SME and approve the dashboard success criteria."
       },
       {
         name: "Aisha Brooks",
-        role: "UX Research Intern",
+        role: "Oracle Cloud ERP UX Research Intern",
         progress: 91,
-        completed: "Finished interview scripts, moderated sessions, and synthesized key findings.",
-        focus: "Accessibility recommendations for the onboarding experience.",
+        completed: "Reviewed requisition and expense entry workflows and documented friction points from sample user walkthroughs.",
+        focus: "Usability recommendations for procurement and expense self-service tasks.",
         blockers: "None reported.",
-        nextStep: "Convert findings into prioritized design recommendations and a short research readout.",
-        managerAction: "Invite her to the next design critique and approve the final research summary."
+        nextStep: "Convert findings into prioritized process and UX recommendations with a short before-and-after workflow readout.",
+        managerAction: "Invite her to the next process design review and approve the recommendation summary."
       },
       {
         name: "Luis Romero",
-        role: "Product Management Intern",
+        role: "Oracle Cloud ERP Product Management Intern",
         progress: 54,
-        completed: "Drafted competitor notes and initial user stories for onboarding improvements.",
-        focus: "Backlog prioritization and acceptance criteria.",
-        blockers: "Needs feedback on story scope and acceptance criteria quality.",
-        nextStep: "Complete the agile requirements module, then refine five backlog items tied to onboarding.",
-        managerAction: "Give written feedback on his top three user stories and identify one owner for questions."
+        completed: "Drafted Oracle Cloud ERP implementation backlog items for supplier onboarding and invoice exception handling.",
+        focus: "Functional requirements, acceptance criteria, and training plan alignment.",
+        blockers: "Needs feedback on requirement scope and module ownership.",
+        nextStep: "Complete Oracle Cloud ERP fundamentals training, then refine five backlog items with measurable acceptance criteria.",
+        managerAction: "Give written feedback on his top three requirements and identify the Finance or Procurement SME for questions."
       }
     ];
 
     const capstoneIdeas = {
-      "Software Engineering Intern": "Build a lightweight internal health-check panel for the staging API that validates authentication states and reports common integration errors.",
-      "Data Analytics Intern": "Create a retention insights dashboard with a documented metric glossary, filters by cohort, and three manager-ready observations.",
-      "UX Research Intern": "Produce an accessibility improvement brief that maps research findings to prioritized onboarding design changes and measurable usability goals.",
-      "Product Management Intern": "Develop a prioritized onboarding backlog with acceptance criteria, effort estimates, and a short business rationale for each item."
+      "Oracle Cloud ERP Software Engineering Intern": "Build a sandbox Oracle Cloud ERP integration validator for Payables invoice import that checks payload fields, mock REST responses, and common FBDI error states.",
+      "Oracle Cloud ERP Data Analytics Intern": "Create an Oracle Cloud ERP Financials and Procurement KPI dashboard with OTBI-style metrics, clear definitions, filters, and three manager-ready insights.",
+      "Oracle Cloud ERP UX Research Intern": "Produce a procurement or expense self-service workflow improvement brief that maps user friction to prioritized Oracle Cloud ERP process changes.",
+      "Oracle Cloud ERP Product Management Intern": "Develop a prioritized Oracle Cloud ERP implementation backlog with functional requirements, acceptance criteria, training impacts, and SME questions."
     };
 
     const state = {
@@ -1589,11 +1589,11 @@
     }
 
     function getTrainingRecommendation(intern) {
-      if (intern.role.includes("Software")) return "Review integration testing patterns and API error-handling guidelines before the next implementation pass.";
-      if (intern.role.includes("Data")) return "Complete the data dictionary training and confirm the KPI definitions with your manager.";
-      if (intern.role.includes("UX")) return "Prepare the accessibility recommendation readout and connect each finding to a practical design action.";
-      if (intern.role.includes("Product")) return "Finish the agile requirements module and revise the highest-priority user stories with measurable acceptance criteria.";
-      return "Continue the most relevant project training and connect the next task to a concrete team deliverable.";
+      if (intern.role.includes("Software")) return "Complete Oracle Cloud ERP REST API and FBDI import training before extending the Payables integration test path.";
+      if (intern.role.includes("Data")) return "Complete OTBI and BI Publisher reporting training, then confirm Financials KPI definitions with the manager.";
+      if (intern.role.includes("UX")) return "Review Oracle Cloud ERP procurement and expense self-service workflows, then map usability findings to practical process improvements.";
+      if (intern.role.includes("Product")) return "Complete Oracle Cloud ERP fundamentals and Financials/Procurement process training before revising the implementation backlog.";
+      return "Continue Oracle Cloud ERP process training and connect the next task to a concrete team deliverable.";
     }
 
     function draftEmailsForInterns(interns, variant = "standard") {
@@ -1617,49 +1617,53 @@
     }
 
     function assignmentSuggestion(intern) {
-      if (intern.role.includes("Software")) return "Implement one integration test path and document the API error states.";
-      if (intern.role.includes("Data")) return "Validate the retention KPI definitions and add two manager-ready dashboard insights.";
-      if (intern.role.includes("UX")) return "Convert research findings into three prioritized accessibility recommendations.";
-      if (intern.role.includes("Product")) return "Refine five onboarding user stories with measurable acceptance criteria.";
-      return "Complete a focused project task tied to the intern's current role and team goals.";
+      if (intern.role.includes("Software")) return "Build a mocked Oracle Cloud ERP Payables import test path and document FBDI/REST error states.";
+      if (intern.role.includes("Data")) return "Validate Oracle Cloud ERP invoice approval and payment KPI definitions and add two OTBI-style insights.";
+      if (intern.role.includes("UX")) return "Map Oracle Cloud ERP requisition or expense workflow friction and create three prioritized improvement recommendations.";
+      if (intern.role.includes("Product")) return "Refine five Oracle Cloud ERP supplier onboarding backlog items with acceptance criteria and training impacts.";
+      return "Complete a focused Oracle Cloud ERP project task tied to the intern's current role and team goals.";
     }
 
     function assignmentDetails(intern) {
       if (intern.role.includes("Software")) {
         return [
-          "Deliverable: Add one passing integration test path for the assigned authentication/API workflow.",
-          "Success criteria: Include test evidence, documented error states, and a short implementation note.",
+          "Deliverable: Create one mocked Payables invoice import test path using Oracle Cloud ERP payload fields.",
+          "Success criteria: Include sample request/response data, documented FBDI or REST error states, and test evidence.",
+          "Training: Review Oracle Cloud ERP REST API basics and FBDI import concepts before implementation.",
           `Manager support: ${intern.managerAction}`
         ].join("\n");
       }
 
       if (intern.role.includes("Data")) {
         return [
-          "Deliverable: Validate the retention metric definitions and add two manager-ready dashboard insights.",
-          "Success criteria: Include source assumptions, KPI definitions, and one recommended next analysis.",
+          "Deliverable: Validate invoice approval aging, invoice hold, and paid-on-time KPI definitions.",
+          "Success criteria: Include source assumptions, metric formulas, two OTBI-style insights, and one recommended next analysis.",
+          "Training: Complete OTBI dashboard and BI Publisher report basics before extending visuals.",
           `Manager support: ${intern.managerAction}`
         ].join("\n");
       }
 
       if (intern.role.includes("UX")) {
         return [
-          "Deliverable: Turn research findings into three prioritized accessibility recommendations.",
-          "Success criteria: Connect each recommendation to user evidence, impact, and a proposed design action.",
+          "Deliverable: Review the Oracle Cloud ERP requisition or expense entry flow and identify the top three usability friction points.",
+          "Success criteria: Connect each recommendation to user evidence, process impact, and a proposed workflow improvement.",
+          "Training: Review Oracle Cloud ERP navigation, procurement self-service, and expense self-service basics.",
           `Manager support: ${intern.managerAction}`
         ].join("\n");
       }
 
       if (intern.role.includes("Product")) {
         return [
-          "Deliverable: Refine five onboarding user stories with measurable acceptance criteria.",
-          "Success criteria: Include priority, rationale, owner questions, and a clear definition of done.",
+          "Deliverable: Refine five Oracle Cloud ERP supplier onboarding or invoice exception backlog items.",
+          "Success criteria: Include business priority, acceptance criteria, training impact, SME questions, and definition of done.",
+          "Training: Complete Oracle Cloud ERP fundamentals and the Financials/Procurement process overview.",
           `Manager support: ${intern.managerAction}`
         ].join("\n");
       }
 
       return [
         `Deliverable: ${assignmentSuggestion(intern)}`,
-        "Success criteria: Share a concise progress update, decisions needed, and any blockers.",
+        "Success criteria: Share a concise Oracle Cloud ERP progress update, decisions needed, and any blockers.",
         `Manager support: ${intern.managerAction}`
       ].join("\n");
     }
@@ -1750,9 +1754,9 @@
     }
 
     function getCapstoneManagerAction(intern) {
-      if (intern.progress >= 85) return "Give autonomy on final structure and schedule a readout with stakeholders.";
-      if (intern.progress >= 65) return "Clarify scope, define success criteria, and set one mid-point checkpoint.";
-      return "Narrow the project to one meaningful deliverable and provide weekly feedback until blockers are resolved.";
+      if (intern.progress >= 85) return "Give autonomy on final structure and schedule a readout with the ERP process stakeholders.";
+      if (intern.progress >= 65) return "Clarify Oracle Cloud ERP scope, define success criteria, and set one mid-point checkpoint.";
+      return "Narrow the ERP project to one meaningful deliverable and provide weekly feedback until blockers are resolved.";
     }
 
     function generalHelp() {
