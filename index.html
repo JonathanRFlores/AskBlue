@@ -366,23 +366,23 @@
     }
 
     .dashboard-table .col-intern {
-      width: 14%;
+      width: 18%;
     }
 
     .dashboard-table .col-progress {
-      width: 12%;
+      width: 11%;
     }
 
     .dashboard-table .col-completed {
-      width: 16%;
+      width: 15%;
     }
 
     .dashboard-table .col-focus {
-      width: 14%;
+      width: 13%;
     }
 
     .dashboard-table .col-blockers {
-      width: 13%;
+      width: 12%;
     }
 
     .dashboard-table .col-next {
@@ -425,11 +425,18 @@
       font-weight: 780;
       color: #1c2940;
       white-space: nowrap;
+      line-height: 1.2;
     }
 
     .role {
+      display: block;
+      max-width: 100%;
+      margin-top: 4px;
       color: var(--muted);
-      white-space: nowrap;
+      font-size: 0.74rem;
+      line-height: 1.28;
+      white-space: normal;
+      overflow-wrap: break-word;
     }
 
     .progress-cell {
@@ -1504,7 +1511,7 @@
 
       return `
         ${managerSummaryHtml()}
-        <div class="section-title">Oracle Cloud ERP Intern Progress Dashboard</div>
+        <div class="section-title">Oracle Cloud ERP Interns Progress Dashboard</div>
         <div class="table-wrap">
           <table class="dashboard-table">
             <colgroup>
