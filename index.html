@@ -1335,7 +1335,14 @@
 
     function appendActionOptions(html) {
       if (html.includes('class="quick-actions"')) return html;
-      return `${html}${quickActionsHtml({ includeDashboard: !isDashboardContent(html) })}`;
+      const includeDashboard = !state.dashboardShown && !isDashboardContent(html);
+      return `${html}${quickActionsHtml({ includeDashboard })}`;
+    }
+
+    function removeDashboardQuickActions() {
+      messages.querySelectorAll('button[data-action="dashboard"]').forEach(button => {
+        button.remove();
+      });
     }
 
     function renderBubbleContent(bubble, html) {
@@ -1865,6 +1872,7 @@
 
     function showDashboard() {
       state.dashboardShown = true;
+      removeDashboardQuickActions();
       addAgentMessage(dashboardHtml(), { includeActions: true });
     }
 
