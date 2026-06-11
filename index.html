@@ -512,17 +512,6 @@
       transform: translateY(-1px);
     }
 
-    .row-action.primary {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: #fff;
-    }
-
-    .row-action.primary:hover {
-      background: var(--blue-dark);
-      border-color: var(--blue-dark);
-    }
-
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
@@ -1459,7 +1448,7 @@
       const internName = escapeHtml(intern.name);
       return `
         <div class="row-actions" aria-label="Actions for ${internName}">
-          <button type="button" class="row-action primary" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
+          <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
           <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
           <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${internName}">Follow-up</button>
           <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${internName}">Capstone</button>
@@ -1621,6 +1610,55 @@
       return "Complete a focused project task tied to the intern's current role and team goals.";
     }
 
+    function assignmentDetails(intern) {
+      if (intern.role.includes("Software")) {
+        return [
+          "Deliverable: Add one passing integration test path for the assigned authentication/API workflow.",
+          "Success criteria: Include test evidence, documented error states, and a short implementation note.",
+          `Manager support: ${intern.managerAction}`
+        ].join("\n");
+      }
+
+      if (intern.role.includes("Data")) {
+        return [
+          "Deliverable: Validate the retention metric definitions and add two manager-ready dashboard insights.",
+          "Success criteria: Include source assumptions, KPI definitions, and one recommended next analysis.",
+          `Manager support: ${intern.managerAction}`
+        ].join("\n");
+      }
+
+      if (intern.role.includes("UX")) {
+        return [
+          "Deliverable: Turn research findings into three prioritized accessibility recommendations.",
+          "Success criteria: Connect each recommendation to user evidence, impact, and a proposed design action.",
+          `Manager support: ${intern.managerAction}`
+        ].join("\n");
+      }
+
+      if (intern.role.includes("Product")) {
+        return [
+          "Deliverable: Refine five onboarding user stories with measurable acceptance criteria.",
+          "Success criteria: Include priority, rationale, owner questions, and a clear definition of done.",
+          `Manager support: ${intern.managerAction}`
+        ].join("\n");
+      }
+
+      return [
+        `Deliverable: ${assignmentSuggestion(intern)}`,
+        "Success criteria: Share a concise progress update, decisions needed, and any blockers.",
+        `Manager support: ${intern.managerAction}`
+      ].join("\n");
+    }
+
+    function defaultAssignmentDueDate() {
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
     function assignmentPanelHtml(selectedInternName = "") {
       const interns = getInterns();
       const selectedIntern = findInternByName(selectedInternName) || interns[0];
@@ -1628,6 +1666,8 @@
         <option value="${escapeHtml(intern.name)}"${selectedIntern && intern.name === selectedIntern.name ? " selected" : ""}>${escapeHtml(intern.name)} - ${escapeHtml(intern.role)}</option>
       `).join("");
       const suggested = selectedIntern ? assignmentSuggestion(selectedIntern) : "";
+      const details = selectedIntern ? assignmentDetails(selectedIntern) : "";
+      const dueDate = defaultAssignmentDueDate();
 
       return `
         <div class="inline-note">${selectedIntern ? `New assignment for ${escapeHtml(selectedIntern.name)}` : "New assignment"}</div>
@@ -1644,11 +1684,11 @@
             </div>
             <div class="assignment-field">
               <label>Due date</label>
-              <input data-assignment-field="dueDate" type="date">
+              <input data-assignment-field="dueDate" type="date" value="${escapeHtml(dueDate)}">
             </div>
             <div class="assignment-field full">
               <label>Success criteria / notes</label>
-              <textarea data-assignment-field="details" placeholder="Add expectations, deliverables, or support needed."></textarea>
+              <textarea data-assignment-field="details" placeholder="Add expectations, deliverables, or support needed.">${escapeHtml(details)}</textarea>
             </div>
           </div>
           <div class="assignment-actions">
@@ -1894,8 +1934,16 @@
 
       const intern = getInterns().find(candidate => candidate.name === select.value);
       const titleInput = panel.querySelector('[data-assignment-field="title"]');
+      const detailsInput = panel.querySelector('[data-assignment-field="details"]');
+      const dueDateInput = panel.querySelector('[data-assignment-field="dueDate"]');
       if (intern && titleInput) {
         titleInput.value = assignmentSuggestion(intern);
+      }
+      if (intern && detailsInput) {
+        detailsInput.value = assignmentDetails(intern);
+      }
+      if (dueDateInput && !dueDateInput.value) {
+        dueDateInput.value = defaultAssignmentDueDate();
       }
     }
 
