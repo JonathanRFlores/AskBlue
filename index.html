@@ -27,9 +27,15 @@
       box-sizing: border-box;
     }
 
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      overflow: hidden;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 244, 255, 0.72) 44%, rgba(246, 248, 252, 1)),
         #f6f8fc;
@@ -67,9 +73,11 @@
     }
 
     .app {
-      min-height: 100vh;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: auto minmax(0, 1fr);
     }
 
     .topbar {
@@ -185,14 +193,17 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       padding: clamp(12px, 2vw, 24px);
+      min-height: 0;
+      overflow: hidden;
     }
 
     .chat {
       width: 100%;
+      height: 100%;
       margin: 0 auto;
       display: grid;
       grid-template-rows: minmax(0, 1fr) auto;
-      min-height: calc(100vh - 112px);
+      min-height: 0;
       background: rgba(255, 255, 255, 0.88);
       border: 1px solid rgba(228, 231, 236, 0.96);
       border-radius: 8px;
@@ -203,7 +214,9 @@
 
     .messages {
       padding: clamp(16px, 2.5vw, 30px);
+      min-height: 0;
       overflow-y: auto;
+      overscroll-behavior: contain;
       scroll-behavior: smooth;
       background:
         linear-gradient(180deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.82));
@@ -712,6 +725,8 @@
     }
 
     .composer {
+      position: relative;
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
@@ -857,7 +872,8 @@
       }
 
       .chat {
-        min-height: calc(100vh - 156px);
+        height: 100%;
+        min-height: 0;
       }
 
       .composer {
@@ -1001,18 +1017,28 @@
 
     function scrollToBottom() {
       const scroll = () => {
-        messages.scrollTop = messages.scrollHeight;
+        const target = messages.scrollHeight;
+        messages.scrollTop = target;
+        if (messages.scrollTo) {
+          messages.scrollTo({ top: target, behavior: "auto" });
+        }
         if (scrollAnchor.scrollIntoView) {
-          scrollAnchor.scrollIntoView({ block: "end" });
+          scrollAnchor.scrollIntoView({ block: "end", inline: "nearest" });
         }
       };
 
       scroll();
-      nextFrame(scroll);
-      runLater(scroll, 80);
-      runLater(scroll, 220);
-      runLater(scroll, 520);
-      runLater(scroll, 900);
+      let frames = 0;
+      const scrollAcrossFrames = () => {
+        scroll();
+        frames += 1;
+        if (frames < 8) {
+          nextFrame(scrollAcrossFrames);
+        }
+      };
+
+      nextFrame(scrollAcrossFrames);
+      [80, 180, 320, 520, 900, 1300].forEach(delay => runLater(scroll, delay));
     }
 
     function wireScrollAfterAssets(container) {
