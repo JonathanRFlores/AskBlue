@@ -1,0 +1,1764 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AskBlue</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #101828;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --panel: #ffffff;
+      --soft: #f8fafc;
+      --blue: #155eef;
+      --blue-dark: #004eeb;
+      --blue-soft: #eff4ff;
+      --green: #0e9384;
+      --amber: #dc6803;
+      --red: #d92d20;
+      --shadow: 0 24px 70px rgba(16, 24, 40, 0.14);
+      --soft-shadow: 0 10px 32px rgba(16, 24, 40, 0.08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 244, 255, 0.72) 44%, rgba(246, 248, 252, 1)),
+        #f6f8fc;
+      color: var(--ink);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(21, 94, 239, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(21, 94, 239, 0.045) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82), transparent 76%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) auto minmax(150px, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px clamp(14px, 3vw, 34px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(228, 231, 236, 0.92);
+      box-shadow: 0 1px 0 rgba(16, 24, 40, 0.03);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      justify-self: start;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(270px, 50vw);
+      height: 48px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .brand-logo {
+      width: 100%;
+      max-height: 34px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .header-tagline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 720;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      justify-self: center;
+    }
+
+    .partner-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(245px, 31vw);
+      height: 58px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      flex: 0 0 auto;
+      justify-self: end;
+    }
+
+    .partner-logo {
+      width: 100%;
+      max-height: 46px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .status-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pill.blue {
+      background: #edf3ff;
+      border-color: #c9d9ff;
+      color: var(--blue-dark);
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      padding: clamp(12px, 2vw, 24px);
+    }
+
+    .chat {
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-height: calc(100vh - 112px);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(228, 231, 236, 0.96);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .messages {
+      padding: clamp(16px, 2.5vw, 30px);
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      background:
+        linear-gradient(180deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.82));
+    }
+
+    .scroll-anchor {
+      height: 1px;
+    }
+
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 0 16px;
+      animation: messageIn 220ms ease both;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .message-row.agent::before {
+      content: "";
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background:
+        url("assets/icon.png") center / cover no-repeat,
+        #0f6fcb;
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 10px 24px rgba(21, 94, 239, 0.24);
+    }
+
+    .message-row.agent.is-thinking::before {
+      animation: iconThinking 1s ease-in-out infinite;
+      box-shadow:
+        0 0 0 0 rgba(21, 94, 239, 0.28),
+        0 10px 24px rgba(21, 94, 239, 0.24);
+    }
+
+    .message {
+      max-width: min(840px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.94);
+      line-height: 1.48;
+      font-size: 0.96rem;
+      box-shadow: 0 8px 28px rgba(16, 24, 40, 0.07);
+    }
+
+    .message-row.user .message {
+      background: linear-gradient(145deg, #155eef, #004eeb);
+      color: #fff;
+      border-color: #155eef;
+      max-width: min(650px, 88%);
+      box-shadow: 0 12px 28px rgba(21, 94, 239, 0.22);
+    }
+
+    .message-row.agent .message {
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .message-row.agent .message.wide {
+      flex: 1 1 auto;
+      max-width: none;
+      width: 100%;
+    }
+
+    .message.typing {
+      display: none;
+    }
+
+    .message.rendered {
+      animation: answerReveal 240ms ease both;
+    }
+
+    .message strong {
+      font-weight: 760;
+    }
+
+    .message p {
+      margin: 0 0 10px;
+    }
+
+    .message p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      font-size: 0.98rem;
+      font-weight: 780;
+    }
+
+    .inline-note {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 28px;
+      margin: 0 0 12px;
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: var(--blue-soft);
+      color: #00359e;
+      border: 1px solid #c7d7fe;
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.05);
+    }
+
+    table {
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.78rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #344058;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      white-space: normal;
+    }
+
+    .dashboard-table .col-intern {
+      width: 14%;
+    }
+
+    .dashboard-table .col-progress {
+      width: 12%;
+    }
+
+    .dashboard-table .col-completed {
+      width: 16%;
+    }
+
+    .dashboard-table .col-focus {
+      width: 14%;
+    }
+
+    .dashboard-table .col-blockers {
+      width: 13%;
+    }
+
+    .dashboard-table .col-next {
+      width: 16%;
+    }
+
+    .dashboard-table .col-action {
+      width: 15%;
+    }
+
+    .manager-summary {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.25;
+    }
+
+    .manager-summary strong {
+      color: #1d2939;
+      font-size: 0.78rem;
+    }
+
+    .manager-summary span {
+      white-space: nowrap;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .intern-name {
+      font-weight: 780;
+      color: #1c2940;
+      white-space: nowrap;
+    }
+
+    .role {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .progress-cell {
+      min-width: 0;
+    }
+
+    .progress-label {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 7px;
+      font-weight: 760;
+    }
+
+    .bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e7ebf2;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+    }
+
+    .bar.good span {
+      background: var(--green);
+    }
+
+    .bar.watch span {
+      background: var(--amber);
+    }
+
+    .bar.support span {
+      background: var(--red);
+    }
+
+    .blocker {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 7px;
+      border-radius: 8px;
+      background: #fff1f1;
+      color: var(--red);
+      font-weight: 740;
+    }
+
+    .blocker.none {
+      background: #eaf7f1;
+      color: var(--green);
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .quick-actions button {
+      border: 1px solid #b2ccff;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      font-weight: 740;
+      cursor: pointer;
+    }
+
+    .quick-actions button:hover {
+      background: #dbeafe;
+      border-color: #84adff;
+      transform: translateY(-1px);
+    }
+
+    .draft {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 10px 0;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.05);
+    }
+
+    .draft:last-child {
+      margin-bottom: 0;
+    }
+
+    .draft-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .draft-title strong {
+      color: #1f2d47;
+    }
+
+    .subject {
+      color: var(--blue-dark);
+      font-weight: 760;
+    }
+
+    .draft-body {
+      border-radius: 8px;
+      padding: 2px;
+      outline: none;
+    }
+
+    .draft.editing .draft-body {
+      padding: 10px;
+      background: #f8fafc;
+      box-shadow: inset 0 0 0 2px rgba(21, 94, 239, 0.18);
+    }
+
+    .draft-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .draft-status {
+      margin-right: auto;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 740;
+    }
+
+    .draft-action {
+      border: 1px solid #d0d5dd;
+      background: #fff;
+      color: #344054;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      font-weight: 740;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .draft-action:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .draft-action.send {
+      border-color: #84adff;
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .draft-action.send:hover {
+      background: var(--blue-dark);
+    }
+
+    .draft-action.loading::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      border: 2px solid rgba(255, 255, 255, 0.38);
+      border-top-color: #fff;
+      animation: buttonSpin 760ms linear infinite;
+    }
+
+    .draft-action.send.sent {
+      border-color: var(--green);
+      background: var(--green);
+    }
+
+    .draft-action:disabled {
+      cursor: default;
+      opacity: 0.72;
+      transform: none;
+    }
+
+    .draft ul,
+    .capstone-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    .draft li,
+    .capstone-list li {
+      margin: 6px 0;
+    }
+
+    .assignment-panel {
+      display: grid;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .assignment-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.8fr) minmax(220px, 1fr) minmax(150px, 0.6fr);
+      gap: 10px;
+    }
+
+    .assignment-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .assignment-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .assignment-field label {
+      color: var(--muted);
+      font-size: 0.74rem;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    .assignment-field input,
+    .assignment-field select,
+    .assignment-field textarea {
+      width: 100%;
+      border: 1px solid #cbd4e2;
+      border-radius: 8px;
+      padding: 9px 10px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font: inherit;
+      font-size: 0.9rem;
+    }
+
+    .assignment-field textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .assignment-field input:focus,
+    .assignment-field select:focus,
+    .assignment-field textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.12);
+    }
+
+    .assignment-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .assignment-feedback {
+      margin-right: auto;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 720;
+    }
+
+    .assignment-feedback.error {
+      color: var(--red);
+    }
+
+    .assignment-feedback.success {
+      color: var(--green);
+    }
+
+    .assignment-action {
+      border: 1px solid #84adff;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 760;
+      cursor: pointer;
+    }
+
+    .assignment-action:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .assignment-action:disabled {
+      cursor: default;
+      opacity: 0.76;
+      transform: none;
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .composer input {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid #cbd4e2;
+      border-radius: 8px;
+      padding: 0 13px;
+      outline: none;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    }
+
+    .composer input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(36, 87, 197, 0.13);
+    }
+
+    .composer button {
+      min-width: 94px;
+      min-height: 46px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #155eef, #004eeb);
+      color: #fff;
+      font-weight: 780;
+      cursor: pointer;
+      box-shadow: 0 12px 22px rgba(21, 94, 239, 0.24);
+    }
+
+    .composer button:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes answerReveal {
+      from {
+        opacity: 0.72;
+        transform: translateY(3px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes buttonSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes iconThinking {
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow:
+          0 0 0 0 rgba(21, 94, 239, 0.3),
+          0 10px 24px rgba(21, 94, 239, 0.24);
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow:
+          0 0 0 8px rgba(21, 94, 239, 0.08),
+          0 10px 24px rgba(21, 94, 239, 0.24);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .messages {
+        scroll-behavior: auto;
+      }
+
+      .message-row,
+      .message.rendered,
+      .message-row.agent.is-thinking::before {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .brand-title {
+        white-space: normal;
+      }
+
+      .header-tagline {
+        max-width: min(360px, 92vw);
+        font-size: 0.88rem;
+        white-space: normal;
+      }
+
+      .brand {
+        align-items: center;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .brand-logo-wrap {
+        width: min(250px, 78vw);
+      }
+
+      .partner-logo-wrap {
+        align-self: flex-end;
+        width: min(190px, 48vw);
+        height: 48px;
+      }
+
+      table {
+        min-width: 860px;
+      }
+
+      .assignment-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chat {
+        min-height: calc(100vh - 156px);
+      }
+
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .composer button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar" aria-label="AskBlue header">
+      <div class="brand">
+        <div class="brand-logo-wrap" aria-hidden="true">
+          <img class="brand-logo" src="assets/Blue-transparent.png" alt="">
+        </div>
+        <h1 class="sr-only">AskBlue</h1>
+      </div>
+      <p class="header-tagline">AI assistant for intern progress, planning, and follow-up</p>
+      <div class="partner-logo-wrap" aria-label="IBM">
+        <img class="partner-logo" src="assets/ibm-logo.png" alt="IBM">
+      </div>
+    </header>
+
+    <section class="shell">
+      <div class="chat" aria-label="AskBlue chat">
+        <div id="messages" class="messages" aria-live="polite"></div>
+        <form id="composer" class="composer" autocomplete="off">
+          <input id="chatInput" name="chatInput" type="text" placeholder="Enter your Employee ID, e.g. 1234E" aria-label="Message AskBlue">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const defaultInterns = [
+      {
+        name: "Maya Chen",
+        role: "Software Engineering Intern",
+        progress: 82,
+        completed: "Built the authentication UI flow and added unit tests for form validation.",
+        focus: "API error handling and integration testing.",
+        blockers: "Waiting on a staging API endpoint contract.",
+        nextStep: "Pair on a mock API fallback, then complete one integration test path for sign-in errors.",
+        managerAction: "Review her pull request and confirm the endpoint response format."
+      },
+      {
+        name: "Jordan Patel",
+        role: "Data Analytics Intern",
+        progress: 68,
+        completed: "Cleaned the survey dataset and created first-pass retention visuals.",
+        focus: "Cohort retention dashboard.",
+        blockers: "Needs clearer definitions for active user and retained user metrics.",
+        nextStep: "Complete the data dictionary training and validate KPI definitions before extending visuals.",
+        managerAction: "Schedule a 20-minute metric review and approve the dashboard success criteria."
+      },
+      {
+        name: "Aisha Brooks",
+        role: "UX Research Intern",
+        progress: 91,
+        completed: "Finished interview scripts, moderated sessions, and synthesized key findings.",
+        focus: "Accessibility recommendations for the onboarding experience.",
+        blockers: "None reported.",
+        nextStep: "Convert findings into prioritized design recommendations and a short research readout.",
+        managerAction: "Invite her to the next design critique and approve the final research summary."
+      },
+      {
+        name: "Luis Romero",
+        role: "Product Management Intern",
+        progress: 54,
+        completed: "Drafted competitor notes and initial user stories for onboarding improvements.",
+        focus: "Backlog prioritization and acceptance criteria.",
+        blockers: "Needs feedback on story scope and acceptance criteria quality.",
+        nextStep: "Complete the agile requirements module, then refine five backlog items tied to onboarding.",
+        managerAction: "Give written feedback on his top three user stories and identify one owner for questions."
+      }
+    ];
+
+    const capstoneIdeas = {
+      "Software Engineering Intern": "Build a lightweight internal health-check panel for the staging API that validates authentication states and reports common integration errors.",
+      "Data Analytics Intern": "Create a retention insights dashboard with a documented metric glossary, filters by cohort, and three manager-ready observations.",
+      "UX Research Intern": "Produce an accessibility improvement brief that maps research findings to prioritized onboarding design changes and measurable usability goals.",
+      "Product Management Intern": "Develop a prioritized onboarding backlog with acceptance criteria, effort estimates, and a short business rationale for each item."
+    };
+
+    const state = {
+      verification: {
+        employeeId: "",
+        fullName: "",
+        email: "",
+        complete: false
+      },
+      pendingEmailConfirmation: false,
+      dashboardShown: false,
+      assignments: {},
+      customInternNames: []
+    };
+
+    const messages = document.getElementById("messages");
+    const form = document.getElementById("composer");
+    const input = document.getElementById("chatInput");
+    const scrollAnchor = document.createElement("div");
+    scrollAnchor.className = "scroll-anchor";
+    messages.appendChild(scrollAnchor);
+
+    function runLater(callback, delay) {
+      const schedule = typeof window !== "undefined" && typeof window.setTimeout === "function"
+        ? window.setTimeout.bind(window)
+        : typeof setTimeout === "function"
+          ? setTimeout
+          : null;
+
+      if (!schedule || delay <= 0) {
+        callback();
+        return null;
+      }
+
+      return schedule(callback, delay);
+    }
+
+    function nextFrame(callback) {
+      const schedule = typeof window !== "undefined" && typeof window.requestAnimationFrame === "function"
+        ? window.requestAnimationFrame.bind(window)
+        : typeof requestAnimationFrame === "function"
+          ? requestAnimationFrame
+          : null;
+
+      if (schedule) {
+        schedule(callback);
+      } else {
+        callback();
+      }
+    }
+
+    function scrollToBottom() {
+      const scroll = () => {
+        messages.scrollTop = messages.scrollHeight;
+        if (scrollAnchor.scrollIntoView) {
+          scrollAnchor.scrollIntoView({ block: "end" });
+        }
+      };
+
+      scroll();
+      nextFrame(scroll);
+      runLater(scroll, 80);
+      runLater(scroll, 220);
+      runLater(scroll, 520);
+      runLater(scroll, 900);
+    }
+
+    function wireScrollAfterAssets(container) {
+      if (!container.querySelectorAll) return;
+
+      container.querySelectorAll("img").forEach(image => {
+        if (image.complete) {
+          scrollToBottom();
+          return;
+        }
+
+        image.addEventListener("load", scrollToBottom, { once: true });
+        image.addEventListener("error", scrollToBottom, { once: true });
+      });
+    }
+
+    function responseDelay(html) {
+      const textLength = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length;
+      return Math.min(850, Math.max(360, 260 + textLength * 2));
+    }
+
+    function isWideContent(html) {
+      return /class="[^"]*(table-wrap|manager-summary|assignment-panel)[^"]*"/.test(html);
+    }
+
+    function quickActionsHtml() {
+      return `
+        <div class="quick-actions">
+          <button type="button" data-action="emails">Draft follow-up emails</button>
+          <button type="button" data-action="assignments">Assign new work</button>
+          <button type="button" data-action="capstones">Recommend capstones</button>
+          <button type="button" data-action="dashboard">Show dashboard</button>
+        </div>
+      `;
+    }
+
+    function appendActionOptions(html) {
+      if (html.includes('class="quick-actions"')) return html;
+      return `${html}${quickActionsHtml()}`;
+    }
+
+    function renderBubbleContent(bubble, html) {
+      const row = bubble.parentElement;
+      if (row) row.classList.remove("is-thinking");
+      bubble.innerHTML = html;
+      bubble.classList.remove("typing");
+      bubble.classList.toggle("wide", isWideContent(html));
+      bubble.classList.add("rendered");
+      wireScrollAfterAssets(bubble);
+      scrollToBottom();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function addMessage(sender, html) {
+      const row = document.createElement("div");
+      row.className = `message-row ${sender}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "message";
+      bubble.innerHTML = html;
+
+      row.appendChild(bubble);
+      if (messages.insertBefore && scrollAnchor.parentElement === messages) {
+        messages.insertBefore(row, scrollAnchor);
+      } else {
+        messages.appendChild(row);
+        messages.appendChild(scrollAnchor);
+      }
+      wireScrollAfterAssets(bubble);
+      scrollToBottom();
+      return bubble;
+    }
+
+    function addAgentMessage(html, options = {}) {
+      const includeActions = options.includeActions ?? state.dashboardShown;
+      const finalHtml = includeActions ? appendActionOptions(html) : html;
+      const bubble = addMessage("agent", "");
+      const row = bubble.parentElement;
+      if (row) row.classList.add("is-thinking");
+      bubble.classList.add("typing");
+      bubble.classList.toggle("wide", isWideContent(finalHtml));
+      scrollToBottom();
+      runLater(() => renderBubbleContent(bubble, finalHtml), responseDelay(finalHtml));
+      return bubble;
+    }
+
+    function addUserMessage(text) {
+      const bubble = addMessage("user", `<p>${escapeHtml(text)}</p>`);
+      scrollToBottom();
+      return bubble;
+    }
+
+    function progressTone(progress) {
+      if (progress >= 80) return "good";
+      if (progress >= 60) return "watch";
+      return "support";
+    }
+
+    function isValidIbmEmail(email) {
+      const trimmed = email.trim();
+      const validShape = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed);
+      if (!validShape) return false;
+      const domain = trimmed.split("@")[1] || "";
+      return domain.toLowerCase() === "ibm.com";
+    }
+
+    function isValidFullName(name) {
+      const parts = name.trim().split(/\s+/).filter(Boolean);
+      return parts.length >= 2 && parts.every(part => /[A-Za-z]/.test(part));
+    }
+
+    function parseEmail(text) {
+      const match = text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+      return match ? match[0] : "";
+    }
+
+    function isValidEmployeeId(value) {
+      return /^\d+[A-Za-z]$/.test(value.trim());
+    }
+
+    function extractEmployeeIdCandidate(text) {
+      const labeled = text.match(/(?:employee\s*id|id)\s*(?:is|=|:|#|-)?\s*([A-Za-z0-9-]+)/i);
+      if (labeled) return labeled[1].trim();
+
+      const compact = text.trim();
+      if (/^[A-Za-z0-9-]{2,}$/.test(compact) && !compact.includes("@") && compact.split(/\s+/).length === 1) {
+        return compact;
+      }
+
+      const firstToken = (compact.split(/\s+/)[0] || "").replace(/[,:;]/g, "");
+      if (/^(?=.*\d)[A-Za-z0-9-]{2,}$/.test(firstToken) && !firstToken.includes("@")) {
+        return firstToken;
+      }
+
+      return "";
+    }
+
+    function parseEmployeeId(text) {
+      const candidate = extractEmployeeIdCandidate(text);
+      return candidate && isValidEmployeeId(candidate) ? candidate.toUpperCase() : "";
+    }
+
+    function parseFullName(text) {
+      const labeled = text.match(/(?:full\s*name|name)\s*(?:is|=|:|#|-)?\s*([A-Za-z][A-Za-z'.-]+(?:\s+[A-Za-z][A-Za-z'.-]+)+?)(?=\s*(?:,|;|\.|$|(?:work\s*)?email\b|employee\s*id\b|\bid\b|[A-Z0-9._%+-]+@))/i);
+      if (labeled) return labeled[1].trim();
+
+      const withoutEmail = text.replace(parseEmail(text), " ");
+      const withoutLabels = withoutEmail
+        .replace(/(?:employee\s*id|id)\s*(?:is|=|:|#|-)?\s*[A-Za-z0-9-]+/ig, " ")
+        .replace(/(?:work\s*)?email\s*(?:is|=|:|#|-)?/ig, " ")
+        .replace(/(?:full\s*)?name\s*(?:is|=|:|#|-)?/ig, " ")
+        .replace(/^\s*(?=.*\d)[A-Za-z0-9-]{2,}\b/, " ")
+        .trim();
+      const words = withoutLabels.match(/[A-Za-z][A-Za-z'.-]+/g) || [];
+      const ignored = new Set(["employee", "full", "name", "email", "work", "id"]);
+      const nameWords = words.filter(word => !ignored.has(word.toLowerCase()));
+
+      if (nameWords.length >= 2) {
+        return nameWords.slice(0, 3).join(" ");
+      }
+
+      return "";
+    }
+
+    function parseCustomInternNames(text) {
+      const match = text.match(/(?:interns?|intern\s+names?)\s*(?:are|=|:|-)\s*([^.;]+)/i);
+      if (!match) return [];
+
+      return match[1]
+        .split(/,| and /i)
+        .map(name => name.trim())
+        .filter(name => isValidFullName(name))
+        .slice(0, 6);
+    }
+
+    function getInterns() {
+      const interns = state.customInternNames.length
+        ? state.customInternNames.map((name, index) => {
+          const template = defaultInterns[index % defaultInterns.length];
+          return {
+            ...template,
+            name
+          };
+        })
+        : defaultInterns;
+
+      return interns.map(intern => {
+        const assignment = state.assignments[intern.name];
+        if (!assignment) return intern;
+
+        const dueText = assignment.dueDate ? ` (due ${assignment.dueDate})` : "";
+        return {
+          ...intern,
+          focus: `Assigned: ${assignment.title}${dueText}`,
+          nextStep: assignment.details || assignment.title,
+          managerAction: assignment.dueDate
+            ? `Review progress before ${assignment.dueDate} and clear blockers.`
+            : "Review progress in the next check-in and clear blockers."
+        };
+      });
+    }
+
+    function getMissingPrompt() {
+      const verification = state.verification;
+      if (!verification.employeeId) return "Please enter your Employee ID to begin manager verification. Use numbers followed by one letter, such as 1234E.";
+      if (!verification.fullName) return "Please provide your full name.";
+      if (!verification.email) return "Please provide your IBM email address ending in @ibm.com.";
+      return "";
+    }
+
+    function maybeCaptureVerification(text) {
+      const verification = state.verification;
+      const foundNames = parseCustomInternNames(text);
+      if (foundNames.length) {
+        state.customInternNames = foundNames;
+      }
+
+      if (!verification.employeeId) {
+        const employeeId = parseEmployeeId(text);
+        if (employeeId) verification.employeeId = employeeId;
+      }
+
+      if (!verification.fullName) {
+        const name = parseFullName(text);
+        if (name && isValidFullName(name)) verification.fullName = name;
+      }
+
+      if (!verification.email) {
+        const email = parseEmail(text);
+        if (email && isValidIbmEmail(email)) verification.email = email.toLowerCase();
+      }
+    }
+
+    function handleVerification(text) {
+      const verification = state.verification;
+      const prior = { ...verification };
+
+      maybeCaptureVerification(text);
+
+      if (!verification.employeeId) {
+        const attemptedEmployeeId = extractEmployeeIdCandidate(text);
+        if (attemptedEmployeeId) {
+          addAgentMessage("<p>Employee ID must be numbers followed by one letter, such as 1234E.</p>");
+        } else {
+          addAgentMessage("<p>Employee ID cannot be blank. Please enter your Employee ID, such as 1234E.</p>");
+        }
+        return;
+      }
+
+      if (!verification.fullName) {
+        if (prior.employeeId && text.trim()) {
+          const attemptedName = parseFullName(text) || text.trim();
+          if (attemptedName && !isValidFullName(attemptedName) && !parseEmail(text)) {
+            addAgentMessage("<p>Full name must include first and last name. Please provide your full name.</p>");
+            return;
+          }
+        }
+        addAgentMessage("<p>Please provide your full name.</p>");
+        input.placeholder = "Enter your first and last name";
+        return;
+      }
+
+      if (!verification.email) {
+        const attemptedEmail = parseEmail(text);
+        if (attemptedEmail && !isValidIbmEmail(attemptedEmail)) {
+          addAgentMessage("<p>Please enter a valid IBM email address ending in @ibm.com.</p>");
+          return;
+        }
+        addAgentMessage("<p>Please provide your IBM email address ending in @ibm.com.</p>");
+        input.placeholder = "Enter your IBM email address";
+        return;
+      }
+
+      completeVerification();
+    }
+
+    function completeVerification() {
+      state.verification.complete = true;
+      input.placeholder = "Ask for email drafts, capstone ideas, or dashboard recommendations";
+      showDashboard();
+    }
+
+    function managerSummaryHtml() {
+      const verification = state.verification;
+      return `
+        <div class="manager-summary" aria-label="Verified manager details">
+          <strong>Manager verified</strong>
+          <span>${escapeHtml(verification.fullName)}</span>
+          <span>ID ${escapeHtml(verification.employeeId)}</span>
+          <span>${escapeHtml(verification.email)}</span>
+        </div>
+      `;
+    }
+
+    function dashboardHtml() {
+      const interns = getInterns();
+      const rows = interns.map(intern => {
+        const blockerClass = intern.blockers.toLowerCase().includes("none") ? "none" : "";
+        const tone = progressTone(intern.progress);
+        return `
+          <tr>
+            <td>
+              <div class="intern-name">${escapeHtml(intern.name)}</div>
+              <div class="role">${escapeHtml(intern.role)}</div>
+            </td>
+            <td class="progress-cell">
+              <div class="progress-label">
+                <span>${intern.progress}%</span>
+                <span>${intern.progress >= 80 ? "On track" : intern.progress >= 60 ? "Needs clarity" : "Needs support"}</span>
+              </div>
+              <div class="bar ${tone}" aria-label="${intern.progress}% progress">
+                <span style="width: ${intern.progress}%"></span>
+              </div>
+            </td>
+            <td>${escapeHtml(intern.completed)}</td>
+            <td>${escapeHtml(intern.focus)}</td>
+            <td><span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span></td>
+            <td>${escapeHtml(intern.nextStep)}</td>
+            <td>${escapeHtml(intern.managerAction)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="section-title">Intern Progress Dashboard</div>
+        <div class="table-wrap">
+          <table class="dashboard-table">
+            <colgroup>
+              <col class="col-intern">
+              <col class="col-progress">
+              <col class="col-completed">
+              <col class="col-focus">
+              <col class="col-blockers">
+              <col class="col-next">
+              <col class="col-action">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Intern name / Role</th>
+                <th>Progress percentage</th>
+                <th>Completed work</th>
+                <th>Current focus</th>
+                <th>Blockers</th>
+                <th>AI recommended next step</th>
+                <th>Suggested manager action</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function showDashboard() {
+      state.dashboardShown = true;
+      addAgentMessage(dashboardHtml(), { includeActions: true });
+    }
+
+    function emailDraftHtml(intern, index) {
+      const dueDate = "[Due date]";
+      const draftId = `draft-${index}-${intern.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+      return `
+        <div class="draft" data-draft-id="${escapeHtml(draftId)}">
+          <div class="draft-title">
+            <strong>${escapeHtml(intern.name)}</strong>
+            <span class="subject">Subject: Next steps for your internship project</span>
+          </div>
+          <div class="draft-body" contenteditable="false" spellcheck="true" aria-label="Editable email draft for ${escapeHtml(intern.name)}">
+            <p>Hello ${escapeHtml(intern.name.split(" ")[0])},</p>
+            <p>Thank you for the progress you have made so far. You have completed: ${escapeHtml(intern.completed)}</p>
+            <ul>
+              <li><strong>Next assigned task:</strong> ${escapeHtml(intern.nextStep)}</li>
+              <li><strong>Training or project recommendation:</strong> ${escapeHtml(getTrainingRecommendation(intern))}</li>
+              <li><strong>Due date:</strong> ${dueDate}</li>
+            </ul>
+            <p>Please reply with any questions or blockers that could affect your progress.</p>
+            <p>Best,<br>Manager</p>
+          </div>
+          <div class="draft-actions">
+            <span class="draft-status" aria-live="polite"></span>
+            <button type="button" class="draft-action edit" data-draft-action="edit" data-draft-id="${escapeHtml(draftId)}">Edit</button>
+            <button type="button" class="draft-action send" data-draft-action="send" data-draft-id="${escapeHtml(draftId)}">Send</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function getTrainingRecommendation(intern) {
+      if (intern.role.includes("Software")) return "Review integration testing patterns and API error-handling guidelines before the next implementation pass.";
+      if (intern.role.includes("Data")) return "Complete the data dictionary training and confirm the KPI definitions with your manager.";
+      if (intern.role.includes("UX")) return "Prepare the accessibility recommendation readout and connect each finding to a practical design action.";
+      if (intern.role.includes("Product")) return "Finish the agile requirements module and revise the highest-priority user stories with measurable acceptance criteria.";
+      return "Continue the most relevant project training and connect the next task to a concrete team deliverable.";
+    }
+
+    function draftEmails(text) {
+      const lower = text.toLowerCase();
+      const selected = getInterns().filter(intern => lower.includes(intern.name.toLowerCase().split(" ")[0]) || lower.includes(intern.name.toLowerCase()));
+      const interns = selected.length ? selected : getInterns();
+
+      state.pendingEmailConfirmation = true;
+      addAgentMessage(`
+        <div class="inline-note">Prepared manager review drafts</div>
+        <div class="section-title">Prepared Follow-Up Email Drafts</div>
+        ${interns.map(emailDraftHtml).join("")}
+        <p><strong>Use Edit to adjust a draft, or Send to mark an individual email ready.</strong></p>
+      `);
+    }
+
+    function assignmentSuggestion(intern) {
+      if (intern.role.includes("Software")) return "Implement one integration test path and document the API error states.";
+      if (intern.role.includes("Data")) return "Validate the retention KPI definitions and add two manager-ready dashboard insights.";
+      if (intern.role.includes("UX")) return "Convert research findings into three prioritized accessibility recommendations.";
+      if (intern.role.includes("Product")) return "Refine five onboarding user stories with measurable acceptance criteria.";
+      return "Complete a focused project task tied to the intern's current role and team goals.";
+    }
+
+    function assignmentPanelHtml() {
+      const interns = getInterns();
+      const options = interns.map(intern => `
+        <option value="${escapeHtml(intern.name)}">${escapeHtml(intern.name)} - ${escapeHtml(intern.role)}</option>
+      `).join("");
+      const suggested = interns[0] ? assignmentSuggestion(interns[0]) : "";
+
+      return `
+        <div class="inline-note">New assignment</div>
+        <div class="section-title">Assign Intern Work</div>
+        <div class="assignment-panel">
+          <div class="assignment-grid">
+            <div class="assignment-field">
+              <label>Intern</label>
+              <select data-assignment-field="intern">${options}</select>
+            </div>
+            <div class="assignment-field">
+              <label>Assignment</label>
+              <input data-assignment-field="title" type="text" value="${escapeHtml(suggested)}">
+            </div>
+            <div class="assignment-field">
+              <label>Due date</label>
+              <input data-assignment-field="dueDate" type="date">
+            </div>
+            <div class="assignment-field full">
+              <label>Success criteria / notes</label>
+              <textarea data-assignment-field="details" placeholder="Add expectations, deliverables, or support needed."></textarea>
+            </div>
+          </div>
+          <div class="assignment-actions">
+            <span class="assignment-feedback" aria-live="polite"></span>
+            <button type="button" class="assignment-action" data-assignment-action="assign">Assign</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showAssignmentPanel() {
+      addAgentMessage(assignmentPanelHtml(), { includeActions: true });
+    }
+
+    function capstoneHtml() {
+      const rows = getInterns().map(intern => `
+        <tr>
+          <td>
+            <div class="intern-name">${escapeHtml(intern.name)}</div>
+            <div class="role">${escapeHtml(intern.role)}</div>
+          </td>
+          <td>${escapeHtml(capstoneIdeas[intern.role] || "Create a focused project that turns current internship work into a practical team asset.")}</td>
+          <td>${escapeHtml(getCapstoneManagerAction(intern))}</td>
+        </tr>
+      `).join("");
+
+      addAgentMessage(`
+        <div class="inline-note">Recommendations for manager review</div>
+        <div class="section-title">Capstone Recommendations</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Intern</th>
+                <th>Recommended capstone</th>
+                <th>Suggested manager action</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `);
+    }
+
+    function getCapstoneManagerAction(intern) {
+      if (intern.progress >= 85) return "Give autonomy on final structure and schedule a readout with stakeholders.";
+      if (intern.progress >= 65) return "Clarify scope, define success criteria, and set one mid-point checkpoint.";
+      return "Narrow the project to one meaningful deliverable and provide weekly feedback until blockers are resolved.";
+    }
+
+    function generalHelp() {
+      addAgentMessage(`
+        <p>I can help with intern tracking, new assignments, recommendations, capstone ideas, and follow-up email drafts.</p>
+        <p>Try: <strong>assign new work</strong>, <strong>draft follow-up emails</strong>, <strong>recommend capstones</strong>, or <strong>show dashboard</strong>.</p>
+      `);
+    }
+
+    function handlePostVerification(text) {
+      const lower = text.toLowerCase();
+      const names = parseCustomInternNames(text);
+      if (names.length) {
+        state.customInternNames = names;
+        addAgentMessage(`<p>Updated the dashboard to use ${names.length} provided intern name${names.length === 1 ? "" : "s"}.</p>`);
+        showDashboard();
+        return;
+      }
+
+      if (state.pendingEmailConfirmation && /\b(yes|confirm|ready|please do|go ahead)\b/i.test(lower)) {
+        state.pendingEmailConfirmation = false;
+        addAgentMessage("<p><strong>The email drafts are marked as ready for manager review.</strong></p>");
+        return;
+      }
+
+      if (state.pendingEmailConfirmation && /\b(no|do not|don't|cancel|not now)\b/i.test(lower)) {
+        state.pendingEmailConfirmation = false;
+        addAgentMessage("<p>No status change was made. The email drafts remain available in this chat for review.</p>");
+        return;
+      }
+
+      if (/\b(assign|assignment|new work|new task|task)\b/i.test(lower)) {
+        showAssignmentPanel();
+        return;
+      }
+
+      if (/\b(email|emails|contact|message|follow[- ]?up|send)\b/i.test(lower)) {
+        draftEmails(text);
+        return;
+      }
+
+      if (/\b(capstone|final project|portfolio project)\b/i.test(lower)) {
+        capstoneHtml();
+        return;
+      }
+
+      if (/\b(dashboard|progress|status|blocker|blockers|recommendation|recommendations|interns)\b/i.test(lower)) {
+        showDashboard();
+        return;
+      }
+
+      generalHelp();
+    }
+
+    function boot() {
+      addAgentMessage(`
+        <p><strong>Welcome to AskBlue.</strong></p>
+        <p>I&rsquo;m here to help you keep intern teams aligned with clear progress visibility, practical next-step recommendations, and follow-up support.</p>
+        <p>To begin manager verification, please enter your Employee ID:</p>
+      `);
+    }
+
+    function setDraftEditing(draft, isEditing) {
+      const body = draft.querySelector(".draft-body");
+      const editButton = draft.querySelector('[data-draft-action="edit"]');
+      const status = draft.querySelector(".draft-status");
+      if (!body || !editButton) return;
+
+      draft.classList.toggle("editing", isEditing);
+      body.setAttribute("contenteditable", isEditing ? "true" : "false");
+      editButton.textContent = isEditing ? "Save" : "Edit";
+
+      if (status) {
+        status.textContent = isEditing ? "Editing draft" : "Edits saved";
+      }
+
+      if (isEditing) {
+        body.focus();
+      }
+
+      scrollToBottom();
+    }
+
+    function handleDraftAction(button, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      if (button.disabled || button.dataset.draftAction === "sent") return;
+
+      const draft = button.closest(".draft");
+      if (!draft) return;
+
+      const action = button.dataset.draftAction;
+      if (draft.dataset.draftId !== button.dataset.draftId) return;
+
+      const status = draft.querySelector(".draft-status");
+
+      if (action === "edit") {
+        setDraftEditing(draft, !draft.classList.contains("editing"));
+        return;
+      }
+
+      if (action === "send") {
+        if (draft.classList.contains("editing")) {
+          setDraftEditing(draft, false);
+        }
+
+        button.textContent = "Sending";
+        button.disabled = true;
+        button.classList.add("loading");
+        button.setAttribute("aria-busy", "true");
+        if (status) {
+          status.textContent = "Sending...";
+        }
+        scrollToBottom();
+
+        runLater(() => {
+          button.classList.remove("loading");
+          button.classList.add("sent");
+          button.removeAttribute("aria-busy");
+          button.dataset.draftAction = "sent";
+          button.textContent = "Sent!";
+          if (status) {
+            status.textContent = "";
+          }
+          scrollToBottom();
+        }, 850);
+      }
+    }
+
+    function assignmentValues(panel) {
+      return {
+        internName: (panel.querySelector('[data-assignment-field="intern"]')?.value || "").trim(),
+        title: (panel.querySelector('[data-assignment-field="title"]')?.value || "").trim(),
+        dueDate: (panel.querySelector('[data-assignment-field="dueDate"]')?.value || "").trim(),
+        details: (panel.querySelector('[data-assignment-field="details"]')?.value || "").trim()
+      };
+    }
+
+    function handleAssignmentAction(button, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      if (button.disabled) return;
+
+      const panel = button.closest(".assignment-panel");
+      if (!panel) return;
+
+      const feedback = panel.querySelector(".assignment-feedback");
+      const values = assignmentValues(panel);
+
+      if (!values.internName || !values.title) {
+        if (feedback) {
+          feedback.textContent = "Select an intern and enter an assignment.";
+          feedback.className = "assignment-feedback error";
+        }
+        scrollToBottom();
+        return;
+      }
+
+      state.assignments[values.internName] = {
+        title: values.title,
+        details: values.details,
+        dueDate: values.dueDate
+      };
+
+      button.textContent = "Assigned";
+      button.disabled = true;
+      if (feedback) {
+        feedback.textContent = `Assigned to ${values.internName}`;
+        feedback.className = "assignment-feedback success";
+      }
+
+      const dueText = values.dueDate ? ` Due date: ${escapeHtml(values.dueDate)}.` : "";
+      addAgentMessage(`
+        <p><strong>Assignment added for ${escapeHtml(values.internName)}.</strong></p>
+        <p>${escapeHtml(values.title)}.${dueText}</p>
+      `);
+      showDashboard();
+      scrollToBottom();
+    }
+
+    function handleAssignmentInternChange(select) {
+      const panel = select.closest(".assignment-panel");
+      if (!panel) return;
+
+      const intern = getInterns().find(candidate => candidate.name === select.value);
+      const titleInput = panel.querySelector('[data-assignment-field="title"]');
+      if (intern && titleInput) {
+        titleInput.value = assignmentSuggestion(intern);
+      }
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (!text) {
+        if (!state.verification.complete) {
+          addAgentMessage(`<p>${getMissingPrompt()}</p>`);
+        }
+        return;
+      }
+
+      addUserMessage(text);
+      input.value = "";
+
+      if (!state.verification.complete) {
+        handleVerification(text);
+      } else {
+        handlePostVerification(text);
+      }
+    });
+
+    messages.addEventListener("click", event => {
+      const assignmentButton = event.target.closest("button[data-assignment-action]");
+      if (assignmentButton) {
+        handleAssignmentAction(assignmentButton, event);
+        return;
+      }
+
+      const draftButton = event.target.closest("button[data-draft-action]");
+      if (draftButton) {
+        handleDraftAction(draftButton, event);
+        return;
+      }
+
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+
+      const action = button.dataset.action;
+      if (action === "emails") draftEmails("draft follow-up emails");
+      if (action === "assignments") showAssignmentPanel();
+      if (action === "capstones") capstoneHtml();
+      if (action === "dashboard") showDashboard();
+    });
+
+    messages.addEventListener("change", event => {
+      const internSelect = event.target.closest('select[data-assignment-field="intern"]');
+      if (internSelect) {
+        handleAssignmentInternChange(internSelect);
+      }
+    });
+
+    boot();
+  </script>
+</body>
+</html>
