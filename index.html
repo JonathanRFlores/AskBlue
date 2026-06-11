@@ -217,7 +217,7 @@
       min-height: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
       background:
         linear-gradient(180deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.82));
     }
@@ -725,12 +725,15 @@
     }
 
     .composer {
-      position: relative;
-      z-index: 2;
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      flex-shrink: 0;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
       padding: 14px;
+      padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid var(--line);
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(16px);
@@ -1022,9 +1025,6 @@
         if (messages.scrollTo) {
           messages.scrollTo({ top: target, behavior: "auto" });
         }
-        if (scrollAnchor.scrollIntoView) {
-          scrollAnchor.scrollIntoView({ block: "end", inline: "nearest" });
-        }
       };
 
       scroll();
@@ -1032,13 +1032,13 @@
       const scrollAcrossFrames = () => {
         scroll();
         frames += 1;
-        if (frames < 8) {
+        if (frames < 12) {
           nextFrame(scrollAcrossFrames);
         }
       };
 
       nextFrame(scrollAcrossFrames);
-      [80, 180, 320, 520, 900, 1300].forEach(delay => runLater(scroll, delay));
+      [80, 180, 320, 520, 900, 1300, 1800].forEach(delay => runLater(scroll, delay));
     }
 
     function wireScrollAfterAssets(container) {
