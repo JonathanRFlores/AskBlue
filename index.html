@@ -1317,20 +1317,25 @@
       return /class="[^"]*(table-wrap|manager-summary|assignment-panel)[^"]*"/.test(html);
     }
 
-    function quickActionsHtml() {
+    function isDashboardContent(html) {
+      return html.includes('class="dashboard-table"');
+    }
+
+    function quickActionsHtml(options = {}) {
+      const includeDashboard = options.includeDashboard ?? true;
       return `
         <div class="quick-actions">
           <button type="button" data-action="emails">Draft follow-up emails</button>
           <button type="button" data-action="assignments">Assign new work</button>
           <button type="button" data-action="capstones">Recommend capstones</button>
-          <button type="button" data-action="dashboard">Show dashboard</button>
+          ${includeDashboard ? '<button type="button" data-action="dashboard">Show dashboard</button>' : ""}
         </div>
       `;
     }
 
     function appendActionOptions(html) {
       if (html.includes('class="quick-actions"')) return html;
-      return `${html}${quickActionsHtml()}`;
+      return `${html}${quickActionsHtml({ includeDashboard: !isDashboardContent(html) })}`;
     }
 
     function renderBubbleContent(bubble, html) {
