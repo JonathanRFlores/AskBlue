@@ -512,6 +512,20 @@
       transform: translateY(-1px);
     }
 
+    .row-actions .row-action[data-intern-action="assign"],
+    .row-actions .row-action.primary[data-intern-action="assign"] {
+      background: #eff4ff;
+      border-color: #b2ccff;
+      color: var(--blue-dark);
+    }
+
+    .row-actions .row-action[data-intern-action="assign"]:hover,
+    .row-actions .row-action.primary[data-intern-action="assign"]:hover {
+      background: #dbeafe;
+      border-color: #84adff;
+      color: var(--blue-dark);
+    }
+
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
