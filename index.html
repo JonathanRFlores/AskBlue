@@ -897,6 +897,8 @@
   </main>
 
   <script>
+    const ASKBLUE_AI_ENDPOINT = window.ASKBLUE_AI_ENDPOINT || "";
+
     const defaultInterns = [
       {
         name: "Maya Chen",
@@ -957,6 +959,7 @@
       pendingEmailConfirmation: false,
       dashboardShown: false,
       assignments: {},
+      aiHistory: [],
       customInternNames: []
     };
 
@@ -1071,6 +1074,70 @@
         .replaceAll("'", "&#039;");
     }
 
+    function textToHtml(text) {
+      const escaped = escapeHtml(text || "");
+      const paragraphs = escaped
+        .split(/\n{2,}/)
+        .map(part => part.trim())
+        .filter(Boolean)
+        .map(part => `<p>${part.replace(/\n/g, "<br>")}</p>`);
+
+      return paragraphs.length ? paragraphs.join("") : "<p>I can help with the next manager workflow.</p>";
+    }
+
+    function aiContext() {
+      return {
+        managerVerified: state.verification.complete,
+        interns: getInterns().map(intern => ({
+          name: intern.name,
+          role: intern.role,
+          progress: intern.progress,
+          completed: intern.completed,
+          focus: intern.focus,
+          blockers: intern.blockers,
+          nextStep: intern.nextStep,
+          managerAction: intern.managerAction
+        })),
+        assignments: state.assignments
+      };
+    }
+
+    async function requestAiResponse(text) {
+      if (!ASKBLUE_AI_ENDPOINT) return false;
+
+      const bubble = addAgentThinkingBubble();
+
+      try {
+        const response = await fetch(ASKBLUE_AI_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: text,
+            context: aiContext(),
+            history: state.aiHistory.slice(-8)
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`AI endpoint returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        const reply = data.reply || "I can help with intern progress, assignments, emails, or capstone planning.";
+        state.aiHistory.push({ role: "user", content: text });
+        state.aiHistory.push({ role: "assistant", content: reply });
+        renderBubbleContent(bubble, appendActionOptions(textToHtml(reply)));
+        return true;
+      } catch (error) {
+        renderBubbleContent(bubble, appendActionOptions(`
+          <p>I could not reach the AI service right now. You can still use dashboard, assignment, email, and capstone actions from this page.</p>
+        `));
+        return true;
+      }
+    }
+
     function addMessage(sender, html) {
       const row = document.createElement("div");
       row.className = `message-row ${sender}`;
@@ -1094,13 +1161,18 @@
     function addAgentMessage(html, options = {}) {
       const includeActions = options.includeActions ?? state.dashboardShown;
       const finalHtml = includeActions ? appendActionOptions(html) : html;
+      const bubble = addAgentThinkingBubble(finalHtml);
+      runLater(() => renderBubbleContent(bubble, finalHtml), responseDelay(finalHtml));
+      return bubble;
+    }
+
+    function addAgentThinkingBubble(html = "") {
       const bubble = addMessage("agent", "");
       const row = bubble.parentElement;
       if (row) row.classList.add("is-thinking");
       bubble.classList.add("typing");
-      bubble.classList.toggle("wide", isWideContent(finalHtml));
+      bubble.classList.toggle("wide", isWideContent(html));
       scrollToBottom();
-      runLater(() => renderBubbleContent(bubble, finalHtml), responseDelay(finalHtml));
       return bubble;
     }
 
@@ -1520,7 +1592,7 @@
       `);
     }
 
-    function handlePostVerification(text) {
+    async function handlePostVerification(text) {
       const lower = text.toLowerCase();
       const names = parseCustomInternNames(text);
       if (names.length) {
@@ -1562,7 +1634,10 @@
         return;
       }
 
-      generalHelp();
+      const handledByAi = await requestAiResponse(text);
+      if (!handledByAi) {
+        generalHelp();
+      }
     }
 
     function boot() {
