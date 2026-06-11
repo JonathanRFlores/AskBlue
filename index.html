@@ -417,6 +417,10 @@
       border-bottom: 0;
     }
 
+    .dashboard-row:hover td {
+      background: #f8fbff;
+    }
+
     .intern-name {
       font-weight: 780;
       color: #1c2940;
@@ -480,6 +484,43 @@
     .blocker.none {
       background: #eaf7f1;
       color: var(--green);
+    }
+
+    .row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .row-action {
+      border: 1px solid #b2ccff;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      border-radius: 8px;
+      padding: 5px 7px;
+      font-size: 0.72rem;
+      font-weight: 780;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .row-action:hover {
+      background: #dbeafe;
+      border-color: #84adff;
+      transform: translateY(-1px);
+    }
+
+    .row-action.primary {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .row-action.primary:hover {
+      background: var(--blue-dark);
+      border-color: var(--blue-dark);
     }
 
     .quick-actions {
@@ -1318,6 +1359,10 @@
       });
     }
 
+    function findInternByName(internName) {
+      return getInterns().find(intern => intern.name === internName);
+    }
+
     function getMissingPrompt() {
       const verification = state.verification;
       if (!verification.employeeId) return "Please enter your Employee ID to begin manager verification. Use numbers followed by one letter, such as 1234E.";
@@ -1410,13 +1455,25 @@
       `;
     }
 
+    function dashboardRowActionsHtml(intern) {
+      const internName = escapeHtml(intern.name);
+      return `
+        <div class="row-actions" aria-label="Actions for ${internName}">
+          <button type="button" class="row-action primary" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
+          <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
+          <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${internName}">Follow-up</button>
+          <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${internName}">Capstone</button>
+        </div>
+      `;
+    }
+
     function dashboardHtml() {
       const interns = getInterns();
       const rows = interns.map(intern => {
         const blockerClass = intern.blockers.toLowerCase().includes("none") ? "none" : "";
         const tone = progressTone(intern.progress);
         return `
-          <tr>
+          <tr class="dashboard-row" data-intern-name="${escapeHtml(intern.name)}">
             <td>
               <div class="intern-name">${escapeHtml(intern.name)}</div>
               <div class="role">${escapeHtml(intern.role)}</div>
@@ -1434,7 +1491,10 @@
             <td>${escapeHtml(intern.focus)}</td>
             <td><span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span></td>
             <td>${escapeHtml(intern.nextStep)}</td>
-            <td>${escapeHtml(intern.managerAction)}</td>
+            <td>
+              ${escapeHtml(intern.managerAction)}
+              ${dashboardRowActionsHtml(intern)}
+            </td>
           </tr>
         `;
       }).join("");
@@ -1461,7 +1521,7 @@
                 <th>Current focus</th>
                 <th>Blockers</th>
                 <th>AI recommended next step</th>
-                <th>Suggested manager action</th>
+                <th>Suggested manager action / Actions</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -1475,16 +1535,27 @@
       addAgentMessage(dashboardHtml(), { includeActions: true });
     }
 
-    function emailDraftHtml(intern, index) {
+    function emailDraftHtml(intern, index, variant = "standard") {
       const dueDate = "[Due date]";
-      const draftId = `draft-${index}-${intern.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
-      return `
-        <div class="draft" data-draft-id="${escapeHtml(draftId)}">
-          <div class="draft-title">
-            <strong>${escapeHtml(intern.name)}</strong>
-            <span class="subject">Subject: Next steps for your internship project</span>
-          </div>
-          <div class="draft-body" contenteditable="false" spellcheck="true" aria-label="Editable email draft for ${escapeHtml(intern.name)}">
+      const isFollowUp = variant === "followup";
+      const draftId = `${variant}-${index}-${intern.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+      const subject = isFollowUp
+        ? "Follow-up on current focus and blockers"
+        : "Next steps for your internship project";
+      const body = isFollowUp
+        ? `
+            <p>Hello ${escapeHtml(intern.name.split(" ")[0])},</p>
+            <p>I wanted to follow up on your current focus: ${escapeHtml(intern.focus)}</p>
+            <ul>
+              <li><strong>Progress noted:</strong> ${escapeHtml(intern.completed)}</li>
+              <li><strong>Recommended next step:</strong> ${escapeHtml(intern.nextStep)}</li>
+              <li><strong>Training or project recommendation:</strong> ${escapeHtml(getTrainingRecommendation(intern))}</li>
+              <li><strong>Due date:</strong> ${dueDate}</li>
+            </ul>
+            <p>Please reply with any questions, blockers, or support needed to keep this moving.</p>
+            <p>Best,<br>Manager</p>
+          `
+        : `
             <p>Hello ${escapeHtml(intern.name.split(" ")[0])},</p>
             <p>Thank you for the progress you have made so far. You have completed: ${escapeHtml(intern.completed)}</p>
             <ul>
@@ -1494,6 +1565,16 @@
             </ul>
             <p>Please reply with any questions or blockers that could affect your progress.</p>
             <p>Best,<br>Manager</p>
+          `;
+
+      return `
+        <div class="draft" data-draft-id="${escapeHtml(draftId)}">
+          <div class="draft-title">
+            <strong>${escapeHtml(intern.name)}</strong>
+            <span class="subject">Subject: ${escapeHtml(subject)}</span>
+          </div>
+          <div class="draft-body" contenteditable="false" spellcheck="true" aria-label="Editable email draft for ${escapeHtml(intern.name)}">
+            ${body}
           </div>
           <div class="draft-actions">
             <span class="draft-status" aria-live="polite"></span>
@@ -1512,18 +1593,24 @@
       return "Continue the most relevant project training and connect the next task to a concrete team deliverable.";
     }
 
+    function draftEmailsForInterns(interns, variant = "standard") {
+      if (!interns.length) return;
+
+      const isFollowUp = variant === "followup";
+      state.pendingEmailConfirmation = true;
+      addAgentMessage(`
+        <div class="inline-note">Prepared manager review drafts</div>
+        <div class="section-title">${isFollowUp ? "Prepared Focused Follow-Up Drafts" : "Prepared Follow-Up Email Drafts"}</div>
+        ${interns.map((intern, index) => emailDraftHtml(intern, index, variant)).join("")}
+        <p><strong>Use Edit to adjust a draft, or Send to mark an individual email ready.</strong></p>
+      `);
+    }
+
     function draftEmails(text) {
       const lower = text.toLowerCase();
       const selected = getInterns().filter(intern => lower.includes(intern.name.toLowerCase().split(" ")[0]) || lower.includes(intern.name.toLowerCase()));
       const interns = selected.length ? selected : getInterns();
-
-      state.pendingEmailConfirmation = true;
-      addAgentMessage(`
-        <div class="inline-note">Prepared manager review drafts</div>
-        <div class="section-title">Prepared Follow-Up Email Drafts</div>
-        ${interns.map(emailDraftHtml).join("")}
-        <p><strong>Use Edit to adjust a draft, or Send to mark an individual email ready.</strong></p>
-      `);
+      draftEmailsForInterns(interns);
     }
 
     function assignmentSuggestion(intern) {
@@ -1534,15 +1621,16 @@
       return "Complete a focused project task tied to the intern's current role and team goals.";
     }
 
-    function assignmentPanelHtml() {
+    function assignmentPanelHtml(selectedInternName = "") {
       const interns = getInterns();
+      const selectedIntern = findInternByName(selectedInternName) || interns[0];
       const options = interns.map(intern => `
-        <option value="${escapeHtml(intern.name)}">${escapeHtml(intern.name)} - ${escapeHtml(intern.role)}</option>
+        <option value="${escapeHtml(intern.name)}"${selectedIntern && intern.name === selectedIntern.name ? " selected" : ""}>${escapeHtml(intern.name)} - ${escapeHtml(intern.role)}</option>
       `).join("");
-      const suggested = interns[0] ? assignmentSuggestion(interns[0]) : "";
+      const suggested = selectedIntern ? assignmentSuggestion(selectedIntern) : "";
 
       return `
-        <div class="inline-note">New assignment</div>
+        <div class="inline-note">${selectedIntern ? `New assignment for ${escapeHtml(selectedIntern.name)}` : "New assignment"}</div>
         <div class="section-title">Assign Intern Work</div>
         <div class="assignment-panel">
           <div class="assignment-grid">
@@ -1571,12 +1659,14 @@
       `;
     }
 
-    function showAssignmentPanel() {
-      addAgentMessage(assignmentPanelHtml(), { includeActions: true });
+    function showAssignmentPanel(selectedInternName = "") {
+      addAgentMessage(assignmentPanelHtml(selectedInternName), { includeActions: true });
     }
 
-    function capstoneHtml() {
-      const rows = getInterns().map(intern => `
+    function capstoneHtml(selectedInternName = "") {
+      const selectedIntern = findInternByName(selectedInternName);
+      const interns = selectedIntern ? [selectedIntern] : getInterns();
+      const rows = interns.map(intern => `
         <tr>
           <td>
             <div class="intern-name">${escapeHtml(intern.name)}</div>
@@ -1589,7 +1679,7 @@
 
       addAgentMessage(`
         <div class="inline-note">Recommendations for manager review</div>
-        <div class="section-title">Capstone Recommendations</div>
+        <div class="section-title">${selectedIntern ? `Capstone Recommendation for ${escapeHtml(selectedIntern.name)}` : "Capstone Recommendations"}</div>
         <div class="table-wrap">
           <table>
             <thead>
@@ -1809,6 +1899,23 @@
       }
     }
 
+    function handleInternTableAction(button, event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const internName = button.dataset.internName || "";
+      const intern = findInternByName(internName);
+      if (!intern) return;
+
+      const action = button.dataset.internAction;
+      if (action === "assign") showAssignmentPanel(intern.name);
+      if (action === "email") draftEmailsForInterns([intern]);
+      if (action === "followup") draftEmailsForInterns([intern], "followup");
+      if (action === "capstone") capstoneHtml(intern.name);
+    }
+
     form.addEventListener("submit", event => {
       event.preventDefault();
       const text = input.value.trim();
@@ -1830,6 +1937,12 @@
     });
 
     messages.addEventListener("click", event => {
+      const internActionButton = event.target.closest("button[data-intern-action]");
+      if (internActionButton) {
+        handleInternTableAction(internActionButton, event);
+        return;
+      }
+
       const assignmentButton = event.target.closest("button[data-assignment-action]");
       if (assignmentButton) {
         handleAssignmentAction(assignmentButton, event);
