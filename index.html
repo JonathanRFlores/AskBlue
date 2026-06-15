@@ -140,6 +140,40 @@
       justify-self: center;
     }
 
+    .header-center {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      min-width: 0;
+      justify-self: center;
+    }
+
+    .header-manager-summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 3px 10px;
+      color: #344058;
+      font-size: 0.72rem;
+      font-weight: 720;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .header-manager-summary strong {
+      color: var(--blue-dark);
+      font-size: 0.74rem;
+    }
+
+    .header-manager-summary span {
+      white-space: nowrap;
+    }
+
+    .header-manager-summary[hidden] {
+      display: none;
+    }
+
     .partner-logo-wrap {
       display: flex;
       align-items: center;
@@ -1475,6 +1509,14 @@
         white-space: normal;
       }
 
+      .header-center {
+        width: min(460px, 92vw);
+      }
+
+      .header-manager-summary {
+        font-size: 0.7rem;
+      }
+
       .brand {
         align-items: center;
         flex-direction: column;
@@ -1529,7 +1571,10 @@
         </div>
         <h1 class="sr-only">AskBlue</h1>
       </div>
-      <p class="header-tagline">AI assistant for intern skills, training, project planning, and follow-up</p>
+      <div class="header-center">
+        <p class="header-tagline">AI assistant for intern skills, training, project planning, and follow-up</p>
+        <div id="headerManagerSummary" class="header-manager-summary" aria-label="Verified manager details" hidden></div>
+      </div>
       <div class="partner-logo-wrap" aria-label="IBM">
         <img class="partner-logo" src="assets/ibm-logo.png" alt="IBM">
       </div>
@@ -1821,6 +1866,7 @@
     const verificationEmail = document.getElementById("verificationEmail");
     const verificationError = document.getElementById("verificationError");
     const verificationInputs = [verificationEmployeeId, verificationFullName, verificationEmail].filter(Boolean);
+    const headerManagerSummary = document.getElementById("headerManagerSummary");
     const scrollAnchor = document.createElement("div");
     scrollAnchor.className = "scroll-anchor";
     messages.appendChild(scrollAnchor);
@@ -2412,21 +2458,28 @@
       const wasComplete = state.verification.complete;
       state.verification.complete = true;
       input.placeholder = "Ask for skills, training, task lifecycle, Intern10, or auto assignment";
+      updateHeaderManagerSummary();
       closeVerificationModal();
       if (!wasComplete) {
         showDashboard();
       }
     }
 
-    function managerSummaryHtml() {
+    function updateHeaderManagerSummary() {
+      if (!headerManagerSummary) return;
       const verification = state.verification;
-      return `
-        <div class="manager-summary" aria-label="Verified manager details">
-          <strong>Manager verified</strong>
-          <span>${escapeHtml(verification.fullName)}</span>
-          <span>ID ${escapeHtml(verification.employeeId)}</span>
-          <span>${escapeHtml(verification.email)}</span>
-        </div>
+      if (!verification.complete) {
+        headerManagerSummary.hidden = true;
+        headerManagerSummary.innerHTML = "";
+        return;
+      }
+
+      headerManagerSummary.hidden = false;
+      headerManagerSummary.innerHTML = `
+        <strong>Manager verified</strong>
+        <span>${escapeHtml(verification.fullName)}</span>
+        <span>ID ${escapeHtml(verification.employeeId)}</span>
+        <span>${escapeHtml(verification.email)}</span>
       `;
     }
 
@@ -2583,7 +2636,6 @@
         <div class="dashboard-view">
           <div class="dashboard-heading">
             <div>
-              ${managerSummaryHtml()}
               <div class="section-title">Intern Progress and Planning Dashboard</div>
             </div>
             <div class="dashboard-count">Showing ${interns.length} of ${allInterns.length} interns</div>
@@ -2655,7 +2707,6 @@
         : "<p>No custom assignment has been added yet.</p>";
 
       return `
-        ${managerSummaryHtml()}
         <div class="detail-view">
           <div class="inline-note">Intern detail view</div>
           <div class="detail-header">
@@ -3090,7 +3141,6 @@
       }).join("");
 
       return `
-        ${managerSummaryHtml()}
         <div class="inline-note">Skill recommendations</div>
         <div class="section-title">${selectedInternName ? "Skills This Intern Should Learn" : "Skills Interns Should Learn"}</div>
         <div class="recommendation-grid">${panels}</div>
@@ -3114,7 +3164,6 @@
       `).join("");
 
       return `
-        ${managerSummaryHtml()}
         <div class="inline-note">Training recommendations by sub-practice</div>
         <div class="section-title">${selectedInternName ? "Training Plan for Intern and Manager" : "Training Plans for Interns and Managers"}</div>
         <div class="recommendation-grid">${panels}</div>
@@ -3142,7 +3191,6 @@
         }).join("");
 
         return `
-          ${managerSummaryHtml()}
           <div class="inline-note">Task lifecycle overview</div>
           <div class="section-title">Process to Completion by Intern</div>
           <div class="recommendation-grid">${panels}</div>
@@ -3163,7 +3211,6 @@
       `).join("");
 
       return `
-        ${managerSummaryHtml()}
         <div class="inline-note">Task lifecycle for ${escapeHtml(selectedIntern.name)}</div>
         <div class="section-title">Process to Completion</div>
         <div class="manager-summary">
@@ -3219,7 +3266,6 @@
         }).join("");
 
         return `
-          ${managerSummaryHtml()}
           <div class="inline-note">Intern10 challenge planning</div>
           <div class="section-title">Recommended Calls and Assignments</div>
           <div class="recommendation-grid">${panels}</div>
@@ -3227,7 +3273,6 @@
       }
 
       return `
-        ${managerSummaryHtml()}
         <div class="inline-note">Intern10 challenge for ${escapeHtml(selectedIntern.name)}</div>
         <div class="section-title">Calls, Assignments, and Evidence</div>
         <div class="recommendation-panel">${intern10RowsHtml(selectedIntern)}</div>
@@ -3271,7 +3316,6 @@
       }).join("");
 
       addAgentMessage(`
-        ${managerSummaryHtml()}
         <div class="inline-note">Auto assigned by expected project hours</div>
         <div class="section-title">${selectedInternName ? "Scaled Assignment Created" : "Scaled Assignments Created"}</div>
         <div class="table-wrap">
