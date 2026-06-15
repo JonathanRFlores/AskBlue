@@ -192,7 +192,7 @@
     .shell {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      padding: clamp(12px, 2vw, 24px);
+      padding: clamp(8px, 1.4vw, 18px);
       min-height: 0;
       overflow: hidden;
     }
@@ -222,6 +222,11 @@
         linear-gradient(180deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.82));
     }
 
+    .messages.dashboard-mode {
+      padding: clamp(8px, 1.2vw, 14px);
+      overflow: hidden;
+    }
+
     .scroll-anchor {
       height: 1px;
     }
@@ -232,6 +237,13 @@
       gap: 10px;
       margin: 0 0 16px;
       animation: messageIn 220ms ease both;
+    }
+
+    .message-row.dashboard-screen {
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+      gap: 0;
     }
 
     .message-row.user {
@@ -249,6 +261,10 @@
         #0f6fcb;
       border: 1px solid rgba(255, 255, 255, 0.78);
       box-shadow: 0 10px 24px rgba(21, 94, 239, 0.24);
+    }
+
+    .message-row.dashboard-screen::before {
+      display: none;
     }
 
     .message-row.agent.is-thinking::before {
@@ -285,6 +301,18 @@
       flex: 1 1 auto;
       max-width: none;
       width: 100%;
+    }
+
+    .message-row.dashboard-screen .message {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      max-width: none;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
     }
 
     .message.typing {
@@ -366,35 +394,107 @@
     }
 
     .dashboard-table .col-intern {
-      width: 12%;
+      width: 15%;
     }
 
     .dashboard-table .col-area {
-      width: 12%;
-    }
-
-    .dashboard-table .col-progress {
-      width: 9%;
-    }
-
-    .dashboard-table .col-completed {
       width: 14%;
     }
 
-    .dashboard-table .col-focus {
-      width: 13%;
-    }
-
-    .dashboard-table .col-blockers {
+    .dashboard-table .col-progress {
       width: 10%;
     }
 
-    .dashboard-table .col-next {
-      width: 17%;
+    .dashboard-table .col-focus {
+      width: 25%;
+    }
+
+    .dashboard-table .col-blockers {
+      width: 19%;
     }
 
     .dashboard-table .col-action {
-      width: 13%;
+      width: 17%;
+    }
+
+    .dashboard-view {
+      height: 100%;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .dashboard-view .manager-summary {
+      margin: 0;
+      min-height: 22px;
+    }
+
+    .dashboard-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .dashboard-heading .section-title {
+      margin: 0;
+    }
+
+    .dashboard-heading .dashboard-count {
+      flex: 0 0 auto;
+    }
+
+    .dashboard-view .table-wrap {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .dashboard-view .dashboard-table {
+      height: 100%;
+      font-size: 0.72rem;
+    }
+
+    .dashboard-view th,
+    .dashboard-view td {
+      padding: 6px 8px;
+      line-height: 1.24;
+    }
+
+    .dashboard-view th {
+      font-size: 0.66rem;
+    }
+
+    .dashboard-view tbody {
+      height: 100%;
+    }
+
+    .dashboard-brief {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .dashboard-brief strong {
+      color: #344058;
+      font-size: 0.72rem;
+      line-height: 1.2;
+    }
+
+    .clamp-1,
+    .clamp-2 {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .clamp-1 {
+      -webkit-line-clamp: 1;
+    }
+
+    .clamp-2 {
+      -webkit-line-clamp: 2;
     }
 
     .capstone-table .col-capstone-intern {
@@ -431,9 +531,9 @@
 
     .dashboard-controls {
       display: grid;
-      gap: 10px;
-      margin: 0 0 12px;
-      padding: 10px;
+      gap: 6px;
+      margin: 0;
+      padding: 8px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.88);
@@ -441,34 +541,34 @@
 
     .dashboard-control-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
     }
 
     .dashboard-control {
       display: grid;
-      gap: 5px;
+      gap: 3px;
       min-width: 0;
     }
 
     .dashboard-control label {
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.62rem;
       font-weight: 760;
       text-transform: uppercase;
     }
 
     .dashboard-control select {
       width: 100%;
-      min-height: 36px;
+      min-height: 30px;
       border: 1px solid #cbd4e2;
       border-radius: 8px;
-      padding: 7px 9px;
+      padding: 5px 7px;
       color: var(--ink);
       background: #fff;
       outline: none;
       font: inherit;
-      font-size: 0.82rem;
+      font-size: 0.72rem;
     }
 
     .dashboard-control select:focus {
@@ -478,7 +578,7 @@
 
     .dashboard-count {
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 720;
     }
 
@@ -506,33 +606,33 @@
     .role {
       display: block;
       max-width: 100%;
-      margin-top: 4px;
+      margin-top: 3px;
       color: var(--muted);
-      font-size: 0.74rem;
-      line-height: 1.28;
+      font-size: 0.7rem;
+      line-height: 1.22;
       white-space: normal;
       overflow-wrap: break-word;
     }
 
     .meta-stack {
       display: grid;
-      gap: 5px;
+      gap: 3px;
       color: var(--muted);
-      font-size: 0.74rem;
-      line-height: 1.32;
+      font-size: 0.7rem;
+      line-height: 1.24;
     }
 
     .meta-stack strong {
       color: #344058;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
     }
 
     .workload-note {
       display: grid;
-      gap: 4px;
+      gap: 3px;
       color: var(--muted);
-      font-size: 0.74rem;
-      line-height: 1.32;
+      font-size: 0.7rem;
+      line-height: 1.24;
     }
 
     .recommendation-grid {
@@ -675,6 +775,11 @@
       font-weight: 760;
     }
 
+    .dashboard-view .progress-label {
+      margin-bottom: 5px;
+      gap: 1px;
+    }
+
     .bar {
       height: 8px;
       border-radius: 999px;
@@ -734,6 +839,20 @@
       line-height: 1;
       cursor: pointer;
       white-space: nowrap;
+    }
+
+    .dashboard-view .row-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 5px;
+    }
+
+    .dashboard-view .row-action {
+      min-width: 0;
+      padding: 4px 5px;
+      font-size: 0.66rem;
+      text-align: center;
     }
 
     .row-action:hover {
@@ -1919,9 +2038,16 @@
       }
     }
 
-    function addMessage(sender, html) {
+    function addMessage(sender, html, options = {}) {
+      if (!options.keepDashboardMode) {
+        messages.classList.remove("dashboard-mode");
+      }
+
       const row = document.createElement("div");
       row.className = `message-row ${sender}`;
+      if (options.dashboard) {
+        row.classList.add("dashboard-screen");
+      }
 
       const bubble = document.createElement("div");
       bubble.className = "message";
@@ -1937,6 +2063,11 @@
       wireScrollAfterAssets(bubble);
       scrollToBottom();
       return bubble;
+    }
+
+    function clearMessages() {
+      messages.innerHTML = "";
+      messages.appendChild(scrollAnchor);
     }
 
     function addAgentMessage(html, options = {}) {
@@ -2303,7 +2434,7 @@
       `;
     }
 
-    function dashboardControlsHtml(allInterns, visibleInterns) {
+    function dashboardControlsHtml(allInterns) {
       const filters = state.dashboardFilters;
       const tracks = [...new Set(allInterns.map(intern => getInternTrack(intern)).filter(Boolean))];
       const functionalAreas = [...new Set(allInterns.map(intern => getFunctionalArea(intern)).filter(Boolean))];
@@ -2383,7 +2514,6 @@
               </select>
             </div>
           </div>
-          <div class="dashboard-count">Showing ${visibleInterns.length} of ${allInterns.length} interns</div>
         </div>
       `;
     }
@@ -2393,15 +2523,9 @@
       return `
         <div class="row-actions" aria-label="Actions for ${internName}">
           <button type="button" class="row-action" data-intern-action="details" data-intern-name="${internName}">Details</button>
-          <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${internName}">Skills</button>
-          <button type="button" class="row-action" data-intern-action="training" data-intern-name="${internName}">Training</button>
-          <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${internName}">Lifecycle</button>
           <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
           <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${internName}">Auto</button>
           <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
-          <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${internName}">Follow-up</button>
-          <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${internName}">Intern10</button>
-          <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${internName}">Capstone</button>
         </div>
       `;
     }
@@ -2423,9 +2547,9 @@
             <td>
               <div class="meta-stack">
                 <strong>${escapeHtml(getFunctionalArea(intern))}</strong>
-                <span>${escapeHtml(getSubPractice(intern))}</span>
-                <span>${escapeHtml(getProjectPhase(intern))} phase, ${escapeHtml(String(getTimelineWeeks(intern)))} weeks</span>
-                <span>${escapeHtml(getClientInteraction(intern))} client interaction</span>
+                <span class="clamp-1">${escapeHtml(getSubPractice(intern))}</span>
+                <span>${escapeHtml(getProjectPhase(intern))}, ${escapeHtml(String(getTimelineWeeks(intern)))} wks</span>
+                <span>${escapeHtml(getClientInteraction(intern))} client</span>
               </div>
             </td>
             <td class="progress-cell">
@@ -2437,10 +2561,20 @@
                 <span style="width: ${intern.progress}%"></span>
               </div>
             </td>
-            <td>${escapeHtml(intern.completed)}</td>
-            <td>${escapeHtml(intern.focus)}</td>
-            <td><span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span></td>
-            <td>${escapeHtml(intern.nextStep)}</td>
+            <td>
+              <div class="dashboard-brief">
+                <strong>Focus</strong>
+                <span class="clamp-2" title="${escapeHtml(intern.focus)}">${escapeHtml(intern.focus)}</span>
+                <strong>Next</strong>
+                <span class="clamp-2" title="${escapeHtml(intern.nextStep)}">${escapeHtml(intern.nextStep)}</span>
+              </div>
+            </td>
+            <td>
+              <div class="dashboard-brief">
+                <span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span>
+                <span class="clamp-2" title="${escapeHtml(intern.managerAction)}">${escapeHtml(intern.managerAction)}</span>
+              </div>
+            </td>
             <td>
               <div class="workload-note">
                 <strong>${hours} hrs/week</strong>
@@ -2453,40 +2587,43 @@
         `;
       }).join("") || `
         <tr class="empty-row">
-          <td colspan="8">No interns match the current filters.</td>
+          <td colspan="6">No interns match the current filters.</td>
         </tr>
       `;
 
       return `
-        ${managerSummaryHtml()}
-        <div class="section-title">Intern Progress and Planning Dashboard</div>
-        ${dashboardControlsHtml(allInterns, interns)}
-        <div class="table-wrap">
-          <table class="dashboard-table">
-            <colgroup>
-              <col class="col-intern">
-              <col class="col-area">
-              <col class="col-progress">
-              <col class="col-completed">
-              <col class="col-focus">
-              <col class="col-blockers">
-              <col class="col-next">
-              <col class="col-action">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Intern name / Role</th>
-                <th>Functional area / Phase</th>
-                <th>Progress percentage</th>
-                <th>Completed work</th>
-                <th>Current focus</th>
-                <th>Blockers</th>
-                <th>AI recommended next step</th>
-                <th>Workload / Actions</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
+        <div class="dashboard-view">
+          <div class="dashboard-heading">
+            <div>
+              ${managerSummaryHtml()}
+              <div class="section-title">Intern Progress and Planning Dashboard</div>
+            </div>
+            <div class="dashboard-count">Showing ${interns.length} of ${allInterns.length} interns</div>
+          </div>
+          ${dashboardControlsHtml(allInterns)}
+          <div class="table-wrap">
+            <table class="dashboard-table">
+              <colgroup>
+                <col class="col-intern">
+                <col class="col-area">
+                <col class="col-progress">
+                <col class="col-focus">
+                <col class="col-blockers">
+                <col class="col-action">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Intern / Role</th>
+                  <th>Area / Phase</th>
+                  <th>Progress</th>
+                  <th>Focus / Next</th>
+                  <th>Blockers / Manager action</th>
+                  <th>Workload / Actions</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
         </div>
       `;
     }
@@ -2494,7 +2631,11 @@
     function showDashboard() {
       state.dashboardShown = true;
       removeDashboardQuickActions();
-      addAgentMessage(dashboardHtml(), { includeActions: true });
+      clearMessages();
+      messages.classList.add("dashboard-mode");
+      const bubble = addMessage("agent", dashboardHtml(), { dashboard: true, keepDashboardMode: true });
+      bubble.classList.add("wide", "rendered");
+      wireScrollAfterAssets(bubble);
     }
 
     function detailTextHtml(value) {
@@ -3511,7 +3652,8 @@
 
       state.dashboardFilters[filterName] = select.value;
       const bubble = select.closest(".message");
-      const updatedHtml = appendActionOptions(dashboardHtml());
+      const isDashboardScreen = Boolean(bubble?.parentElement?.classList.contains("dashboard-screen"));
+      const updatedHtml = isDashboardScreen ? dashboardHtml() : appendActionOptions(dashboardHtml());
       if (bubble) {
         renderBubbleContent(bubble, updatedHtml);
       } else {
