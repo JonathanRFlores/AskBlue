@@ -2704,7 +2704,7 @@
     function internDetailHtml(internName) {
       const intern = findInternByName(internName);
       if (!intern) {
-        return appendActionOptions("<p>I could not find that intern in the current dashboard.</p>");
+        return "<p>I could not find that intern in the current dashboard.</p>";
       }
 
       const status = internProgressStatus(intern);
@@ -2802,7 +2802,7 @@
     }
 
     function showInternDetail(internName) {
-      addAgentMessage(internDetailHtml(internName), { includeActions: true });
+      addAgentMessage(internDetailHtml(internName), { includeActions: false });
     }
 
     function emailDraftHtml(intern, index, variant = "standard") {
