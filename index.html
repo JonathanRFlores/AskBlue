@@ -1028,6 +1028,138 @@
       margin: 5px 0;
     }
 
+    .training-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .training-card {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.06);
+    }
+
+    .training-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .training-card-title {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .training-card-title h3 {
+      margin: 0;
+      color: #1f2d47;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .training-card-title span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 720;
+      line-height: 1.25;
+    }
+
+    .training-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #b2ccff;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      font-size: 0.7rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .training-columns {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .training-column {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .training-column.manager {
+      padding-left: 12px;
+      border-left: 1px solid var(--line);
+    }
+
+    .training-column-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #344058;
+      font-size: 0.72rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .training-column-header strong {
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 780;
+      text-transform: none;
+      white-space: nowrap;
+    }
+
+    .training-list {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .training-list li {
+      position: relative;
+      margin: 0;
+      padding-left: 14px;
+      color: #344058;
+      font-size: 0.8rem;
+      line-height: 1.34;
+    }
+
+    .training-list li::before {
+      content: "";
+      position: absolute;
+      top: 0.55em;
+      left: 0;
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .training-column.manager .training-list li::before {
+      background: var(--green);
+    }
+
     .intern10-overview-grid {
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 12px;
@@ -2320,6 +2452,26 @@
       .detail-list-row {
         grid-template-columns: 1fr;
         gap: 4px;
+      }
+
+      .training-card-header,
+      .training-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .training-card-header {
+        display: grid;
+      }
+
+      .training-pill {
+        justify-self: start;
+      }
+
+      .training-column.manager {
+        padding-top: 12px;
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
       }
 
       .assignment-grid {
@@ -3694,6 +3846,12 @@
       return `<ul class="capstone-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
     }
 
+    function trainingItemsHtml(items) {
+      const values = (items || []).filter(Boolean);
+      if (!values.length) return '<p class="detail-copy">None identified yet.</p>';
+      return `<ul class="training-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
     function internDetailHtml(internName) {
       const intern = findInternByName(internName);
       if (!intern) {
@@ -4173,20 +4331,42 @@
 
     function trainingHtml(selectedInternName = "") {
       const interns = selectedOrAllInterns(selectedInternName);
-      const panels = interns.map(intern => `
-        <section class="recommendation-panel">
-          <h3>${escapeHtml(intern.name)}</h3>
-          <p><strong>Intern modules</strong></p>
-          ${listItemsHtml(getTrainingModules(intern))}
-          <p><strong>Manager enablement</strong></p>
-          ${listItemsHtml(getManagerTrainingModules(intern))}
-        </section>
-      `).join("");
+      const panels = interns.map(intern => {
+        const internModules = getTrainingModules(intern);
+        const managerModules = getManagerTrainingModules(intern);
+        return `
+          <section class="training-card">
+            <div class="training-card-header">
+              <div class="training-card-title">
+                <h3>${escapeHtml(intern.name)}</h3>
+                <span>${escapeHtml(getFunctionalArea(intern))} / ${escapeHtml(getSubPractice(intern))}</span>
+              </div>
+              <span class="training-pill">${escapeHtml(String(internModules.length + managerModules.length))} items</span>
+            </div>
+            <div class="training-columns">
+              <div class="training-column">
+                <div class="training-column-header">
+                  <span>Intern modules</span>
+                  <strong>${escapeHtml(String(internModules.length))} modules</strong>
+                </div>
+                ${trainingItemsHtml(internModules)}
+              </div>
+              <div class="training-column manager">
+                <div class="training-column-header">
+                  <span>Manager enablement</span>
+                  <strong>${escapeHtml(String(managerModules.length))} items</strong>
+                </div>
+                ${trainingItemsHtml(managerModules)}
+              </div>
+            </div>
+          </section>
+        `;
+      }).join("");
 
       return `
         <div class="inline-note">Training recommendations by sub-practice</div>
         <div class="section-title">${selectedInternName ? "Training Plan for Intern and Manager" : "Training Plans for Interns and Managers"}</div>
-        <div class="recommendation-grid">${panels}</div>
+        <div class="recommendation-grid training-grid">${panels}</div>
       `;
     }
 
