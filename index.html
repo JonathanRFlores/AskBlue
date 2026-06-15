@@ -421,7 +421,7 @@
       position: relative;
       z-index: 40;
       width: 100%;
-      height: clamp(320px, 46vh, 420px);
+      height: clamp(380px, 56vh, 520px);
       min-height: 0;
       display: grid;
       grid-template-rows: auto minmax(0, 1fr);
@@ -2042,7 +2042,7 @@
 
       .chat-widget {
         width: 100%;
-        height: clamp(320px, 46vh, 420px);
+        height: clamp(380px, 56vh, 520px);
       }
     }
 
@@ -2131,7 +2131,7 @@
 
       .chat-widget {
         width: 100%;
-        height: min(520px, 70vh);
+        height: min(600px, 78vh);
       }
 
       .composer {
@@ -2237,7 +2237,7 @@
           </div>
         </section>
 
-        <section id="chatPanel" class="chat-widget" aria-label="IBM intern assistant">
+        <section id="chatPanel" class="chat-widget" aria-label="IBM intern assistant" hidden>
           <div class="chat-widget-header">
             <div class="chat-avatar" aria-hidden="true"></div>
             <div class="chat-widget-title">
@@ -2254,7 +2254,7 @@
             </form>
           </div>
         </section>
-        <button id="chatLauncher" class="chat-launcher" type="button" hidden>IBM chat</button>
+        <button id="chatLauncher" class="chat-launcher" type="button">IBM chat</button>
       </aside>
     </section>
   </main>
@@ -3096,7 +3096,9 @@
         verificationOverlay.hidden = true;
       }
       setComposerEnabled(true);
-      input.focus();
+      if (!chatPanel?.hidden) {
+        input.focus();
+      }
     }
 
     function handleVerificationFormSubmit(event) {
