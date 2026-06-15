@@ -888,15 +888,15 @@
 
     .dashboard-view .row-actions {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 4px;
       margin-top: 5px;
     }
 
     .dashboard-view .row-action {
       min-width: 0;
-      padding: 4px 3px;
-      font-size: 0.64rem;
+      padding: 5px 4px;
+      font-size: 0.69rem;
       text-align: center;
     }
 
@@ -1083,13 +1083,11 @@
     }
 
     .action-menu > summary::after {
-      content: "";
-      width: 0;
-      height: 0;
-      margin-left: 8px;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid currentColor;
+      content: "▾";
+      margin-left: 6px;
+      font-size: 0.8em;
+      display: inline-block;
+      transition: transform 160ms ease;
     }
 
     .action-menu[open] > summary::after {
@@ -1122,6 +1120,7 @@
       font-size: 0.72rem;
       font-weight: 780;
       line-height: 1;
+      white-space: nowrap;
     }
 
     .detail-actions .action-menu-list {
@@ -2673,7 +2672,6 @@
         const blockerClass = intern.blockers.toLowerCase().includes("none") ? "none" : "";
         const status = internProgressStatus(intern);
         const hours = getHoursPerWeek(intern);
-        const workload = getWorkloadTier(hours);
         return `
           <tr class="dashboard-row" data-intern-name="${escapeHtml(intern.name)}">
             <td>
@@ -2706,8 +2704,6 @@
             <td>
               <div class="workload-note">
                 <strong>${hours} hrs/week</strong>
-                <span>${escapeHtml(workload.label)}</span>
-                <span>${escapeHtml(workload.checkpoint)}</span>
               </div>
               ${dashboardRowActionsHtml(intern)}
             </td>
@@ -2859,16 +2855,16 @@
             </section>
           </div>
           <div class="detail-actions" aria-label="Actions for ${escapeHtml(intern.name)}">
-            <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${escapeHtml(intern.name)}">Skills</button>
-            <button type="button" class="row-action" data-intern-action="training" data-intern-name="${escapeHtml(intern.name)}">Training</button>
             <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${escapeHtml(intern.name)}">Assign</button>
             <button type="button" class="row-action" data-intern-action="email" data-intern-name="${escapeHtml(intern.name)}">Email</button>
+            <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
+            <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
             <details class="action-menu">
               <summary>More</summary>
               <div class="action-menu-list">
+                <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${escapeHtml(intern.name)}">Skills</button>
+                <button type="button" class="row-action" data-intern-action="training" data-intern-name="${escapeHtml(intern.name)}">Training</button>
                 <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${escapeHtml(intern.name)}">Lifecycle</button>
-                <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
-                <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
                 <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${escapeHtml(intern.name)}">Intern10</button>
                 <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${escapeHtml(intern.name)}">Capstone</button>
               </div>
