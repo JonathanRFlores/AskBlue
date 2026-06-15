@@ -1998,6 +1998,7 @@
 
     .assignment-field textarea {
       min-height: 92px;
+      line-height: 1.45;
       resize: vertical;
     }
 
@@ -4322,19 +4323,26 @@
       const managerTraining = getManagerTrainingModules(intern).slice(0, 3);
 
       return [
-        `Functional area: ${getFunctionalArea(intern)} - ${getFunctionalAreaInfo(intern).label}`,
-        `Sub-practice: ${getSubPractice(intern)}`,
-        `Phase and timeline: ${getProjectPhase(intern)} phase across ${getTimelineWeeks(intern)} weeks`,
-        `Client interaction: ${getClientInteraction(intern)}`,
-        `Scaled workload: ${workload.label} for ${hours} hrs/week. ${workload.scope}`,
-        `Deliverable: ${assignmentSuggestion(intern, hours)}`,
-        `Success criteria: include assumptions, evidence, open questions, manager review notes, and a clear definition of done.`,
-        `Skills to learn: ${skills.join("; ")}`,
-        `Intern training: ${training.join("; ")}`,
-        `Manager training: ${managerTraining.join("; ")}`,
-        `Intern10 alignment: ${nextIntern10.label} - ${nextIntern10.assignment}`,
-        `Recommended call: ${nextIntern10.call}`,
-        `Manager support: ${intern.managerAction}`
+        "PROJECT CONTEXT",
+        `- Functional area: ${getFunctionalArea(intern)} - ${getFunctionalAreaInfo(intern).label}`,
+        `- Sub-practice: ${getSubPractice(intern)}`,
+        `- Phase: ${getProjectPhase(intern)} across ${getTimelineWeeks(intern)} weeks`,
+        `- Client interaction: ${getClientInteraction(intern)}`,
+        "",
+        "ASSIGNMENT",
+        `- Workload: ${workload.label} for ${hours} hrs/week. ${workload.scope}`,
+        `- Deliverable: ${assignmentSuggestion(intern, hours)}`,
+        "- Success criteria: Include assumptions, evidence, open questions, manager review notes, and a clear definition of done.",
+        "",
+        "LEARNING PLAN",
+        `- Skills to learn: ${skills.join("; ")}`,
+        `- Intern training: ${training.join("; ")}`,
+        `- Manager training: ${managerTraining.join("; ")}`,
+        "",
+        "INTERN10 + MANAGER SUPPORT",
+        `- Alignment: ${nextIntern10.label} - ${nextIntern10.assignment}`,
+        `- Recommended call: ${nextIntern10.call}`,
+        `- Manager support: ${intern.managerAction}`
       ].join("\n");
     }
 
