@@ -282,6 +282,16 @@
 
     .message-row.user {
       justify-content: flex-end;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .message-row.dashboard-screen + .message-row.user {
+      margin-top: 20px;
+    }
+
+    .message-row.user + .message-row.agent {
+      margin-top: 4px;
     }
 
     .message-row.agent::before {
@@ -367,6 +377,15 @@
 
     .message p:last-child {
       margin-bottom: 0;
+    }
+
+    .simple-answer-list {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .simple-answer-list li {
+      margin: 6px 0;
     }
 
     .section-title {
@@ -3389,6 +3408,104 @@
       `);
     }
 
+    function simpleQuestionIntent(text) {
+      const lower = text.toLowerCase();
+      const asksForPeople = /\b(who(?:'|’)?s|whose|who is|who are|which|show|list|tell me|interns?)\b/i.test(lower);
+
+      if (/\bnot\s+on[- ]?track\b/i.test(lower)) {
+        return {
+          type: "statusGroup",
+          keys: ["needs-clarity", "needs-support"],
+          title: "Interns Not On Track",
+          note: "Progress status",
+          empty: "All interns are currently marked on track."
+        };
+      }
+
+      if (/\bon[- ]?track\b/i.test(lower)) {
+        return {
+          type: "status",
+          key: "on-track",
+          title: "Interns On Track",
+          note: "Progress status",
+          empty: "No interns are currently marked on track."
+        };
+      }
+
+      if (asksForPeople && /\b(needs? clarity|clarity|needs? clearer definitions|watch)\b/i.test(lower)) {
+        return {
+          type: "status",
+          key: "needs-clarity",
+          title: "Interns Needing Clarity",
+          note: "Progress status",
+          empty: "No interns currently need clarity."
+        };
+      }
+
+      if (asksForPeople && /\b(needs? support|support|at[- ]?risk|behind)\b/i.test(lower)) {
+        return {
+          type: "status",
+          key: "needs-support",
+          title: "Interns Needing Support",
+          note: "Progress status",
+          empty: "No interns currently need support."
+        };
+      }
+
+      if (asksForPeople && /\b(no blockers?|clear)\b/i.test(lower)) {
+        return {
+          type: "blocker",
+          blocked: false,
+          title: "Interns Without Blockers",
+          note: "Blocker status",
+          empty: "No interns are currently clear of blockers."
+        };
+      }
+
+      if (asksForPeople && /\b(blocked|blockers?|stuck)\b/i.test(lower)) {
+        return {
+          type: "blocker",
+          blocked: true,
+          title: "Interns With Blockers",
+          note: "Blocker status",
+          empty: "No interns currently have blockers."
+        };
+      }
+
+      return null;
+    }
+
+    function simpleQuestionHtml(intent) {
+      const interns = intent.type === "status"
+        ? getInterns().filter(intern => internProgressStatus(intern).key === intent.key)
+        : intent.type === "statusGroup"
+          ? getInterns().filter(intern => intent.keys.includes(internProgressStatus(intern).key))
+        : getInterns().filter(intern => isInternBlocked(intern) === intent.blocked);
+
+      const list = interns.length
+        ? `<ul class="simple-answer-list">${interns.map(intern => {
+          const status = internProgressStatus(intern);
+          const detail = intent.type === "status" || intent.type === "statusGroup"
+            ? `${status.label}, ${intern.progress}% progress`
+            : intent.blocked ? intern.blockers : "No blockers reported";
+          return `<li><strong>${escapeHtml(intern.name)}</strong> - ${escapeHtml(detail)}.</li>`;
+        }).join("")}</ul>`
+        : `<p>${escapeHtml(intent.empty)}</p>`;
+
+      return `
+        <div class="inline-note">${escapeHtml(intent.note)}</div>
+        <div class="section-title">${escapeHtml(intent.title)}</div>
+        ${list}
+      `;
+    }
+
+    function answerSimpleQuestion(text) {
+      const intent = simpleQuestionIntent(text);
+      if (!intent) return false;
+      addAgentMessage(simpleQuestionHtml(intent), { includeActions: false });
+      return true;
+    }
+
     async function handlePostVerification(text) {
       const lower = text.toLowerCase();
       const names = parseCustomInternNames(text);
@@ -3408,6 +3525,10 @@
       if (state.pendingEmailConfirmation && /\b(no|do not|don't|cancel|not now)\b/i.test(lower)) {
         state.pendingEmailConfirmation = false;
         addAgentMessage("<p>No status change was made. The email drafts remain available in this chat for review.</p>");
+        return;
+      }
+
+      if (answerSimpleQuestion(text)) {
         return;
       }
 
