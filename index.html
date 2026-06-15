@@ -477,7 +477,7 @@
       min-height: 0;
       display: grid;
       grid-template-rows: auto auto minmax(0, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .dashboard-view .manager-summary {
@@ -508,29 +508,29 @@
 
     .dashboard-view .dashboard-table {
       height: auto;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
     }
 
     .dashboard-view th,
     .dashboard-view td {
-      padding: 6px 8px;
-      line-height: 1.24;
+      padding: 5px 7px;
+      line-height: 1.2;
     }
 
     .dashboard-view th {
-      font-size: 0.66rem;
+      font-size: 0.64rem;
     }
 
     .dashboard-brief {
       display: grid;
-      gap: 4px;
+      gap: 3px;
       min-width: 0;
     }
 
     .dashboard-brief strong {
       color: #344058;
-      font-size: 0.72rem;
-      line-height: 1.2;
+      font-size: 0.7rem;
+      line-height: 1.12;
     }
 
     .clamp-1,
@@ -894,15 +894,15 @@
 
     .dashboard-view .row-actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 4px;
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     .dashboard-view .row-action {
       min-width: 0;
-      padding: 5px 4px;
-      font-size: 0.69rem;
+      padding: 4px 2px;
+      font-size: 0.62rem;
       text-align: center;
     }
 
@@ -1563,6 +1563,119 @@
         box-shadow:
           0 0 0 8px rgba(21, 94, 239, 0.08),
           0 10px 24px rgba(21, 94, 239, 0.24);
+      }
+    }
+
+    @media (max-height: 720px) and (min-width: 900px) {
+      .topbar {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .brand-logo-wrap {
+        height: 42px;
+      }
+
+      .partner-logo-wrap {
+        height: 48px;
+      }
+
+      .shell,
+      .messages.dashboard-mode {
+        padding: 8px;
+      }
+
+      .dashboard-view {
+        gap: 5px;
+      }
+
+      .dashboard-controls {
+        padding: 6px;
+      }
+
+      .dashboard-control-grid {
+        gap: 4px;
+      }
+
+      .dashboard-control {
+        gap: 2px;
+      }
+
+      .dashboard-control label {
+        font-size: 0.58rem;
+      }
+
+      .dashboard-control select {
+        min-height: 26px;
+        padding: 3px 6px;
+        font-size: 0.66rem;
+      }
+
+      .dashboard-view .dashboard-table {
+        font-size: 0.66rem;
+      }
+
+      .dashboard-view th,
+      .dashboard-view td {
+        padding: 4px 6px;
+        line-height: 1.16;
+      }
+
+      .dashboard-view th {
+        font-size: 0.58rem;
+      }
+
+      .dashboard-view .intern-name {
+        font-size: 0.7rem;
+      }
+
+      .dashboard-view .role {
+        margin-top: 2px;
+        font-size: 0.64rem;
+        line-height: 1.12;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .dashboard-brief {
+        gap: 2px;
+      }
+
+      .dashboard-brief strong {
+        font-size: 0.65rem;
+      }
+
+      .dashboard-view .clamp-2 {
+        -webkit-line-clamp: 1;
+      }
+
+      .dashboard-view .blocker {
+        display: block;
+        padding: 2px 6px;
+        font-size: 0.64rem;
+        line-height: 1.12;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .dashboard-view .progress-label {
+        margin-bottom: 4px;
+      }
+
+      .dashboard-view .bar {
+        height: 6px;
+      }
+
+      .dashboard-view .workload-note {
+        gap: 2px;
+        font-size: 0.64rem;
+      }
+
+      .dashboard-view .row-action {
+        padding: 3px 2px;
+        font-size: 0.58rem;
       }
     }
 
@@ -2703,7 +2816,7 @@
             </td>
             <td>
               <div class="dashboard-brief">
-                <span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span>
+                <span class="blocker ${blockerClass}" title="${escapeHtml(intern.blockers)}">${escapeHtml(intern.blockers)}</span>
                 <span class="clamp-2" title="${escapeHtml(intern.managerAction)}">${escapeHtml(intern.managerAction)}</span>
               </div>
             </td>
