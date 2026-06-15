@@ -1028,6 +1028,106 @@
       margin: 5px 0;
     }
 
+    .intern10-overview-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .intern10-card {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.06);
+    }
+
+    .intern10-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .intern10-card-header h3 {
+      margin: 0;
+      color: #1f2d47;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .intern10-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #a7e6cf;
+      background: #eaf7f1;
+      color: var(--green);
+      font-size: 0.7rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .intern10-progress {
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #eef2f6;
+    }
+
+    .intern10-progress span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .intern10-next {
+      display: grid;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .intern10-next-label {
+      color: var(--blue-dark);
+      font-size: 0.72rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .intern10-next strong {
+      color: #1f2d47;
+    }
+
+    .intern10-next p,
+    .intern10-call p {
+      margin: 0;
+      color: #344058;
+      line-height: 1.42;
+    }
+
+    .intern10-call {
+      display: grid;
+      gap: 4px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+    }
+
+    .intern10-call span {
+      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
     .lifecycle-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -4147,13 +4247,24 @@
         const panels = getInterns().map(intern => {
           const next = getNextIntern10Requirement(intern);
           const completed = getIntern10Completed(intern).length;
+          const progress = Math.min(100, Math.max(0, completed * 10));
           return `
-            <section class="recommendation-panel">
-              <h3>${escapeHtml(intern.name)}</h3>
-              <p><strong>${completed}/10 completed</strong></p>
-              <p><strong>Next:</strong> ${escapeHtml(next.label)}</p>
-              <p>${escapeHtml(next.assignment)}</p>
-              <p>${escapeHtml(next.call)}</p>
+            <section class="intern10-card">
+              <div class="intern10-card-header">
+                <h3>${escapeHtml(intern.name)}</h3>
+                <span class="intern10-count">${escapeHtml(String(completed))}/10 complete</span>
+              </div>
+              <div class="intern10-progress" aria-label="${escapeHtml(String(progress))}% Intern10 complete">
+                <span style="width: ${progress}%"></span>
+              </div>
+              <div class="intern10-next">
+                <span class="intern10-next-label">Next: <strong>${escapeHtml(next.label)}</strong></span>
+                <p>${escapeHtml(next.assignment)}</p>
+              </div>
+              <div class="intern10-call">
+                <span>Recommended call</span>
+                <p>${escapeHtml(next.call)}</p>
+              </div>
             </section>
           `;
         }).join("");
@@ -4161,7 +4272,7 @@
         return `
           <div class="inline-note">Intern10 challenge planning</div>
           <div class="section-title">Recommended Calls and Assignments</div>
-          <div class="recommendation-grid">${panels}</div>
+          <div class="recommendation-grid intern10-overview-grid">${panels}</div>
         `;
       }
 
