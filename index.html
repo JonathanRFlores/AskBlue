@@ -1777,6 +1777,24 @@
       resize: vertical;
     }
 
+    .workspace-view .assignment-panel {
+      min-height: min(620px, calc(100dvh - 250px));
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    .workspace-view .assignment-grid {
+      grid-template-rows: auto minmax(220px, 1fr);
+    }
+
+    .workspace-view .assignment-field.full {
+      min-height: 0;
+    }
+
+    .workspace-view .assignment-field.full textarea {
+      height: 100%;
+      min-height: clamp(220px, 34vh, 420px);
+    }
+
     .assignment-field input:focus,
     .assignment-field select:focus,
     .assignment-field textarea:focus {
@@ -2306,6 +2324,15 @@
 
       .assignment-grid {
         grid-template-columns: 1fr;
+      }
+
+      .workspace-view .assignment-panel {
+        min-height: auto;
+      }
+
+      .workspace-view .assignment-field.full textarea {
+        height: auto;
+        min-height: 220px;
       }
 
       .chat {
