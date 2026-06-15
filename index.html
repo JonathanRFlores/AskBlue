@@ -1028,6 +1028,98 @@
       margin: 5px 0;
     }
 
+    .skill-grid {
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 12px;
+    }
+
+    .skill-card {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      padding: 12px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.06);
+    }
+
+    .skill-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .skill-card-title {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .skill-card-title h3 {
+      margin: 0;
+      color: #1f2d47;
+      font-size: 0.82rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .skill-card-title span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 720;
+      line-height: 1.25;
+    }
+
+    .skill-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid #a7e6cf;
+      background: #eaf7f1;
+      color: var(--green);
+      font-size: 0.7rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .skill-context {
+      margin: 0;
+      color: #344058;
+      font-size: 0.8rem;
+      line-height: 1.42;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .skill-list li {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      max-width: 100%;
+      padding: 5px 8px;
+      border: 1px solid #d7e2ff;
+      border-radius: 999px;
+      background: #f8fbff;
+      color: #243858;
+      font-size: 0.76rem;
+      font-weight: 720;
+      line-height: 1.22;
+    }
+
     .training-grid {
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 12px;
@@ -2454,6 +2546,14 @@
         gap: 4px;
       }
 
+      .skill-card-header {
+        display: grid;
+      }
+
+      .skill-count {
+        justify-self: start;
+      }
+
       .training-card-header,
       .training-columns {
         grid-template-columns: 1fr;
@@ -3852,6 +3952,12 @@
       return `<ul class="training-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
     }
 
+    function skillItemsHtml(items) {
+      const values = (items || []).filter(Boolean);
+      if (!values.length) return '<p class="detail-copy">None identified yet.</p>';
+      return `<ul class="skill-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
     function internDetailHtml(internName) {
       const intern = findInternByName(internName);
       if (!intern) {
@@ -4308,12 +4414,18 @@
       const interns = selectedOrAllInterns(selectedInternName);
       const panels = interns.map(intern => {
         const areaInfo = getFunctionalAreaInfo(intern);
+        const skills = getSkillRecommendations(intern);
         return `
-          <section class="recommendation-panel">
-            <h3>${escapeHtml(intern.name)}</h3>
-            <p><strong>${escapeHtml(getFunctionalArea(intern))} / ${escapeHtml(getSubPractice(intern))}</strong></p>
-            <p>${escapeHtml(areaInfo.projectPattern)}</p>
-            ${listItemsHtml(getSkillRecommendations(intern))}
+          <section class="skill-card">
+            <div class="skill-card-header">
+              <div class="skill-card-title">
+                <h3>${escapeHtml(intern.name)}</h3>
+                <span>${escapeHtml(getFunctionalArea(intern))} / ${escapeHtml(getSubPractice(intern))}</span>
+              </div>
+              <span class="skill-count">${escapeHtml(String(skills.length))} skills</span>
+            </div>
+            <p class="skill-context">${escapeHtml(areaInfo.projectPattern)}</p>
+            ${skillItemsHtml(skills)}
           </section>
         `;
       }).join("");
@@ -4321,7 +4433,7 @@
       return `
         <div class="inline-note">Skill recommendations</div>
         <div class="section-title">${selectedInternName ? "Skills This Intern Should Learn" : "Skills Interns Should Learn"}</div>
-        <div class="recommendation-grid">${panels}</div>
+        <div class="recommendation-grid skill-grid">${panels}</div>
       `;
     }
 
