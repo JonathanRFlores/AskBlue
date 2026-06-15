@@ -225,10 +225,256 @@
 
     .shell {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+      align-items: stretch;
+      gap: clamp(10px, 1.4vw, 18px);
       padding: clamp(8px, 1.4vw, 18px);
       min-height: 0;
       overflow: hidden;
+    }
+
+    .site-main {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: clamp(10px, 1.2vw, 14px);
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .metric-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.05);
+    }
+
+    .metric-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 760;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 3px;
+      color: #1f2d47;
+      font-size: 1.08rem;
+      line-height: 1.1;
+    }
+
+    .dashboard-card {
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .locked-panel {
+      min-height: 280px;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .locked-panel strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #1f2d47;
+      font-size: 1rem;
+    }
+
+    .tools-panel {
+      min-width: 0;
+      min-height: 0;
+      overflow-y: auto;
+      display: grid;
+      align-content: start;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .side-rail {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .tools-header {
+      display: grid;
+      gap: 4px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tools-header h2 {
+      margin: 0;
+      color: #1f2d47;
+      font-size: 0.98rem;
+      line-height: 1.2;
+    }
+
+    .tools-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.32;
+    }
+
+    .tool-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .tool-card {
+      display: grid;
+      gap: 8px;
+      border: 1px solid #d7e2ff;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f8fbff;
+    }
+
+    .tool-card h3 {
+      margin: 0;
+      color: #243858;
+      font-size: 0.84rem;
+      line-height: 1.2;
+    }
+
+    .tool-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.3;
+    }
+
+    .site-action {
+      min-height: 32px;
+      border: 1px solid #b2ccff;
+      border-radius: 8px;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      font-size: 0.78rem;
+      font-weight: 780;
+      cursor: pointer;
+    }
+
+    .site-action:hover {
+      background: #dbeafe;
+      border-color: #84adff;
+      transform: translateY(-1px);
+    }
+
+    .chat-widget {
+      position: relative;
+      z-index: 40;
+      width: 100%;
+      height: clamp(320px, 46vh, 420px);
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+      border: 1px solid rgba(193, 207, 232, 0.96);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 28px 80px rgba(16, 24, 40, 0.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .chat-widget[hidden] {
+      display: none;
+    }
+
+    .chat-widget-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+    }
+
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background:
+        url("assets/icon.png") center / cover no-repeat,
+        #0f6fcb;
+      box-shadow: 0 8px 18px rgba(21, 94, 239, 0.2);
+    }
+
+    .chat-widget-title {
+      min-width: 0;
+      display: grid;
+      gap: 1px;
+      flex: 1 1 auto;
+    }
+
+    .chat-widget-title strong {
+      color: #1f2d47;
+      font-size: 0.88rem;
+      line-height: 1.2;
+    }
+
+    .chat-widget-title span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.2;
+    }
+
+    .chat-minimize,
+    .chat-launcher {
+      border: 1px solid #b2ccff;
+      border-radius: 8px;
+      background: #eff4ff;
+      color: var(--blue-dark);
+      font-weight: 780;
+      cursor: pointer;
+    }
+
+    .chat-minimize {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .chat-launcher {
+      z-index: 41;
+      width: 100%;
+      min-height: 44px;
+      box-shadow: 0 18px 44px rgba(21, 94, 239, 0.26);
+    }
+
+    .chat-launcher[hidden] {
+      display: none;
     }
 
     .chat {
@@ -246,6 +492,14 @@
       backdrop-filter: blur(18px);
     }
 
+    .chat-widget .chat {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: #fff;
+      backdrop-filter: none;
+    }
+
     .messages {
       padding: clamp(16px, 2.5vw, 30px);
       padding-bottom: clamp(32px, 4vw, 52px);
@@ -260,6 +514,12 @@
     .messages.dashboard-mode {
       padding: clamp(8px, 1.2vw, 14px);
       overflow: hidden;
+    }
+
+    .chat-widget .messages {
+      padding: 12px;
+      padding-bottom: 16px;
+      background: #fff;
     }
 
     .scroll-anchor {
@@ -335,6 +595,14 @@
       box-shadow: 0 8px 28px rgba(16, 24, 40, 0.07);
     }
 
+    .chat-widget .message {
+      max-width: min(310px, 100%);
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      line-height: 1.42;
+      box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+    }
+
     .message-row.user .message {
       background: linear-gradient(145deg, #155eef, #004eeb);
       color: #fff;
@@ -351,6 +619,10 @@
       flex: 1 1 auto;
       max-width: none;
       width: 100%;
+    }
+
+    .chat-widget .message-row.agent .message.wide {
+      max-width: 100%;
     }
 
     .message-row.dashboard-screen .message {
@@ -1519,6 +1791,27 @@
       transform: translateY(-1px);
     }
 
+    .chat-widget .composer {
+      position: static;
+      gap: 8px;
+      padding: 10px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      background: #fff;
+    }
+
+    .chat-widget .composer input {
+      min-height: 38px;
+      padding: 0 10px;
+      font-size: 0.8rem;
+    }
+
+    .chat-widget .composer button {
+      min-width: 62px;
+      min-height: 38px;
+      box-shadow: none;
+      font-size: 0.8rem;
+    }
+
     @keyframes messageIn {
       from {
         opacity: 0;
@@ -1691,6 +1984,40 @@
       }
     }
 
+    @media (max-width: 1180px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .tools-panel {
+        grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .tool-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 920px) {
+      .metric-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .tools-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .chat-widget {
+        width: 100%;
+        height: clamp(320px, 46vh, 420px);
+      }
+    }
+
     @media (max-width: 720px) {
       .topbar {
         display: flex;
@@ -1737,6 +2064,28 @@
         min-width: 1080px;
       }
 
+      .shell {
+        overflow-y: auto;
+      }
+
+      .site-main {
+        grid-template-rows: auto auto;
+      }
+
+      .dashboard-card {
+        min-height: 520px;
+      }
+
+      .dashboard-card .dashboard-view {
+        min-height: 500px;
+      }
+
+      .dashboard-view .table-wrap {
+        overflow: auto;
+      }
+
+      .metric-strip,
+      .tool-grid,
       .dashboard-control-grid,
       .detail-grid,
       .detail-header {
@@ -1750,6 +2099,11 @@
       .chat {
         height: 100%;
         min-height: 0;
+      }
+
+      .chat-widget {
+        width: 100%;
+        height: min(520px, 70vh);
       }
 
       .composer {
@@ -1780,14 +2134,100 @@
       </div>
     </header>
 
-    <section class="shell">
-      <div class="chat" aria-label="AskBlue chat">
-        <div id="messages" class="messages" aria-live="polite"></div>
-        <form id="composer" class="composer" autocomplete="off">
-          <input id="chatInput" name="chatInput" type="text" placeholder="Verify to unlock AskBlue" aria-label="Message AskBlue">
-          <button type="submit">Send</button>
-        </form>
-      </div>
+    <section class="shell" aria-label="AskBlue workspace">
+      <section class="site-main" aria-label="Intern dashboard">
+        <div id="metricStrip" class="metric-strip" aria-label="Intern summary metrics">
+          <article class="metric-card">
+            <span>Dashboard</span>
+            <strong>Locked</strong>
+          </article>
+          <article class="metric-card">
+            <span>Tools</span>
+            <strong>Ready</strong>
+          </article>
+          <article class="metric-card">
+            <span>Assistant</span>
+            <strong>IBM</strong>
+          </article>
+          <article class="metric-card">
+            <span>Manager</span>
+            <strong>Verify</strong>
+          </article>
+        </div>
+        <section id="dashboardMount" class="dashboard-card" aria-label="Intern progress dashboard">
+          <div class="locked-panel">
+            <div>
+              <strong>Verify manager details to view the dashboard.</strong>
+              <span>The intern dashboard and tools will load here after verification.</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-rail" aria-label="AskBlue tools and assistant">
+        <section id="toolsPanel" class="tools-panel" aria-label="AskBlue tools">
+          <div class="tools-header">
+            <h2>Tools</h2>
+            <p>Launch intern planning workflows from the workspace.</p>
+          </div>
+          <div class="tool-grid">
+            <article class="tool-card">
+              <h3>Skills</h3>
+              <p>Find skill gaps and next capabilities.</p>
+              <button type="button" class="site-action" data-site-action="skills">Open skills</button>
+            </article>
+            <article class="tool-card">
+              <h3>Training</h3>
+              <p>Match interns to practical modules.</p>
+              <button type="button" class="site-action" data-site-action="training">Open training</button>
+            </article>
+            <article class="tool-card">
+              <h3>Assign</h3>
+              <p>Create scoped project work.</p>
+              <button type="button" class="site-action" data-site-action="assignments">Assign work</button>
+            </article>
+            <article class="tool-card">
+              <h3>Auto assign</h3>
+              <p>Scale work by weekly hours.</p>
+              <button type="button" class="site-action" data-site-action="autoAssign">Auto assign</button>
+            </article>
+            <article class="tool-card">
+              <h3>Follow-up</h3>
+              <p>Draft manager-ready intern emails.</p>
+              <button type="button" class="site-action" data-site-action="emails">Draft emails</button>
+            </article>
+            <article class="tool-card">
+              <h3>Intern10</h3>
+              <p>Plan challenge evidence and calls.</p>
+              <button type="button" class="site-action" data-site-action="intern10">Plan Intern10</button>
+            </article>
+            <article class="tool-card">
+              <h3>Capstone</h3>
+              <p>Recommend final project ideas.</p>
+              <button type="button" class="site-action" data-site-action="capstones">Recommend</button>
+            </article>
+          </div>
+        </section>
+
+        <section id="chatPanel" class="chat-widget" aria-label="IBM intern assistant">
+          <div class="chat-widget-header">
+            <div class="chat-avatar" aria-hidden="true"></div>
+            <div class="chat-widget-title">
+              <strong>IBM Assistant</strong>
+              <span>Ask basic intern questions</span>
+            </div>
+            <button id="chatMinimize" class="chat-minimize" type="button" aria-label="Minimize IBM assistant">−</button>
+          </div>
+          <div class="chat" aria-label="AskBlue chat">
+            <div id="messages" class="messages" aria-live="polite"></div>
+            <form id="composer" class="composer" autocomplete="off">
+              <input id="chatInput" name="chatInput" type="text" placeholder="Verify to unlock AskBlue" aria-label="Message AskBlue">
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </section>
+        <button id="chatLauncher" class="chat-launcher" type="button" hidden>IBM chat</button>
+      </aside>
     </section>
   </main>
 
@@ -2059,6 +2499,12 @@
     const form = document.getElementById("composer");
     const input = document.getElementById("chatInput");
     const sendButton = form.querySelector('button[type="submit"]');
+    const metricStrip = document.getElementById("metricStrip");
+    const dashboardMount = document.getElementById("dashboardMount");
+    const toolsPanel = document.getElementById("toolsPanel");
+    const chatPanel = document.getElementById("chatPanel");
+    const chatLauncher = document.getElementById("chatLauncher");
+    const chatMinimize = document.getElementById("chatMinimize");
     const verificationOverlay = document.getElementById("verificationOverlay");
     const verificationForm = document.getElementById("verificationForm");
     const verificationEmployeeId = document.getElementById("verificationEmployeeId");
@@ -2098,6 +2544,19 @@
       } else {
         callback();
       }
+    }
+
+    function openChatPanel(options = {}) {
+      if (chatPanel) chatPanel.hidden = false;
+      if (chatLauncher) chatLauncher.hidden = true;
+      if (options.focus && !input.disabled) {
+        runLater(() => input.focus(), 80);
+      }
+    }
+
+    function closeChatPanel() {
+      if (chatPanel) chatPanel.hidden = true;
+      if (chatLauncher) chatLauncher.hidden = false;
     }
 
     function scrollToBottom() {
@@ -2318,6 +2777,7 @@
     }
 
     function addAgentMessage(html, options = {}) {
+      openChatPanel();
       const includeActions = options.includeActions ?? state.dashboardShown;
       const finalHtml = includeActions ? appendActionOptions(html) : html;
       const bubble = addAgentThinkingBubble(finalHtml);
@@ -2336,6 +2796,7 @@
     }
 
     function addUserMessage(text) {
+      openChatPanel();
       const bubble = addMessage("user", `<p>${escapeHtml(text)}</p>`);
       scrollToBottom();
       return bubble;
@@ -2662,7 +3123,7 @@
     function completeVerification() {
       const wasComplete = state.verification.complete;
       state.verification.complete = true;
-      input.placeholder = "Ask for skills, training, task lifecycle, Intern10, or auto assignment";
+      input.placeholder = "Ask about an intern, progress, blockers, skills, or follow-up";
       updateHeaderManagerSummary();
       closeVerificationModal();
       if (!wasComplete) {
@@ -2686,6 +3147,60 @@
         <span>ID ${escapeHtml(verification.employeeId)}</span>
         <span>${escapeHtml(verification.email)}</span>
       `;
+    }
+
+    function metricCardHtml(label, value, detail = "") {
+      return `
+        <article class="metric-card">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+          ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}
+        </article>
+      `;
+    }
+
+    function renderLockedWebsite() {
+      if (metricStrip) {
+        metricStrip.innerHTML = [
+          metricCardHtml("Dashboard", "Locked"),
+          metricCardHtml("Tools", "Ready"),
+          metricCardHtml("Assistant", "IBM"),
+          metricCardHtml("Manager", "Verify")
+        ].join("");
+      }
+
+      if (dashboardMount) {
+        dashboardMount.innerHTML = `
+          <div class="locked-panel">
+            <div>
+              <strong>Verify manager details to view the dashboard.</strong>
+              <span>The intern dashboard and tools will load here after verification.</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderSiteMetrics() {
+      if (!metricStrip) return;
+      const interns = getInterns();
+      const onTrack = interns.filter(intern => internProgressStatus(intern).key === "on-track").length;
+      const needsAttention = interns.length - onTrack;
+      const blockers = interns.filter(isInternBlocked).length;
+      const totalHours = interns.reduce((sum, intern) => sum + getHoursPerWeek(intern), 0);
+
+      metricStrip.innerHTML = [
+        metricCardHtml("Interns", String(interns.length), "active"),
+        metricCardHtml("On track", String(onTrack), "progress"),
+        metricCardHtml("Needs attention", String(needsAttention), "clarity/support"),
+        metricCardHtml("Weekly hours", String(totalHours), `${blockers} blocker${blockers === 1 ? "" : "s"}`)
+      ].join("");
+    }
+
+    function renderSiteDashboard() {
+      if (!dashboardMount) return;
+      dashboardMount.innerHTML = dashboardHtml();
+      renderSiteMetrics();
     }
 
     function dashboardControlsHtml(allInterns) {
@@ -2871,11 +3386,8 @@
     function showDashboard() {
       state.dashboardShown = true;
       removeDashboardQuickActions();
-      clearMessages();
-      messages.classList.add("dashboard-mode");
-      const bubble = addMessage("agent", dashboardHtml(), { dashboard: true, keepDashboardMode: true });
-      bubble.classList.add("wide", "rendered");
-      wireScrollAfterAssets(bubble);
+      messages.classList.remove("dashboard-mode");
+      renderSiteDashboard();
     }
 
     function detailTextHtml(value) {
@@ -3691,6 +4203,37 @@
       `;
     }
 
+    function internSnapshotHtml(intern) {
+      const status = internProgressStatus(intern);
+      const blockerText = isInternBlocked(intern) ? intern.blockers : "No blockers reported";
+
+      return `
+        <div class="inline-note">Intern snapshot</div>
+        <div class="section-title">${escapeHtml(intern.name)}</div>
+        <ul class="simple-answer-list">
+          <li><strong>Role:</strong> ${escapeHtml(intern.role)}</li>
+          <li><strong>Status:</strong> ${escapeHtml(status.label)}, ${escapeHtml(String(intern.progress))}% progress</li>
+          <li><strong>Focus:</strong> ${escapeHtml(intern.focus)}</li>
+          <li><strong>Blockers:</strong> ${escapeHtml(blockerText)}</li>
+          <li><strong>Next:</strong> ${escapeHtml(intern.nextStep)}</li>
+          <li><strong>Hours:</strong> ${escapeHtml(String(getHoursPerWeek(intern)))} hrs/week</li>
+        </ul>
+      `;
+    }
+
+    function answerInternBasicInfo(text) {
+      const selected = internsMentionedInText(text);
+      if (!selected.length) return false;
+
+      const lower = text.toLowerCase();
+      const asksForBasicInfo = /\b(who is|who's|status|progress|blocker|blockers|focus|working on|doing|next|hours|role|summary|basic info|info)\b/i.test(lower);
+      const asksForSpecialTool = /\b(skill|skills|training|module|assign|assignment|email|follow[- ]?up|lifecycle|life cycle|intern10|intern 10|capstone)\b/i.test(lower);
+
+      if (!asksForBasicInfo || asksForSpecialTool) return false;
+      addAgentMessage(internSnapshotHtml(selected[0]), { includeActions: false });
+      return true;
+    }
+
     function answerSimpleQuestion(text) {
       const intent = simpleQuestionIntent(text);
       if (!intent) return false;
@@ -3726,6 +4269,10 @@
 
       const selectedInterns = internsMentionedInText(text);
       const selectedInternName = selectedInterns[0]?.name || "";
+
+      if (answerInternBasicInfo(text)) {
+        return;
+      }
 
       if (/\b(auto[- ]?assign|auto assign|assign by hours|scale work|scaled assignment|hours)\b/i.test(lower)) {
         autoAssignWork(selectedInternName);
@@ -3780,6 +4327,7 @@
 
       if (/\b(dashboard|progress|status|blocker|blockers|recommendation|recommendations|interns)\b/i.test(lower)) {
         showDashboard();
+        addAgentMessage("<p>The dashboard is refreshed in the main workspace.</p>", { includeActions: false });
         return;
       }
 
@@ -3790,9 +4338,10 @@
     }
 
     function boot() {
+      renderLockedWebsite();
       addMessage("agent", `
         <p><strong>Welcome to AskBlue.</strong></p>
-        <p>I&rsquo;m here to help you keep intern teams aligned with clear progress visibility, skill recommendations, training plans, scaled project work, task lifecycles, and follow-up support.</p>
+        <p>I&rsquo;m here in the corner for quick intern status, blocker, skill, training, assignment, and follow-up questions.</p>
       `);
       openVerificationModal();
     }
@@ -3990,6 +4539,11 @@
       if (!filterName || !(filterName in state.dashboardFilters)) return;
 
       state.dashboardFilters[filterName] = select.value;
+      if (select.closest("#dashboardMount")) {
+        renderSiteDashboard();
+        return;
+      }
+
       const bubble = select.closest(".message");
       const isDashboardScreen = Boolean(bubble?.parentElement?.classList.contains("dashboard-screen"));
       const updatedHtml = isDashboardScreen ? dashboardHtml() : appendActionOptions(dashboardHtml());
@@ -4010,6 +4564,7 @@
       const intern = findInternByName(internName);
       if (!intern) return;
 
+      openChatPanel();
       const action = button.dataset.internAction;
       if (action === "details") showInternDetail(intern.name);
       if (action === "skills") showSkills(intern.name);
@@ -4023,6 +4578,27 @@
       if (action === "capstone") capstoneHtml(intern.name);
     }
 
+    function handleSiteToolAction(action) {
+      if (!state.verification.complete) {
+        openVerificationModal();
+        return;
+      }
+
+      openChatPanel({ focus: true });
+      if (action === "skills") showSkills();
+      if (action === "training") showTraining();
+      if (action === "lifecycle") showLifecycle();
+      if (action === "intern10") showIntern10();
+      if (action === "emails") draftEmails("draft follow-up emails");
+      if (action === "assignments") showAssignmentPanel();
+      if (action === "autoAssign") autoAssignWork();
+      if (action === "capstones") capstoneHtml();
+      if (action === "dashboard") {
+        showDashboard();
+        addAgentMessage("<p>The dashboard is refreshed in the main workspace.</p>", { includeActions: false });
+      }
+    }
+
     if (verificationForm) {
       verificationForm.addEventListener("submit", handleVerificationFormSubmit);
     }
@@ -4030,6 +4606,39 @@
     verificationInputs.forEach(field => {
       field.addEventListener("input", clearVerificationError);
     });
+
+    if (chatMinimize) {
+      chatMinimize.addEventListener("click", closeChatPanel);
+    }
+
+    if (chatLauncher) {
+      chatLauncher.addEventListener("click", () => openChatPanel({ focus: true }));
+    }
+
+    if (dashboardMount) {
+      dashboardMount.addEventListener("click", event => {
+        const internActionButton = event.target.closest("button[data-intern-action]");
+        if (internActionButton) {
+          handleInternTableAction(internActionButton, event);
+        }
+      });
+
+      dashboardMount.addEventListener("change", event => {
+        const dashboardSelect = event.target.closest('select[data-dashboard-filter]');
+        if (dashboardSelect) {
+          handleDashboardFilterChange(dashboardSelect, event);
+        }
+      });
+    }
+
+    if (toolsPanel) {
+      toolsPanel.addEventListener("click", event => {
+        const toolButton = event.target.closest("button[data-site-action]");
+        if (!toolButton) return;
+        event.preventDefault();
+        handleSiteToolAction(toolButton.dataset.siteAction);
+      });
+    }
 
     form.addEventListener("submit", event => {
       event.preventDefault();
@@ -4073,15 +4682,7 @@
 
       button.closest(".action-menu")?.removeAttribute("open");
       const action = button.dataset.action;
-      if (action === "skills") showSkills();
-      if (action === "training") showTraining();
-      if (action === "lifecycle") showLifecycle();
-      if (action === "intern10") showIntern10();
-      if (action === "emails") draftEmails("draft follow-up emails");
-      if (action === "assignments") showAssignmentPanel();
-      if (action === "autoAssign") autoAssignWork();
-      if (action === "capstones") capstoneHtml();
-      if (action === "dashboard") showDashboard();
+      handleSiteToolAction(action);
     });
 
     messages.addEventListener("change", event => {
