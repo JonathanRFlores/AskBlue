@@ -1334,6 +1334,79 @@
       margin: 0;
     }
 
+    .detail-copy {
+      margin: 0;
+      color: #344058;
+      line-height: 1.5;
+    }
+
+    .detail-copy-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 0;
+      margin: 0;
+    }
+
+    .detail-list-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.34fr) minmax(0, 1fr);
+      gap: 14px;
+      padding: 10px 0;
+      border-top: 1px solid rgba(228, 231, 236, 0.86);
+    }
+
+    .detail-list-row:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .detail-list dt {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    .detail-list dd {
+      margin: 0;
+      color: #1f2d47;
+      line-height: 1.5;
+    }
+
+    .detail-sublist {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .detail-sublist li {
+      margin: 4px 0;
+    }
+
+    .assignment-summary {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(228, 231, 236, 0.86);
+    }
+
+    .assignment-summary strong {
+      color: #1f2d47;
+      line-height: 1.4;
+    }
+
+    .assignment-due {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 780;
+    }
+
     .detail-actions,
     .quick-actions {
       display: flex;
@@ -2120,6 +2193,11 @@
         grid-template-columns: 1fr;
       }
 
+      .detail-list-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
       .assignment-grid {
         grid-template-columns: 1fr;
       }
@@ -2213,11 +2291,6 @@
               <h3>Assign</h3>
               <p>Create scoped project work.</p>
               <button type="button" class="site-action" data-site-action="assignments">Assign work</button>
-            </article>
-            <article class="tool-card">
-              <h3>Auto assign</h3>
-              <p>Scale work by weekly hours.</p>
-              <button type="button" class="site-action" data-site-action="autoAssign">Auto assign</button>
             </article>
             <article class="tool-card">
               <h3>Follow-up</h3>
@@ -2650,7 +2723,6 @@
             <summary>More</summary>
             <div class="action-menu-list">
               <button type="button" data-action="lifecycle">Lifecycle</button>
-              <button type="button" data-action="autoAssign">Auto assign</button>
               <button type="button" data-action="intern10">Intern10</button>
               <button type="button" data-action="capstones">Capstone</button>
             </div>
@@ -3338,7 +3410,6 @@
         <div class="row-actions" aria-label="Actions for ${internName}">
           <button type="button" class="row-action" data-intern-action="details" data-intern-name="${internName}">Details</button>
           <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
-          <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${internName}">Auto</button>
           <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
         </div>
       `;
@@ -3439,6 +3510,51 @@
       return escapeHtml(value || "None reported.").replace(/\n/g, "<br>");
     }
 
+    function detailValueHtml(label, value) {
+      const shouldList = /\b(skill|training|module)\b/i.test(label);
+      const items = shouldList
+        ? value.split(/;\s*/).map(item => item.trim()).filter(Boolean)
+        : [];
+
+      if (items.length > 1) {
+        return `<ul class="detail-sublist">${items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+      }
+
+      return escapeHtml(value).replace(/\n/g, "<br>");
+    }
+
+    function formattedDetailTextHtml(value) {
+      const text = (value || "").trim();
+      if (!text) return '<p class="detail-copy">None reported.</p>';
+
+      const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
+      const rows = lines.map(line => {
+        const match = line.match(/^([^:]+):\s*(.+)$/);
+        if (!match) return "";
+
+        const label = match[1].trim();
+        const detail = match[2].trim();
+        if (!label || !detail) return "";
+
+        return `
+          <div class="detail-list-row">
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${detailValueHtml(label, detail)}</dd>
+          </div>
+        `;
+      });
+
+      if (lines.length > 1 && rows.every(Boolean)) {
+        return `<dl class="detail-list">${rows.join("")}</dl>`;
+      }
+
+      if (lines.length > 1) {
+        return `<div class="detail-copy detail-copy-stack">${lines.map(line => `<p>${escapeHtml(line)}</p>`).join("")}</div>`;
+      }
+
+      return `<p class="detail-copy">${escapeHtml(text)}</p>`;
+    }
+
     function listItemsHtml(items) {
       const values = (items || []).filter(Boolean);
       if (!values.length) return "<p>None identified yet.</p>";
@@ -3459,9 +3575,11 @@
       const nextIntern10 = getNextIntern10Requirement(intern);
       const assignmentHtml = assignment
         ? `
-            <p><strong>${escapeHtml(assignment.title)}</strong></p>
-            <p>${dueText}</p>
-            <p>${detailTextHtml(assignment.details)}</p>
+            <div class="assignment-summary">
+              <p><strong>${escapeHtml(assignment.title)}</strong></p>
+              <span class="assignment-due">${dueText}</span>
+            </div>
+            ${formattedDetailTextHtml(assignment.details)}
           `
         : "<p>No custom assignment has been added yet.</p>";
 
@@ -3509,7 +3627,7 @@
             </section>
             <section class="detail-section full">
               <h3>Recommended next step</h3>
-              <p>${detailTextHtml(intern.nextStep)}</p>
+              ${formattedDetailTextHtml(intern.nextStep)}
             </section>
             <section class="detail-section">
               <h3>Skills to learn</h3>
@@ -3521,9 +3639,11 @@
             </section>
             <section class="detail-section full">
               <h3>Next Intern10 requirement</h3>
-              <p><strong>${escapeHtml(nextIntern10.label)}</strong></p>
-              <p>${escapeHtml(nextIntern10.assignment)}</p>
-              <p>${escapeHtml(nextIntern10.call)}</p>
+              <div class="detail-copy detail-copy-stack">
+                <p><strong>${escapeHtml(nextIntern10.label)}</strong></p>
+                <p>${escapeHtml(nextIntern10.assignment)}</p>
+                <p>${escapeHtml(nextIntern10.call)}</p>
+              </div>
             </section>
             <section class="detail-section full">
               <h3>Active assignment</h3>
@@ -3533,7 +3653,6 @@
           <div class="detail-actions" aria-label="Actions for ${escapeHtml(intern.name)}">
             <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${escapeHtml(intern.name)}">Assign</button>
             <button type="button" class="row-action" data-intern-action="email" data-intern-name="${escapeHtml(intern.name)}">Email</button>
-            <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
             <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
             <details class="action-menu">
               <summary>More</summary>
@@ -4051,63 +4170,6 @@
       addAgentMessage(intern10Html(selectedInternName), { includeActions: true });
     }
 
-    function autoAssignHtml(selectedInternName = "") {
-      const interns = selectedOrAllInterns(selectedInternName);
-      const rows = interns.map(intern => {
-        const hours = getHoursPerWeek(intern);
-        const dueDate = defaultAssignmentDueDate(intern, hours);
-        const title = assignmentSuggestion(intern, hours);
-        const details = assignmentDetails(intern, hours);
-
-        state.assignments[intern.name] = {
-          title,
-          details,
-          dueDate,
-          hoursPerWeek: hours,
-          projectPhase: getProjectPhase(intern),
-          clientInteraction: getClientInteraction(intern),
-          timelineWeeks: getTimelineWeeks(intern)
-        };
-
-        return `
-          <tr>
-            <td>
-              <div class="intern-name">${escapeHtml(intern.name)}</div>
-              <div class="role">${escapeHtml(getSubPractice(intern))}</div>
-            </td>
-            <td>${escapeHtml(String(hours))} hrs/week</td>
-            <td>${escapeHtml(getWorkloadTier(hours).label)}</td>
-            <td>${escapeHtml(title)}</td>
-            <td>${escapeHtml(dueDate)}</td>
-          </tr>
-        `;
-      }).join("");
-
-      return `
-        <div class="inline-note">Auto assigned by expected project hours</div>
-        <div class="section-title">${selectedInternName ? "Scaled Assignment Created" : "Scaled Assignments Created"}</div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Intern</th>
-                <th>Hours</th>
-                <th>Scale</th>
-                <th>Assignment</th>
-                <th>Due</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function autoAssignWork(selectedInternName = "") {
-      addAgentMessage(autoAssignHtml(selectedInternName));
-      showDashboard();
-    }
-
     function capstoneRecommendationsHtml(selectedInternName = "") {
       const selectedIntern = findInternByName(selectedInternName);
       const interns = selectedIntern ? [selectedIntern] : getInterns();
@@ -4164,8 +4226,8 @@
 
     function generalHelp() {
       addAgentMessage(`
-        <p>I can help with intern tracking, skill recommendations, training plans, hour-scaled assignments, task lifecycles, Intern10 planning, capstone ideas, and follow-up email drafts.</p>
-        <p>Try: <strong>recommend skills</strong>, <strong>recommend training</strong>, <strong>task lifecycle</strong>, <strong>auto assign by hours</strong>, <strong>Intern10 plan</strong>, or <strong>show dashboard</strong>.</p>
+        <p>I can help with intern tracking, skill recommendations, training plans, assignments, task lifecycles, Intern10 planning, capstone ideas, and follow-up email drafts.</p>
+        <p>Try: <strong>recommend skills</strong>, <strong>recommend training</strong>, <strong>task lifecycle</strong>, <strong>assign work</strong>, <strong>Intern10 plan</strong>, or <strong>show dashboard</strong>.</p>
       `);
     }
 
@@ -4328,12 +4390,6 @@
       const selectedInternName = selectedInterns[0]?.name || "";
 
       if (answerInternBasicInfo(text)) {
-        return;
-      }
-
-      if (/\b(auto[- ]?assign|auto assign|assign by hours|scale work|scaled assignment|hours)\b/i.test(lower)) {
-        renderSiteToolAction("autoAssign", selectedInternName);
-        addAgentMessage("<p>I opened auto assigned work in the main workspace.</p>", { includeActions: false });
         return;
       }
 
@@ -4660,10 +4716,6 @@
         renderSiteContent("Assign Work", assignmentPanelHtml(selectedInternName));
         return;
       }
-      if (action === "autoAssign") {
-        renderSiteContent("Auto Assigned Work", autoAssignHtml(selectedInternName));
-        return;
-      }
       if (action === "emails" || action === "email") {
         const intern = findInternByName(selectedInternName);
         renderSiteContent("Follow-Up Emails", emailDraftsHtml(intern ? [intern] : getInterns()));
@@ -4703,7 +4755,6 @@
       if (action === "training") showTraining(intern.name);
       if (action === "lifecycle") showLifecycle(intern.name);
       if (action === "assign") showAssignmentPanel(intern.name);
-      if (action === "autoAssign") autoAssignWork(intern.name);
       if (action === "email") draftEmailsForInterns([intern]);
       if (action === "followup") draftEmailsForInterns([intern], "followup");
       if (action === "intern10") showIntern10(intern.name);
