@@ -1028,23 +1028,27 @@
       margin: 0;
     }
 
-    .detail-actions {
+    .detail-actions,
+    .quick-actions {
       display: flex;
+      align-items: flex-start;
       flex-wrap: wrap;
       gap: 8px;
+    }
+
+    .detail-actions {
       padding-top: 2px;
     }
 
     .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
       margin-top: 14px;
       padding-top: 12px;
       border-top: 1px solid var(--line);
     }
 
-    .quick-actions button {
+    .quick-actions button,
+    .action-menu > summary,
+    .action-menu-list button {
       border: 1px solid #b2ccff;
       background: #eff4ff;
       color: var(--blue-dark);
@@ -1055,10 +1059,73 @@
       cursor: pointer;
     }
 
-    .quick-actions button:hover {
+    .quick-actions button:hover,
+    .action-menu > summary:hover,
+    .action-menu-list button:hover {
       background: #dbeafe;
       border-color: #84adff;
       transform: translateY(-1px);
+    }
+
+    .action-menu {
+      position: relative;
+    }
+
+    .action-menu > summary {
+      display: inline-flex;
+      align-items: center;
+      list-style: none;
+      user-select: none;
+    }
+
+    .action-menu > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .action-menu > summary::after {
+      content: "";
+      width: 0;
+      height: 0;
+      margin-left: 8px;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid currentColor;
+    }
+
+    .action-menu[open] > summary::after {
+      transform: rotate(180deg);
+    }
+
+    .action-menu-list {
+      position: absolute;
+      z-index: 5;
+      top: calc(100% + 6px);
+      left: 0;
+      display: grid;
+      gap: 6px;
+      min-width: 150px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 14px 32px rgba(16, 24, 40, 0.14);
+    }
+
+    .action-menu-list button {
+      width: 100%;
+      text-align: left;
+    }
+
+    .detail-actions .action-menu > summary,
+    .detail-actions .action-menu-list button {
+      padding: 5px 7px;
+      font-size: 0.72rem;
+      font-weight: 780;
+      line-height: 1;
+    }
+
+    .detail-actions .action-menu-list {
+      min-width: 128px;
     }
 
     .draft {
@@ -1969,15 +2036,20 @@
       const includeDashboard = options.includeDashboard ?? true;
       return `
         <div class="quick-actions">
-          <button type="button" data-action="skills">Recommend skills</button>
-          <button type="button" data-action="training">Recommend training</button>
-          <button type="button" data-action="lifecycle">Task lifecycle</button>
-          <button type="button" data-action="intern10">Intern10 plan</button>
-          <button type="button" data-action="emails">Draft follow-up emails</button>
-          <button type="button" data-action="assignments">Assign new work</button>
-          <button type="button" data-action="autoAssign">Auto assign by hours</button>
-          <button type="button" data-action="capstones">Recommend capstones</button>
-          ${includeDashboard ? '<button type="button" data-action="dashboard">Show dashboard</button>' : ""}
+          ${includeDashboard ? '<button type="button" data-action="dashboard">Dashboard</button>' : ""}
+          <button type="button" data-action="skills">Skills</button>
+          <button type="button" data-action="training">Training</button>
+          <button type="button" data-action="assignments">Assign</button>
+          <button type="button" data-action="emails">Follow-up</button>
+          <details class="action-menu">
+            <summary>More</summary>
+            <div class="action-menu-list">
+              <button type="button" data-action="lifecycle">Lifecycle</button>
+              <button type="button" data-action="autoAssign">Auto assign</button>
+              <button type="button" data-action="intern10">Intern10</button>
+              <button type="button" data-action="capstones">Capstone</button>
+            </div>
+          </details>
         </div>
       `;
     }
@@ -2789,13 +2861,18 @@
           <div class="detail-actions" aria-label="Actions for ${escapeHtml(intern.name)}">
             <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${escapeHtml(intern.name)}">Skills</button>
             <button type="button" class="row-action" data-intern-action="training" data-intern-name="${escapeHtml(intern.name)}">Training</button>
-            <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${escapeHtml(intern.name)}">Lifecycle</button>
             <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${escapeHtml(intern.name)}">Assign</button>
-            <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
             <button type="button" class="row-action" data-intern-action="email" data-intern-name="${escapeHtml(intern.name)}">Email</button>
-            <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
-            <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${escapeHtml(intern.name)}">Intern10</button>
-            <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${escapeHtml(intern.name)}">Capstone</button>
+            <details class="action-menu">
+              <summary>More</summary>
+              <div class="action-menu-list">
+                <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${escapeHtml(intern.name)}">Lifecycle</button>
+                <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
+                <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
+                <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${escapeHtml(intern.name)}">Intern10</button>
+                <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${escapeHtml(intern.name)}">Capstone</button>
+              </div>
+            </details>
           </div>
         </div>
       `;
@@ -3859,6 +3936,7 @@
     messages.addEventListener("click", event => {
       const internActionButton = event.target.closest("button[data-intern-action]");
       if (internActionButton) {
+        internActionButton.closest(".action-menu")?.removeAttribute("open");
         handleInternTableAction(internActionButton, event);
         return;
       }
@@ -3878,6 +3956,7 @@
       const button = event.target.closest("button[data-action]");
       if (!button) return;
 
+      button.closest(".action-menu")?.removeAttribute("open");
       const action = button.dataset.action;
       if (action === "skills") showSkills();
       if (action === "training") showTraining();
