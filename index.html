@@ -394,27 +394,23 @@
     }
 
     .dashboard-table .col-intern {
-      width: 15%;
-    }
-
-    .dashboard-table .col-area {
-      width: 14%;
+      width: 18%;
     }
 
     .dashboard-table .col-progress {
-      width: 10%;
+      width: 11%;
     }
 
     .dashboard-table .col-focus {
-      width: 25%;
+      width: 34%;
     }
 
     .dashboard-table .col-blockers {
-      width: 19%;
+      width: 21%;
     }
 
     .dashboard-table .col-action {
-      width: 17%;
+      width: 16%;
     }
 
     .dashboard-view {
@@ -2544,14 +2540,6 @@
               <div class="intern-name">${escapeHtml(intern.name)}</div>
               <div class="role">${escapeHtml(intern.role)}</div>
             </td>
-            <td>
-              <div class="meta-stack">
-                <strong>${escapeHtml(getFunctionalArea(intern))}</strong>
-                <span class="clamp-1">${escapeHtml(getSubPractice(intern))}</span>
-                <span>${escapeHtml(getProjectPhase(intern))}, ${escapeHtml(String(getTimelineWeeks(intern)))} wks</span>
-                <span>${escapeHtml(getClientInteraction(intern))} client</span>
-              </div>
-            </td>
             <td class="progress-cell">
               <div class="progress-label">
                 <span>${intern.progress}%</span>
@@ -2587,7 +2575,7 @@
         `;
       }).join("") || `
         <tr class="empty-row">
-          <td colspan="6">No interns match the current filters.</td>
+          <td colspan="5">No interns match the current filters.</td>
         </tr>
       `;
 
@@ -2605,7 +2593,6 @@
             <table class="dashboard-table">
               <colgroup>
                 <col class="col-intern">
-                <col class="col-area">
                 <col class="col-progress">
                 <col class="col-focus">
                 <col class="col-blockers">
@@ -2614,7 +2601,6 @@
               <thead>
                 <tr>
                   <th>Intern / Role</th>
-                  <th>Area / Phase</th>
                   <th>Progress</th>
                   <th>Focus / Next</th>
                   <th>Blockers / Manager action</th>
