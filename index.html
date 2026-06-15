@@ -284,6 +284,34 @@
       box-shadow: var(--soft-shadow);
     }
 
+    .workspace-view {
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      align-content: start;
+      gap: 12px;
+      padding: 2px;
+    }
+
+    .workspace-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 0 8px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .workspace-toolbar strong {
+      color: #1f2d47;
+      font-size: 0.88rem;
+    }
+
     .locked-panel {
       min-height: 280px;
       height: 100%;
@@ -3203,6 +3231,21 @@
       renderSiteMetrics();
     }
 
+    function renderSiteContent(title, html) {
+      if (!dashboardMount) return;
+      dashboardMount.innerHTML = `
+        <div class="workspace-view">
+          <div class="workspace-toolbar">
+            <strong>${escapeHtml(title)}</strong>
+            <button type="button" class="site-action" data-site-action="dashboard">Dashboard</button>
+          </div>
+          <div>${html}</div>
+        </div>
+      `;
+      dashboardMount.scrollTop = 0;
+      renderSiteMetrics();
+    }
+
     function dashboardControlsHtml(allInterns) {
       const filters = state.dashboardFilters;
       const tracks = [...new Set(allInterns.map(intern => getInternTrack(intern)).filter(Boolean))];
@@ -3643,17 +3686,21 @@
       return `Start with ${modules[0]}, then apply ${skills[0]} through the next ${getFunctionalArea(intern)} deliverable. Manager should reinforce ${getManagerTrainingModules(intern)[0]}.`;
     }
 
-    function draftEmailsForInterns(interns, variant = "standard") {
-      if (!interns.length) return;
-
+    function emailDraftsHtml(interns, variant = "standard") {
       const isFollowUp = variant === "followup";
-      state.pendingEmailConfirmation = true;
-      addAgentMessage(`
+      return `
         <div class="inline-note">Prepared manager review drafts</div>
         <div class="section-title">${isFollowUp ? "Prepared Focused Follow-Up Drafts" : "Prepared Follow-Up Email Drafts"}</div>
         ${interns.map((intern, index) => emailDraftHtml(intern, index, variant)).join("")}
         <p><strong>Use Edit to adjust a draft, or Send to mark an individual email ready.</strong></p>
-      `);
+      `;
+    }
+
+    function draftEmailsForInterns(interns, variant = "standard") {
+      if (!interns.length) return;
+
+      state.pendingEmailConfirmation = true;
+      addAgentMessage(emailDraftsHtml(interns, variant));
     }
 
     function internsMentionedInText(text) {
@@ -4002,7 +4049,7 @@
       addAgentMessage(intern10Html(selectedInternName), { includeActions: true });
     }
 
-    function autoAssignWork(selectedInternName = "") {
+    function autoAssignHtml(selectedInternName = "") {
       const interns = selectedOrAllInterns(selectedInternName);
       const rows = interns.map(intern => {
         const hours = getHoursPerWeek(intern);
@@ -4034,7 +4081,7 @@
         `;
       }).join("");
 
-      addAgentMessage(`
+      return `
         <div class="inline-note">Auto assigned by expected project hours</div>
         <div class="section-title">${selectedInternName ? "Scaled Assignment Created" : "Scaled Assignments Created"}</div>
         <div class="table-wrap">
@@ -4051,11 +4098,15 @@
             <tbody>${rows}</tbody>
           </table>
         </div>
-      `);
+      `;
+    }
+
+    function autoAssignWork(selectedInternName = "") {
+      addAgentMessage(autoAssignHtml(selectedInternName));
       showDashboard();
     }
 
-    function capstoneHtml(selectedInternName = "") {
+    function capstoneRecommendationsHtml(selectedInternName = "") {
       const selectedIntern = findInternByName(selectedInternName);
       const interns = selectedIntern ? [selectedIntern] : getInterns();
       const rows = interns.map(intern => `
@@ -4069,7 +4120,7 @@
         </tr>
       `).join("");
 
-      addAgentMessage(`
+      return `
         <div class="inline-note">Recommendations for manager review</div>
         <div class="section-title">${selectedIntern ? `Capstone Recommendation for ${escapeHtml(selectedIntern.name)}` : "Capstone Recommendations"}</div>
         <div class="table-wrap">
@@ -4089,7 +4140,11 @@
             <tbody>${rows}</tbody>
           </table>
         </div>
-      `);
+      `;
+    }
+
+    function capstoneHtml(selectedInternName = "") {
+      addAgentMessage(capstoneRecommendationsHtml(selectedInternName));
     }
 
     function getCapstoneIdea(intern) {
@@ -4275,42 +4330,53 @@
       }
 
       if (/\b(auto[- ]?assign|auto assign|assign by hours|scale work|scaled assignment|hours)\b/i.test(lower)) {
-        autoAssignWork(selectedInternName);
+        renderSiteToolAction("autoAssign", selectedInternName);
+        addAgentMessage("<p>I opened auto assigned work in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(skill|skills|learn|capabilit|growth area|gap)\b/i.test(lower)) {
-        showSkills(selectedInternName);
+        renderSiteToolAction("skills", selectedInternName);
+        addAgentMessage("<p>I opened skill recommendations in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(training|module|modules|learning|enablement|sub[- ]?practice)\b/i.test(lower)) {
-        showTraining(selectedInternName);
+        renderSiteToolAction("training", selectedInternName);
+        addAgentMessage("<p>I opened training recommendations in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(lifecycle|life cycle|process to completion|completion process|phase|timeline|milestone)\b/i.test(lower)) {
-        showLifecycle(selectedInternName);
+        renderSiteToolAction("lifecycle", selectedInternName);
+        addAgentMessage("<p>I opened the task lifecycle in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(intern10|intern 10|challenge|shadow call|sme chat)\b/i.test(lower)) {
-        showIntern10(selectedInternName);
+        renderSiteToolAction("intern10", selectedInternName);
+        addAgentMessage("<p>I opened the Intern10 plan in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(assign|assignment|new work|new task|task)\b/i.test(lower)) {
-        showAssignmentPanel(selectedInternName);
+        renderSiteToolAction("assignments", selectedInternName);
+        addAgentMessage("<p>I opened the assignment tool in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(email|emails|contact|message|follow[- ]?up|send)\b/i.test(lower)) {
-        draftEmails(text);
+        const selected = internsMentionedInText(text);
+        const intern = selected[0];
+        renderSiteContent("Follow-Up Emails", emailDraftsHtml(intern ? [intern] : getInterns(), /\bfollow[- ]?up\b/i.test(lower) ? "followup" : "standard"));
+        state.pendingEmailConfirmation = true;
+        addAgentMessage("<p>I opened follow-up email drafts in the main workspace.</p>", { includeActions: false });
         return;
       }
 
       if (/\b(capstone|final project|portfolio project)\b/i.test(lower)) {
-        capstoneHtml(selectedInternName);
+        renderSiteToolAction("capstones", selectedInternName);
+        addAgentMessage("<p>I opened capstone recommendations in the main workspace.</p>", { includeActions: false });
         return;
       }
 
@@ -4318,7 +4384,8 @@
       if (detailRequest) {
         const selected = internsMentionedInText(text);
         if (selected.length) {
-          showInternDetail(selected[0].name);
+          renderSiteToolAction("details", selected[0].name);
+          addAgentMessage("<p>I opened that intern profile in the main workspace.</p>", { includeActions: false });
         } else {
           addAgentMessage("<p>Which intern would you like to view? You can also open details from the dashboard row actions.</p>");
         }
@@ -4442,6 +4509,7 @@
 
       const panel = button.closest(".assignment-panel");
       if (!panel) return;
+      const isSitePanel = Boolean(panel.closest("#dashboardMount"));
 
       const feedback = panel.querySelector(".assignment-feedback");
       const values = assignmentValues(panel);
@@ -4473,11 +4541,13 @@
       }
 
       const dueText = values.dueDate ? ` Due date: ${escapeHtml(values.dueDate)}.` : "";
-      addAgentMessage(`
-        <p><strong>Assignment added for ${escapeHtml(values.internName)}.</strong></p>
-        <p>${escapeHtml(values.title)}${dueText} Project work: ${escapeHtml(String(values.hoursPerWeek))} hrs/week.</p>
-      `);
-      showDashboard();
+      if (!isSitePanel) {
+        addAgentMessage(`
+          <p><strong>Assignment added for ${escapeHtml(values.internName)}.</strong></p>
+          <p>${escapeHtml(values.title)}${dueText} Project work: ${escapeHtml(String(values.hoursPerWeek))} hrs/week.</p>
+        `);
+        showDashboard();
+      }
       scrollToBottom();
     }
 
@@ -4554,6 +4624,61 @@
       }
     }
 
+    function renderSiteToolAction(action, selectedInternName = "") {
+      if (!state.verification.complete) {
+        openVerificationModal();
+        return;
+      }
+
+      if (action === "dashboard") {
+        showDashboard();
+        return;
+      }
+      if (action === "details") {
+        renderSiteContent("Intern Profile", internDetailHtml(selectedInternName));
+        return;
+      }
+      if (action === "skills") {
+        renderSiteContent("Skill Recommendations", skillsHtml(selectedInternName));
+        return;
+      }
+      if (action === "training") {
+        renderSiteContent("Training Plan", trainingHtml(selectedInternName));
+        return;
+      }
+      if (action === "lifecycle") {
+        renderSiteContent("Task Lifecycle", lifecycleHtml(selectedInternName));
+        return;
+      }
+      if (action === "intern10") {
+        renderSiteContent("Intern10 Plan", intern10Html(selectedInternName));
+        return;
+      }
+      if (action === "assignments" || action === "assign") {
+        renderSiteContent("Assign Work", assignmentPanelHtml(selectedInternName));
+        return;
+      }
+      if (action === "autoAssign") {
+        renderSiteContent("Auto Assigned Work", autoAssignHtml(selectedInternName));
+        return;
+      }
+      if (action === "emails" || action === "email") {
+        const intern = findInternByName(selectedInternName);
+        renderSiteContent("Follow-Up Emails", emailDraftsHtml(intern ? [intern] : getInterns()));
+        state.pendingEmailConfirmation = true;
+        return;
+      }
+      if (action === "followup") {
+        const intern = findInternByName(selectedInternName);
+        renderSiteContent("Focused Follow-Up", emailDraftsHtml(intern ? [intern] : getInterns(), "followup"));
+        state.pendingEmailConfirmation = true;
+        return;
+      }
+      if (action === "capstones" || action === "capstone") {
+        renderSiteContent("Capstone Recommendations", capstoneRecommendationsHtml(selectedInternName));
+      }
+    }
+
     function handleInternTableAction(button, event) {
       if (event) {
         event.preventDefault();
@@ -4564,8 +4689,13 @@
       const intern = findInternByName(internName);
       if (!intern) return;
 
-      openChatPanel();
       const action = button.dataset.internAction;
+      if (button.closest("#dashboardMount")) {
+        renderSiteToolAction(action, intern.name);
+        return;
+      }
+
+      openChatPanel();
       if (action === "details") showInternDetail(intern.name);
       if (action === "skills") showSkills(intern.name);
       if (action === "training") showTraining(intern.name);
@@ -4584,19 +4714,7 @@
         return;
       }
 
-      openChatPanel({ focus: true });
-      if (action === "skills") showSkills();
-      if (action === "training") showTraining();
-      if (action === "lifecycle") showLifecycle();
-      if (action === "intern10") showIntern10();
-      if (action === "emails") draftEmails("draft follow-up emails");
-      if (action === "assignments") showAssignmentPanel();
-      if (action === "autoAssign") autoAssignWork();
-      if (action === "capstones") capstoneHtml();
-      if (action === "dashboard") {
-        showDashboard();
-        addAgentMessage("<p>The dashboard is refreshed in the main workspace.</p>", { includeActions: false });
-      }
+      renderSiteToolAction(action);
     }
 
     if (verificationForm) {
@@ -4617,9 +4735,28 @@
 
     if (dashboardMount) {
       dashboardMount.addEventListener("click", event => {
+        const siteActionButton = event.target.closest("button[data-site-action]");
+        if (siteActionButton) {
+          event.preventDefault();
+          handleSiteToolAction(siteActionButton.dataset.siteAction);
+          return;
+        }
+
         const internActionButton = event.target.closest("button[data-intern-action]");
         if (internActionButton) {
           handleInternTableAction(internActionButton, event);
+          return;
+        }
+
+        const assignmentButton = event.target.closest("button[data-assignment-action]");
+        if (assignmentButton) {
+          handleAssignmentAction(assignmentButton, event);
+          return;
+        }
+
+        const draftButton = event.target.closest("button[data-draft-action]");
+        if (draftButton) {
+          handleDraftAction(draftButton, event);
         }
       });
 
@@ -4627,6 +4764,19 @@
         const dashboardSelect = event.target.closest('select[data-dashboard-filter]');
         if (dashboardSelect) {
           handleDashboardFilterChange(dashboardSelect, event);
+          return;
+        }
+
+        const internSelect = event.target.closest('select[data-assignment-field="intern"]');
+        if (internSelect) {
+          handleAssignmentInternChange(internSelect);
+          return;
+        }
+
+        const hoursInput = event.target.closest('input[data-assignment-field="hoursPerWeek"]');
+        if (hoursInput) {
+          const panel = hoursInput.closest(".assignment-panel");
+          if (panel) refreshAssignmentScale(panel);
         }
       });
     }
