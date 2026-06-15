@@ -35,4 +35,4 @@ This repo can stay on GitHub Pages for the frontend, but OpenAI calls must go th
 
 ## Local fallback
 
-If `ASKBLUE_AI_ENDPOINT` is blank, the page still works with its local manager dashboard, email, capstone, and assignment workflows. Free-form AI responses require the backend endpoint.
+If `ASKBLUE_AI_ENDPOINT` is blank, the page still works with its local manager dashboard, skill recommendations, training plans, task lifecycles, Intern10 planning, email drafts, capstone ideas, and hour-scaled assignment workflows. Free-form AI responses require the backend endpoint.

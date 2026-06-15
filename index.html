@@ -369,20 +369,24 @@
       width: 12%;
     }
 
+    .dashboard-table .col-area {
+      width: 12%;
+    }
+
     .dashboard-table .col-progress {
-      width: 10%;
+      width: 9%;
     }
 
     .dashboard-table .col-completed {
-      width: 17%;
+      width: 14%;
     }
 
     .dashboard-table .col-focus {
-      width: 15%;
+      width: 13%;
     }
 
     .dashboard-table .col-blockers {
-      width: 13%;
+      width: 10%;
     }
 
     .dashboard-table .col-next {
@@ -390,7 +394,7 @@
     }
 
     .dashboard-table .col-action {
-      width: 16%;
+      width: 13%;
     }
 
     .capstone-table .col-capstone-intern {
@@ -437,7 +441,7 @@
 
     .dashboard-control-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
       gap: 8px;
     }
 
@@ -508,6 +512,154 @@
       line-height: 1.28;
       white-space: normal;
       overflow-wrap: break-word;
+    }
+
+    .meta-stack {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.32;
+    }
+
+    .meta-stack strong {
+      color: #344058;
+      font-size: 0.78rem;
+    }
+
+    .workload-note {
+      display: grid;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.32;
+    }
+
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .recommendation-panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.05);
+    }
+
+    .recommendation-panel h3,
+    .lifecycle-step h3 {
+      margin: 0 0 6px;
+      color: #344058;
+      font-size: 0.78rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .recommendation-panel p {
+      margin: 0;
+    }
+
+    .recommendation-panel ul,
+    .intern10-list,
+    .lifecycle-step ul {
+      margin: 7px 0 0;
+      padding-left: 18px;
+    }
+
+    .recommendation-panel li,
+    .intern10-list li,
+    .lifecycle-step li {
+      margin: 5px 0;
+    }
+
+    .lifecycle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lifecycle-step {
+      position: relative;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(16, 24, 40, 0.05);
+    }
+
+    .lifecycle-step.current {
+      border-color: #84adff;
+      box-shadow: 0 8px 24px rgba(21, 94, 239, 0.12);
+    }
+
+    .step-kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      margin-bottom: 8px;
+      padding: 3px 8px;
+      border-radius: 8px;
+      background: #f2f4f7;
+      color: #344058;
+      font-size: 0.72rem;
+      font-weight: 780;
+    }
+
+    .lifecycle-step.current .step-kicker {
+      background: #eff4ff;
+      color: var(--blue-dark);
+    }
+
+    .intern10-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 9px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .intern10-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .intern10-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid #fedf89;
+      background: #fff6e8;
+      color: var(--amber);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .intern10-status.done {
+      border-color: #a7e6cf;
+      background: #eaf7f1;
+      color: var(--green);
+    }
+
+    .assignment-insight {
+      display: grid;
+      gap: 5px;
+      padding: 10px;
+      border: 1px solid #c7d7fe;
+      border-radius: 8px;
+      background: #f8fbff;
+      color: #344058;
+      font-size: 0.82rem;
+      line-height: 1.36;
     }
 
     .progress-cell {
@@ -871,7 +1023,7 @@
 
     .assignment-grid {
       display: grid;
-      grid-template-columns: minmax(180px, 0.8fr) minmax(220px, 1fr) minmax(150px, 0.6fr);
+      grid-template-columns: minmax(170px, 0.8fr) minmax(220px, 1.2fr) minmax(130px, 0.55fr) minmax(130px, 0.55fr);
       gap: 10px;
     }
 
@@ -1104,7 +1256,7 @@
       }
 
       table {
-        min-width: 860px;
+        min-width: 1080px;
       }
 
       .dashboard-control-grid,
@@ -1141,7 +1293,7 @@
         </div>
         <h1 class="sr-only">AskBlue</h1>
       </div>
-      <p class="header-tagline">AI assistant for intern progress, planning, and follow-up</p>
+      <p class="header-tagline">AI assistant for intern skills, training, project planning, and follow-up</p>
       <div class="partner-logo-wrap" aria-label="IBM">
         <img class="partner-logo" src="assets/ibm-logo.png" alt="IBM">
       </div>
@@ -1164,55 +1316,214 @@
     const defaultInterns = [
       {
         name: "Maya Chen",
-        role: "Oracle Cloud ERP Intern",
+        role: "ERP Integration Intern",
         track: "Software",
+        functionalArea: "ERP",
+        subPractice: "Oracle ERP Financials",
+        projectPhase: "Build",
+        timelineWeeks: 4,
+        clientInteraction: "Low",
+        hoursPerWeek: 12,
         progress: 82,
         completed: "Configured a sample Oracle Cloud ERP supplier onboarding REST API call and added payload validation tests.",
         focus: "FBDI import error handling and integration coverage for Payables invoices.",
         blockers: "Waiting on approved sandbox payloads and endpoint field mapping.",
         nextStep: "Complete Oracle Cloud ERP REST API training, then pair on a mocked Payables import path and document expected error responses.",
-        managerAction: "Confirm the invoice import field mapping and review the integration test checklist."
+        managerAction: "Confirm the invoice import field mapping and review the integration test checklist.",
+        intern10Completed: ["kickoff", "practice-orientation", "skills-plan", "shadow-call", "hands-on-artifact", "manager-checkpoint"]
       },
       {
         name: "Jordan Patel",
-        role: "Oracle Cloud ERP Intern",
+        role: "SCM Analytics Intern",
         track: "Data",
+        functionalArea: "SCM",
+        subPractice: "Oracle SCM Analytics",
+        projectPhase: "Discover",
+        timelineWeeks: 6,
+        clientInteraction: "Medium",
+        hoursPerWeek: 8,
         progress: 68,
-        completed: "Built first-pass OTBI-style visuals for procure-to-pay cycle time and invoice exception trends.",
-        focus: "Oracle Cloud ERP Financials dashboard definitions and KPI validation.",
-        blockers: "Needs clearer definitions for invoice hold, approval aging, and paid-on-time metrics.",
-        nextStep: "Complete OTBI and BI Publisher reporting training, then validate KPI formulas before extending dashboard filters.",
-        managerAction: "Schedule a metric review with the Finance SME and approve the dashboard success criteria."
+        completed: "Built first-pass OTBI-style visuals for order fulfillment cycle time, supplier exceptions, and inventory aging.",
+        focus: "SCM dashboard definitions and KPI validation across planning, inventory, and fulfillment.",
+        blockers: "Needs clearer definitions for backorder rate, forecast variance, and inventory aging thresholds.",
+        nextStep: "Complete SCM analytics and OTBI reporting training, then validate KPI formulas before extending dashboard filters.",
+        managerAction: "Schedule a metric review with the supply chain SME and approve the dashboard success criteria.",
+        intern10Completed: ["kickoff", "practice-orientation", "skills-plan", "shadow-call"]
       },
       {
         name: "Aisha Brooks",
-        role: "Oracle Cloud ERP Intern",
+        role: "SCM Experience Intern",
         track: "UX",
+        functionalArea: "SCM",
+        subPractice: "SAP SCM Experience",
+        projectPhase: "Validate",
+        timelineWeeks: 3,
+        clientInteraction: "High",
+        hoursPerWeek: 16,
         progress: 91,
-        completed: "Reviewed requisition and expense entry workflows and documented friction points from sample user walkthroughs.",
-        focus: "Usability recommendations for procurement and expense self-service tasks.",
+        completed: "Reviewed warehouse exception and purchase order change workflows and documented friction points from sample user walkthroughs.",
+        focus: "Usability recommendations for planner, buyer, and warehouse exception handling.",
         blockers: "None reported.",
         nextStep: "Convert findings into prioritized process and UX recommendations with a short before-and-after workflow readout.",
-        managerAction: "Invite her to the next process design review and approve the recommendation summary."
+        managerAction: "Invite her to the next process design review and approve the recommendation summary.",
+        intern10Completed: ["kickoff", "practice-orientation", "skills-plan", "shadow-call", "sme-chat", "hands-on-artifact", "manager-checkpoint", "practice-shareout"]
       },
       {
         name: "Luis Romero",
-        role: "Oracle Cloud ERP Intern",
+        role: "HCM Product Intern",
         track: "Product",
+        functionalArea: "HCM",
+        subPractice: "Workday HCM Transformation",
+        projectPhase: "Plan",
+        timelineWeeks: 5,
+        clientInteraction: "Medium",
+        hoursPerWeek: 6,
         progress: 54,
-        completed: "Drafted Oracle Cloud ERP implementation backlog items for supplier onboarding and invoice exception handling.",
+        completed: "Drafted HCM implementation backlog items for onboarding, worker data corrections, and manager self-service enablement.",
         focus: "Functional requirements, acceptance criteria, and training plan alignment.",
         blockers: "Needs feedback on requirement scope and module ownership.",
-        nextStep: "Complete Oracle Cloud ERP fundamentals training, then refine five backlog items with measurable acceptance criteria.",
-        managerAction: "Give written feedback on his top three requirements and identify the Finance or Procurement SME for questions."
+        nextStep: "Complete Workday HCM fundamentals training, then refine five backlog items with measurable acceptance criteria.",
+        managerAction: "Give written feedback on his top three requirements and identify the HCM SME for questions.",
+        intern10Completed: ["kickoff", "practice-orientation"]
+      }
+    ];
+
+    const functionalAreaCatalog = {
+      ERP: {
+        label: "Enterprise Resource Planning",
+        projectPattern: "Finance, procurement, supplier, invoice, controls, reporting, and integration work.",
+        coreSkills: ["Process mapping", "ERP module vocabulary", "Data validation", "Acceptance criteria"],
+        typicalOutputs: ["Configured scenario", "Integration or report artifact", "Process gap summary", "UAT evidence"],
+        clientGuidance: "Usually SME-heavy in design and UAT; lower client exposure during build unless readouts are scheduled."
+      },
+      SCM: {
+        label: "Supply Chain Management",
+        projectPattern: "Planning, inventory, fulfillment, warehouse, supplier, exception, and logistics workflows.",
+        coreSkills: ["Supply chain KPI literacy", "Exception analysis", "Process walkthroughs", "Operational storytelling"],
+        typicalOutputs: ["KPI dashboard", "Exception analysis", "Workflow improvement brief", "Inventory or fulfillment insight"],
+        clientGuidance: "Often benefits from shadowing working sessions because terminology and edge cases are highly operational."
+      },
+      HCM: {
+        label: "Human Capital Management",
+        projectPattern: "Worker data, onboarding, recruiting, compensation, manager self-service, and adoption work.",
+        coreSkills: ["HR process literacy", "Requirement writing", "Security role awareness", "Change enablement"],
+        typicalOutputs: ["Backlog refinement", "Training plan", "Persona workflow", "Adoption risk summary"],
+        clientGuidance: "Client interaction should be structured because HCM examples can include sensitive workforce scenarios."
+      },
+      "Data & AI": {
+        label: "Data and AI",
+        projectPattern: "Data quality, analytics, automation, insight generation, governance, and AI-assisted workflows.",
+        coreSkills: ["Data profiling", "Metric definition", "Prompt and model evaluation", "Insight communication"],
+        typicalOutputs: ["Data quality readout", "KPI story", "Automation prototype", "Governance checklist"],
+        clientGuidance: "Client interaction should focus on problem framing, explainability, and measurable decision support."
+      }
+    };
+
+    const subPracticeCatalog = {
+      "Oracle ERP Financials": {
+        modules: ["Oracle Cloud ERP Financials foundations", "Payables and supplier onboarding flow", "FBDI, REST, and OTBI basics"],
+        managerModules: ["ERP deliverable review checklist", "Finance SME question framing", "UAT evidence expectations"],
+        skills: ["Payables process literacy", "Payload and field mapping", "Invoice exception handling", "Integration test evidence"]
+      },
+      "Oracle SCM Analytics": {
+        modules: ["Oracle SCM process overview", "Inventory and fulfillment KPI definitions", "OTBI reporting basics"],
+        managerModules: ["Supply chain metric validation", "Operational readout coaching", "Dashboard acceptance criteria"],
+        skills: ["Forecast and inventory metric definitions", "Exception trend analysis", "Dashboard storytelling", "Source assumption documentation"]
+      },
+      "SAP SCM Experience": {
+        modules: ["SAP S/4HANA supply chain overview", "Warehouse and procurement workflow basics", "Design thinking for process improvement"],
+        managerModules: ["Workflow walkthrough facilitation", "SME feedback capture", "Client-ready recommendation review"],
+        skills: ["Process observation", "User friction synthesis", "Prioritization rationale", "Before-and-after workflow communication"]
+      },
+      "Workday HCM Transformation": {
+        modules: ["Workday HCM foundations", "Worker data and manager self-service basics", "Change enablement for HR transformation"],
+        managerModules: ["Requirement quality review", "HCM privacy-aware examples", "Training impact assessment"],
+        skills: ["HCM terminology", "Acceptance criteria writing", "Persona-based training needs", "Adoption risk analysis"]
+      }
+    };
+
+    const intern10Requirements = [
+      {
+        key: "kickoff",
+        label: "Manager kickoff",
+        call: "30-minute manager kickoff to confirm goals, working hours, and communication cadence.",
+        assignment: "Write a one-page internship goal brief with expected outcomes and support needs.",
+        evidence: "Goal brief"
+      },
+      {
+        key: "practice-orientation",
+        label: "Practice orientation",
+        call: "Practice or sub-practice overview with a team lead.",
+        assignment: "Summarize the sub-practice, common client problems, and how the intern project fits.",
+        evidence: "Practice summary"
+      },
+      {
+        key: "skills-plan",
+        label: "Skills plan",
+        call: "15-minute manager review of skill gaps and learning sequence.",
+        assignment: "Complete the first recommended training module and list three skills to apply immediately.",
+        evidence: "Learning plan"
+      },
+      {
+        key: "shadow-call",
+        label: "Shadow a call",
+        call: "Shadow a project, SME, or client-safe working session tied to the functional area.",
+        assignment: "Capture meeting purpose, decisions, terms learned, and follow-up questions.",
+        evidence: "Call notes"
+      },
+      {
+        key: "sme-chat",
+        label: "SME chat",
+        call: "Coffee chat or working session with a functional SME.",
+        assignment: "Prepare five questions and document how answers change the project plan.",
+        evidence: "SME question log"
+      },
+      {
+        key: "hands-on-artifact",
+        label: "Hands-on artifact",
+        call: "Optional office hours with technical, data, UX, or product mentor.",
+        assignment: "Create a project artifact that can be reviewed by the team.",
+        evidence: "Draft artifact"
+      },
+      {
+        key: "manager-checkpoint",
+        label: "Manager checkpoint",
+        call: "Midpoint manager checkpoint focused on blockers, scope, and quality bar.",
+        assignment: "Share progress, risks, and a narrowed next-step plan.",
+        evidence: "Checkpoint notes"
+      },
+      {
+        key: "practice-shareout",
+        label: "Practice shareout",
+        call: "Short internal readout to the project team or practice community.",
+        assignment: "Present what was built, learned, and recommended.",
+        evidence: "Readout deck or notes"
+      },
+      {
+        key: "client-ready-review",
+        label: "Client-ready review",
+        call: "Manager review of whether the output is client-safe or should remain internal.",
+        assignment: "Polish the artifact with assumptions, limits, and next actions.",
+        evidence: "Reviewed final artifact"
+      },
+      {
+        key: "reflection",
+        label: "Reflection and next path",
+        call: "Final manager conversation on strengths, growth areas, and next role exposure.",
+        assignment: "Write a reflection linking skills learned to future project work.",
+        evidence: "Final reflection"
       }
     ];
 
     const capstoneIdeas = {
-      Software: "Build a sandbox Oracle Cloud ERP integration validator for Payables invoice import that checks payload fields, mock REST responses, and common FBDI error states.",
-      Data: "Create an Oracle Cloud ERP Financials and Procurement KPI dashboard with OTBI-style metrics, clear definitions, filters, and three manager-ready insights.",
-      UX: "Produce a procurement or expense self-service workflow improvement brief that maps user friction to prioritized Oracle Cloud ERP process changes.",
-      Product: "Develop a prioritized Oracle Cloud ERP implementation backlog with functional requirements, acceptance criteria, training impacts, and SME questions."
+      "Oracle ERP Financials": "Build a sandbox Oracle ERP Financials validator for Payables invoice import that checks payload fields, mock REST responses, and common FBDI error states.",
+      "Oracle SCM Analytics": "Create an SCM KPI dashboard with forecast variance, inventory aging, fulfillment exceptions, clear source assumptions, and three manager-ready insights.",
+      "SAP SCM Experience": "Produce an SCM workflow improvement brief that maps planner or warehouse friction to prioritized SAP process recommendations.",
+      "Workday HCM Transformation": "Develop a prioritized Workday HCM backlog with functional requirements, training impacts, privacy-aware examples, and SME questions.",
+      ERP: "Create a focused ERP artifact that connects process design, data quality, and implementation readiness.",
+      SCM: "Create a focused SCM artifact that improves planning, fulfillment, inventory, or exception management.",
+      HCM: "Create a focused HCM artifact that improves worker, manager, or HR operations with clear adoption guidance.",
+      "Data & AI": "Create a data or AI prototype with measurable decision support, explainability notes, and governance considerations."
     };
 
     const state = {
@@ -1227,6 +1538,9 @@
       dashboardFilters: {
         status: "all",
         blocker: "all",
+        functionalArea: "all",
+        subPractice: "all",
+        phase: "all",
         track: "all",
         sort: "progress-desc"
       },
@@ -1314,7 +1628,7 @@
     }
 
     function isWideContent(html) {
-      return /class="[^"]*(table-wrap|manager-summary|assignment-panel)[^"]*"/.test(html);
+      return /class="[^"]*(table-wrap|manager-summary|assignment-panel|recommendation-grid|lifecycle-grid|intern10-row)[^"]*"/.test(html);
     }
 
     function isDashboardContent(html) {
@@ -1325,8 +1639,13 @@
       const includeDashboard = options.includeDashboard ?? true;
       return `
         <div class="quick-actions">
+          <button type="button" data-action="skills">Recommend skills</button>
+          <button type="button" data-action="training">Recommend training</button>
+          <button type="button" data-action="lifecycle">Task lifecycle</button>
+          <button type="button" data-action="intern10">Intern10 plan</button>
           <button type="button" data-action="emails">Draft follow-up emails</button>
           <button type="button" data-action="assignments">Assign new work</button>
+          <button type="button" data-action="autoAssign">Auto assign by hours</button>
           <button type="button" data-action="capstones">Recommend capstones</button>
           ${includeDashboard ? '<button type="button" data-action="dashboard">Show dashboard</button>' : ""}
         </div>
@@ -1383,14 +1702,30 @@
           name: intern.name,
           role: intern.role,
           track: getInternTrack(intern),
+          functionalArea: getFunctionalArea(intern),
+          subPractice: getSubPractice(intern),
+          projectPhase: getProjectPhase(intern),
+          timelineWeeks: getTimelineWeeks(intern),
+          clientInteraction: getClientInteraction(intern),
+          hoursPerWeek: getHoursPerWeek(intern),
           progress: intern.progress,
           completed: intern.completed,
           focus: intern.focus,
           blockers: intern.blockers,
           nextStep: intern.nextStep,
-          managerAction: intern.managerAction
+          managerAction: intern.managerAction,
+          intern10Completed: getIntern10Completed(intern)
         })),
-        assignments: state.assignments
+        assignments: state.assignments,
+        functionalAreas: Object.keys(functionalAreaCatalog),
+        subPracticeTraining: Object.fromEntries(Object.entries(subPracticeCatalog).map(([name, value]) => [name, value.modules])),
+        intern10Challenge: intern10Requirements.map(item => ({
+          key: item.key,
+          label: item.label,
+          call: item.call,
+          assignment: item.assignment,
+          evidence: item.evidence
+        }))
       };
     }
 
@@ -1514,6 +1849,14 @@
         return left.name.localeCompare(right.name);
       }
 
+      if (sort === "hours-desc") {
+        return getHoursPerWeek(right) - getHoursPerWeek(left) || left.name.localeCompare(right.name);
+      }
+
+      if (sort === "timeline-asc") {
+        return getTimelineWeeks(left) - getTimelineWeeks(right) || left.name.localeCompare(right.name);
+      }
+
       return right.progress - left.progress || left.name.localeCompare(right.name);
     }
 
@@ -1524,10 +1867,16 @@
           const status = internProgressStatus(intern);
           const blocked = isInternBlocked(intern);
           const track = getInternTrack(intern);
+          const functionalArea = getFunctionalArea(intern);
+          const subPractice = getSubPractice(intern);
+          const phase = getProjectPhase(intern);
 
           if (filters.status !== "all" && filters.status !== status.key) return false;
           if (filters.blocker === "blocked" && !blocked) return false;
           if (filters.blocker === "clear" && blocked) return false;
+          if (filters.functionalArea !== "all" && filters.functionalArea !== functionalArea) return false;
+          if (filters.subPractice !== "all" && filters.subPractice !== subPractice) return false;
+          if (filters.phase !== "all" && filters.phase !== phase) return false;
           if (filters.track !== "all" && filters.track !== track) return false;
           return true;
         })
@@ -1627,9 +1976,14 @@
         if (!assignment) return intern;
 
         const dueText = assignment.dueDate ? ` (due ${assignment.dueDate})` : "";
+        const hoursText = assignment.hoursPerWeek ? `, ${assignment.hoursPerWeek} hrs/week` : "";
         return {
           ...intern,
-          focus: `Assigned: ${assignment.title}${dueText}`,
+          projectPhase: assignment.projectPhase || intern.projectPhase,
+          clientInteraction: assignment.clientInteraction || intern.clientInteraction,
+          hoursPerWeek: assignment.hoursPerWeek || intern.hoursPerWeek,
+          timelineWeeks: assignment.timelineWeeks || intern.timelineWeeks,
+          focus: `Assigned: ${assignment.title}${dueText}${hoursText}`,
           nextStep: assignment.details || assignment.title,
           managerAction: assignment.dueDate
             ? `Review progress before ${assignment.dueDate} and clear blockers.`
@@ -1644,6 +1998,85 @@
 
     function getInternTrack(intern) {
       return intern.track || "";
+    }
+
+    function getFunctionalArea(intern) {
+      return intern.functionalArea || "ERP";
+    }
+
+    function getSubPractice(intern) {
+      return intern.subPractice || getFunctionalArea(intern);
+    }
+
+    function getProjectPhase(intern) {
+      return intern.projectPhase || "Plan";
+    }
+
+    function getTimelineWeeks(intern) {
+      const weeks = Number(intern.timelineWeeks);
+      return Number.isFinite(weeks) && weeks > 0 ? weeks : 4;
+    }
+
+    function getClientInteraction(intern) {
+      return intern.clientInteraction || "Medium";
+    }
+
+    function getHoursPerWeek(intern) {
+      const hours = Number(intern.hoursPerWeek);
+      if (!Number.isFinite(hours) || hours <= 0) return 8;
+      return Math.max(2, Math.min(40, Math.round(hours)));
+    }
+
+    function getIntern10Completed(intern) {
+      return Array.isArray(intern.intern10Completed) ? intern.intern10Completed : [];
+    }
+
+    function getFunctionalAreaInfo(intern) {
+      return functionalAreaCatalog[getFunctionalArea(intern)] || functionalAreaCatalog.ERP;
+    }
+
+    function getSubPracticeInfo(intern) {
+      return subPracticeCatalog[getSubPractice(intern)] || {
+        modules: [`${getSubPractice(intern)} fundamentals`, "Project delivery basics", "Consulting communication basics"],
+        managerModules: ["Review expectations and acceptance criteria", "Set checkpoint cadence", "Coach final readout"],
+        skills: ["Functional vocabulary", "Deliverable quality", "Stakeholder communication"]
+      };
+    }
+
+    function getWorkloadTier(hours) {
+      if (hours <= 5) {
+        return {
+          label: "Micro assignment",
+          scope: "One narrow artifact with a manager review before expansion.",
+          dueDays: 10,
+          checkpoint: "One 15-minute checkpoint"
+        };
+      }
+
+      if (hours <= 10) {
+        return {
+          label: "Focused assignment",
+          scope: "One primary deliverable plus evidence, assumptions, and questions.",
+          dueDays: 7,
+          checkpoint: "One midpoint checkpoint"
+        };
+      }
+
+      if (hours <= 20) {
+        return {
+          label: "Sprint assignment",
+          scope: "A complete artifact with peer or SME feedback before manager review.",
+          dueDays: 5,
+          checkpoint: "Two checkpoints"
+        };
+      }
+
+      return {
+        label: "Expanded sprint",
+        scope: "A larger artifact plus a short readout, handoff notes, and next-step recommendations.",
+        dueDays: 3,
+        checkpoint: "Two checkpoints and a final readout"
+      };
     }
 
     function getMissingPrompt() {
@@ -1722,7 +2155,7 @@
 
     function completeVerification() {
       state.verification.complete = true;
-      input.placeholder = "Ask for email drafts, capstone ideas, or dashboard recommendations";
+      input.placeholder = "Ask for skills, training, task lifecycle, Intern10, or auto assignment";
       showDashboard();
     }
 
@@ -1741,8 +2174,20 @@
     function dashboardControlsHtml(allInterns, visibleInterns) {
       const filters = state.dashboardFilters;
       const tracks = [...new Set(allInterns.map(intern => getInternTrack(intern)).filter(Boolean))];
+      const functionalAreas = [...new Set(allInterns.map(intern => getFunctionalArea(intern)).filter(Boolean))];
+      const subPractices = [...new Set(allInterns.map(intern => getSubPractice(intern)).filter(Boolean))];
+      const phases = [...new Set(allInterns.map(intern => getProjectPhase(intern)).filter(Boolean))];
       const trackOptions = tracks.map(track => `
         <option value="${escapeHtml(track)}"${filters.track === track ? " selected" : ""}>${escapeHtml(track)}</option>
+      `).join("");
+      const functionalAreaOptions = functionalAreas.map(area => `
+        <option value="${escapeHtml(area)}"${filters.functionalArea === area ? " selected" : ""}>${escapeHtml(area)}</option>
+      `).join("");
+      const subPracticeOptions = subPractices.map(practice => `
+        <option value="${escapeHtml(practice)}"${filters.subPractice === practice ? " selected" : ""}>${escapeHtml(practice)}</option>
+      `).join("");
+      const phaseOptions = phases.map(phase => `
+        <option value="${escapeHtml(phase)}"${filters.phase === phase ? " selected" : ""}>${escapeHtml(phase)}</option>
       `).join("");
 
       return `
@@ -1766,6 +2211,27 @@
               </select>
             </div>
             <div class="dashboard-control">
+              <label>Functional area</label>
+              <select data-dashboard-filter="functionalArea">
+                <option value="all"${filters.functionalArea === "all" ? " selected" : ""}>All areas</option>
+                ${functionalAreaOptions}
+              </select>
+            </div>
+            <div class="dashboard-control">
+              <label>Sub-practice</label>
+              <select data-dashboard-filter="subPractice">
+                <option value="all"${filters.subPractice === "all" ? " selected" : ""}>All sub-practices</option>
+                ${subPracticeOptions}
+              </select>
+            </div>
+            <div class="dashboard-control">
+              <label>Phase</label>
+              <select data-dashboard-filter="phase">
+                <option value="all"${filters.phase === "all" ? " selected" : ""}>All phases</option>
+                ${phaseOptions}
+              </select>
+            </div>
+            <div class="dashboard-control">
               <label>Track</label>
               <select data-dashboard-filter="track">
                 <option value="all"${filters.track === "all" ? " selected" : ""}>All tracks</option>
@@ -1780,6 +2246,8 @@
                 <option value="name-asc"${filters.sort === "name-asc" ? " selected" : ""}>Name A-Z</option>
                 <option value="blocker-first"${filters.sort === "blocker-first" ? " selected" : ""}>Blockers first</option>
                 <option value="due-date"${filters.sort === "due-date" ? " selected" : ""}>Due date</option>
+                <option value="hours-desc"${filters.sort === "hours-desc" ? " selected" : ""}>Hours high to low</option>
+                <option value="timeline-asc"${filters.sort === "timeline-asc" ? " selected" : ""}>Timeline shortest first</option>
               </select>
             </div>
           </div>
@@ -1793,9 +2261,14 @@
       return `
         <div class="row-actions" aria-label="Actions for ${internName}">
           <button type="button" class="row-action" data-intern-action="details" data-intern-name="${internName}">Details</button>
+          <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${internName}">Skills</button>
+          <button type="button" class="row-action" data-intern-action="training" data-intern-name="${internName}">Training</button>
+          <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${internName}">Lifecycle</button>
           <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${internName}">Assign</button>
+          <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${internName}">Auto</button>
           <button type="button" class="row-action" data-intern-action="email" data-intern-name="${internName}">Email</button>
           <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${internName}">Follow-up</button>
+          <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${internName}">Intern10</button>
           <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${internName}">Capstone</button>
         </div>
       `;
@@ -1807,11 +2280,21 @@
       const rows = interns.map(intern => {
         const blockerClass = intern.blockers.toLowerCase().includes("none") ? "none" : "";
         const status = internProgressStatus(intern);
+        const hours = getHoursPerWeek(intern);
+        const workload = getWorkloadTier(hours);
         return `
           <tr class="dashboard-row" data-intern-name="${escapeHtml(intern.name)}">
             <td>
               <div class="intern-name">${escapeHtml(intern.name)}</div>
               <div class="role">${escapeHtml(intern.role)}</div>
+            </td>
+            <td>
+              <div class="meta-stack">
+                <strong>${escapeHtml(getFunctionalArea(intern))}</strong>
+                <span>${escapeHtml(getSubPractice(intern))}</span>
+                <span>${escapeHtml(getProjectPhase(intern))} phase, ${escapeHtml(String(getTimelineWeeks(intern)))} weeks</span>
+                <span>${escapeHtml(getClientInteraction(intern))} client interaction</span>
+              </div>
             </td>
             <td class="progress-cell">
               <div class="progress-label">
@@ -1827,25 +2310,30 @@
             <td><span class="blocker ${blockerClass}">${escapeHtml(intern.blockers)}</span></td>
             <td>${escapeHtml(intern.nextStep)}</td>
             <td>
-              ${escapeHtml(intern.managerAction)}
+              <div class="workload-note">
+                <strong>${hours} hrs/week</strong>
+                <span>${escapeHtml(workload.label)}</span>
+                <span>${escapeHtml(workload.checkpoint)}</span>
+              </div>
               ${dashboardRowActionsHtml(intern)}
             </td>
           </tr>
         `;
       }).join("") || `
         <tr class="empty-row">
-          <td colspan="7">No interns match the current filters.</td>
+          <td colspan="8">No interns match the current filters.</td>
         </tr>
       `;
 
       return `
         ${managerSummaryHtml()}
-        <div class="section-title">Oracle Cloud ERP Interns Progress Dashboard</div>
+        <div class="section-title">Intern Progress and Planning Dashboard</div>
         ${dashboardControlsHtml(allInterns, interns)}
         <div class="table-wrap">
           <table class="dashboard-table">
             <colgroup>
               <col class="col-intern">
+              <col class="col-area">
               <col class="col-progress">
               <col class="col-completed">
               <col class="col-focus">
@@ -1856,12 +2344,13 @@
             <thead>
               <tr>
                 <th>Intern name / Role</th>
+                <th>Functional area / Phase</th>
                 <th>Progress percentage</th>
                 <th>Completed work</th>
                 <th>Current focus</th>
                 <th>Blockers</th>
                 <th>AI recommended next step</th>
-                <th>Actions</th>
+                <th>Workload / Actions</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -1880,6 +2369,12 @@
       return escapeHtml(value || "None reported.").replace(/\n/g, "<br>");
     }
 
+    function listItemsHtml(items) {
+      const values = (items || []).filter(Boolean);
+      if (!values.length) return "<p>None identified yet.</p>";
+      return `<ul class="capstone-list">${values.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
     function internDetailHtml(internName) {
       const intern = findInternByName(internName);
       if (!intern) {
@@ -1889,6 +2384,9 @@
       const status = internProgressStatus(intern);
       const assignment = state.assignments[intern.name];
       const dueText = assignment?.dueDate ? `Due ${escapeHtml(assignment.dueDate)}` : "No due date";
+      const skills = getSkillRecommendations(intern).slice(0, 4);
+      const training = getTrainingModules(intern).slice(0, 4);
+      const nextIntern10 = getNextIntern10Requirement(intern);
       const assignmentHtml = assignment
         ? `
             <p><strong>${escapeHtml(assignment.title)}</strong></p>
@@ -1907,6 +2405,12 @@
               <div class="detail-meta">
                 <span>${escapeHtml(intern.role)}</span>
                 <span>${escapeHtml(getInternTrack(intern))} track</span>
+                <span>${escapeHtml(getFunctionalArea(intern))}</span>
+                <span>${escapeHtml(getSubPractice(intern))}</span>
+                <span>${escapeHtml(getProjectPhase(intern))} phase</span>
+                <span>${escapeHtml(String(getTimelineWeeks(intern)))} week timeline</span>
+                <span>${escapeHtml(getClientInteraction(intern))} client interaction</span>
+                <span>${escapeHtml(String(getHoursPerWeek(intern)))} hrs/week</span>
               </div>
             </div>
             <div class="detail-progress">
@@ -1938,15 +2442,34 @@
               <h3>Recommended next step</h3>
               <p>${detailTextHtml(intern.nextStep)}</p>
             </section>
+            <section class="detail-section">
+              <h3>Skills to learn</h3>
+              ${listItemsHtml(skills)}
+            </section>
+            <section class="detail-section">
+              <h3>Training modules</h3>
+              ${listItemsHtml(training)}
+            </section>
+            <section class="detail-section full">
+              <h3>Next Intern10 requirement</h3>
+              <p><strong>${escapeHtml(nextIntern10.label)}</strong></p>
+              <p>${escapeHtml(nextIntern10.assignment)}</p>
+              <p>${escapeHtml(nextIntern10.call)}</p>
+            </section>
             <section class="detail-section full">
               <h3>Active assignment</h3>
               ${assignmentHtml}
             </section>
           </div>
           <div class="detail-actions" aria-label="Actions for ${escapeHtml(intern.name)}">
+            <button type="button" class="row-action" data-intern-action="skills" data-intern-name="${escapeHtml(intern.name)}">Skills</button>
+            <button type="button" class="row-action" data-intern-action="training" data-intern-name="${escapeHtml(intern.name)}">Training</button>
+            <button type="button" class="row-action" data-intern-action="lifecycle" data-intern-name="${escapeHtml(intern.name)}">Lifecycle</button>
             <button type="button" class="row-action" data-intern-action="assign" data-intern-name="${escapeHtml(intern.name)}">Assign</button>
+            <button type="button" class="row-action" data-intern-action="autoAssign" data-intern-name="${escapeHtml(intern.name)}">Auto assign</button>
             <button type="button" class="row-action" data-intern-action="email" data-intern-name="${escapeHtml(intern.name)}">Email</button>
             <button type="button" class="row-action" data-intern-action="followup" data-intern-name="${escapeHtml(intern.name)}">Follow-up</button>
+            <button type="button" class="row-action" data-intern-action="intern10" data-intern-name="${escapeHtml(intern.name)}">Intern10</button>
             <button type="button" class="row-action" data-intern-action="capstone" data-intern-name="${escapeHtml(intern.name)}">Capstone</button>
           </div>
         </div>
@@ -1964,6 +2487,8 @@
       const subject = isFollowUp
         ? "Follow-up on current focus and blockers"
         : "Next steps for your internship project";
+      const skillFocus = getSkillRecommendations(intern).slice(0, 3).join(", ");
+      const intern10Next = getNextIntern10Requirement(intern);
       const body = isFollowUp
         ? `
             <p>Hello ${escapeHtml(intern.name.split(" ")[0])},</p>
@@ -1972,6 +2497,8 @@
               <li><strong>Progress noted:</strong> ${escapeHtml(intern.completed)}</li>
               <li><strong>Recommended next step:</strong> ${escapeHtml(intern.nextStep)}</li>
               <li><strong>Training or project recommendation:</strong> ${escapeHtml(getTrainingRecommendation(intern))}</li>
+              <li><strong>Skill focus:</strong> ${escapeHtml(skillFocus)}</li>
+              <li><strong>Intern10 alignment:</strong> ${escapeHtml(intern10Next.label)} - ${escapeHtml(intern10Next.assignment)}</li>
               <li><strong>Due date:</strong> ${dueDate}</li>
             </ul>
             <p>Please reply with any questions, blockers, or support needed to keep this moving.</p>
@@ -1983,6 +2510,8 @@
             <ul>
               <li><strong>Next assigned task:</strong> ${escapeHtml(intern.nextStep)}</li>
               <li><strong>Training or project recommendation:</strong> ${escapeHtml(getTrainingRecommendation(intern))}</li>
+              <li><strong>Skill focus:</strong> ${escapeHtml(skillFocus)}</li>
+              <li><strong>Intern10 alignment:</strong> ${escapeHtml(intern10Next.label)} - ${escapeHtml(intern10Next.assignment)}</li>
               <li><strong>Due date:</strong> ${dueDate}</li>
             </ul>
             <p>Please reply with any questions or blockers that could affect your progress.</p>
@@ -2007,13 +2536,82 @@
       `;
     }
 
-    function getTrainingRecommendation(intern) {
+    function uniqueValues(values) {
+      return [...new Set((values || []).filter(Boolean))];
+    }
+
+    function getSkillRecommendations(intern) {
+      const info = getSubPracticeInfo(intern);
+      const areaInfo = getFunctionalAreaInfo(intern);
       const track = getInternTrack(intern);
-      if (track === "Software") return "Complete Oracle Cloud ERP REST API and FBDI import training before extending the Payables integration test path.";
-      if (track === "Data") return "Complete OTBI and BI Publisher reporting training, then confirm Financials KPI definitions with the manager.";
-      if (track === "UX") return "Review Oracle Cloud ERP procurement and expense self-service workflows, then map usability findings to practical process improvements.";
-      if (track === "Product") return "Complete Oracle Cloud ERP fundamentals and Financials/Procurement process training before revising the implementation backlog.";
-      return "Continue Oracle Cloud ERP process training and connect the next task to a concrete team deliverable.";
+      const phase = getProjectPhase(intern);
+      const skills = [...info.skills, ...areaInfo.coreSkills];
+
+      if (track === "Software") {
+        skills.push("Technical design notes", "Test evidence", "Error handling");
+      }
+      if (track === "Data") {
+        skills.push("Metric definition", "Data storytelling", "Source assumption validation");
+      }
+      if (track === "UX") {
+        skills.push("Workflow observation", "Journey mapping", "Recommendation prioritization");
+      }
+      if (track === "Product") {
+        skills.push("Backlog writing", "Acceptance criteria", "Stakeholder question framing");
+      }
+      if (phase === "Discover") {
+        skills.push("Problem framing", "Question design", "Current-state documentation");
+      }
+      if (phase === "Build") {
+        skills.push("Incremental delivery", "Quality checks", "Issue documentation");
+      }
+      if (phase === "Validate") {
+        skills.push("UAT thinking", "Feedback synthesis", "Client-ready evidence");
+      }
+      if (getClientInteraction(intern) === "High") {
+        skills.push("Client-safe language", "Meeting notes", "Executive summary writing");
+      }
+      if (isInternBlocked(intern)) {
+        skills.push("Blocker escalation", "Decision log hygiene");
+      }
+
+      return uniqueValues(skills).slice(0, 8);
+    }
+
+    function getTrainingModules(intern) {
+      const info = getSubPracticeInfo(intern);
+      const modules = [...info.modules];
+      const area = getFunctionalArea(intern);
+
+      if (area === "ERP") modules.push("ERP implementation lifecycle and UAT basics");
+      if (area === "SCM") modules.push("Supply chain process and exception management overview");
+      if (area === "HCM") modules.push("HCM privacy-aware scenario handling");
+      if (area === "Data & AI") modules.push("Data quality, governance, and insight communication");
+      if (getClientInteraction(intern) !== "Low") modules.push("Client meeting preparation and action-note writing");
+      if (getProjectPhase(intern) === "Validate") modules.push("Readout rehearsal and evidence review");
+
+      return uniqueValues(modules).slice(0, 7);
+    }
+
+    function getManagerTrainingModules(intern) {
+      const info = getSubPracticeInfo(intern);
+      const modules = [...info.managerModules];
+      modules.push(`${getFunctionalArea(intern)} project quality bar for ${getProjectPhase(intern).toLowerCase()} phase`);
+      modules.push(`${getHoursPerWeek(intern)} hrs/week workload calibration`);
+      if (getClientInteraction(intern) === "High") {
+        modules.push("Client-safe coaching and pre-read review");
+      }
+      if (isInternBlocked(intern)) {
+        modules.push("Blocker triage and decision log review");
+      }
+
+      return uniqueValues(modules).slice(0, 6);
+    }
+
+    function getTrainingRecommendation(intern) {
+      const modules = getTrainingModules(intern);
+      const skills = getSkillRecommendations(intern);
+      return `Start with ${modules[0]}, then apply ${skills[0]} through the next ${getFunctionalArea(intern)} deliverable. Manager should reinforce ${getManagerTrainingModules(intern)[0]}.`;
     }
 
     function draftEmailsForInterns(interns, variant = "standard") {
@@ -2044,63 +2642,114 @@
       draftEmailsForInterns(interns);
     }
 
-    function assignmentSuggestion(intern) {
-      const track = getInternTrack(intern);
-      if (track === "Software") return "Build a mocked Oracle Cloud ERP Payables import test path and document FBDI/REST error states.";
-      if (track === "Data") return "Validate Oracle Cloud ERP invoice approval and payment KPI definitions and add two OTBI-style insights.";
-      if (track === "UX") return "Map Oracle Cloud ERP requisition or expense workflow friction and create three prioritized improvement recommendations.";
-      if (track === "Product") return "Refine five Oracle Cloud ERP supplier onboarding backlog items with acceptance criteria and training impacts.";
-      return "Complete a focused Oracle Cloud ERP project task tied to the intern's current role and team goals.";
+    function getNextIntern10Requirement(intern) {
+      const completed = new Set(getIntern10Completed(intern));
+      return intern10Requirements.find(item => !completed.has(item.key)) || intern10Requirements[intern10Requirements.length - 1];
     }
 
-    function assignmentDetails(intern) {
+    function assignmentSuggestion(intern, hours = getHoursPerWeek(intern)) {
+      const area = getFunctionalArea(intern);
       const track = getInternTrack(intern);
-      if (track === "Software") {
-        return [
-          "Deliverable: Create one mocked Payables invoice import test path using Oracle Cloud ERP payload fields.",
-          "Success criteria: Include sample request/response data, documented FBDI or REST error states, and test evidence.",
-          "Training: Review Oracle Cloud ERP REST API basics and FBDI import concepts before implementation.",
-          `Manager support: ${intern.managerAction}`
-        ].join("\n");
-      }
+      const workload = getWorkloadTier(hours);
+      const prefix = workload.label.replace(" assignment", "");
 
-      if (track === "Data") {
-        return [
-          "Deliverable: Validate invoice approval aging, invoice hold, and paid-on-time KPI definitions.",
-          "Success criteria: Include source assumptions, metric formulas, two OTBI-style insights, and one recommended next analysis.",
-          "Training: Complete OTBI dashboard and BI Publisher report basics before extending visuals.",
-          `Manager support: ${intern.managerAction}`
-        ].join("\n");
+      if (getSubPractice(intern) === "Oracle ERP Financials") {
+        return `${prefix}: build a Payables import validation artifact with field mapping, error states, and review evidence.`;
       }
+      if (getSubPractice(intern) === "Oracle SCM Analytics") {
+        return `${prefix}: validate SCM KPI definitions and create two dashboard insights with source assumptions.`;
+      }
+      if (getSubPractice(intern) === "SAP SCM Experience") {
+        return `${prefix}: map an SCM exception workflow and recommend three prioritized experience improvements.`;
+      }
+      if (getSubPractice(intern) === "Workday HCM Transformation") {
+        return `${prefix}: refine HCM backlog items with acceptance criteria, training impact, and SME questions.`;
+      }
+      if (track === "Data") return `${prefix}: validate ${area} metrics and summarize two manager-ready insights.`;
+      if (track === "UX") return `${prefix}: document ${area} workflow friction and prioritize improvements.`;
+      if (track === "Product") return `${prefix}: refine ${area} requirements with acceptance criteria and open decisions.`;
+      return `${prefix}: complete a focused ${area} deliverable tied to the intern's sub-practice.`;
+    }
 
-      if (track === "UX") {
-        return [
-          "Deliverable: Review the Oracle Cloud ERP requisition or expense entry flow and identify the top three usability friction points.",
-          "Success criteria: Connect each recommendation to user evidence, process impact, and a proposed workflow improvement.",
-          "Training: Review Oracle Cloud ERP navigation, procurement self-service, and expense self-service basics.",
-          `Manager support: ${intern.managerAction}`
-        ].join("\n");
-      }
-
-      if (track === "Product") {
-        return [
-          "Deliverable: Refine five Oracle Cloud ERP supplier onboarding or invoice exception backlog items.",
-          "Success criteria: Include business priority, acceptance criteria, training impact, SME questions, and definition of done.",
-          "Training: Complete Oracle Cloud ERP fundamentals and the Financials/Procurement process overview.",
-          `Manager support: ${intern.managerAction}`
-        ].join("\n");
-      }
+    function getLifecycleSteps(intern) {
+      const hours = getHoursPerWeek(intern);
+      const workload = getWorkloadTier(hours);
+      const areaInfo = getFunctionalAreaInfo(intern);
+      const phase = getProjectPhase(intern);
+      const client = getClientInteraction(intern);
+      const reviewStep = client === "High" ? "Client-safe pre-read and manager approval" : "Manager or SME review";
 
       return [
-        `Deliverable: ${assignmentSuggestion(intern)}`,
-        "Success criteria: Share a concise Oracle Cloud ERP progress update, decisions needed, and any blockers.",
+        {
+          label: "Scope",
+          phase: "Plan",
+          duration: hours <= 5 ? "1 session" : "1-2 sessions",
+          internOutput: `Problem statement for ${getFunctionalArea(intern)} work`,
+          managerCheckpoint: "Confirm scope, hours, source material, and definition of done."
+        },
+        {
+          label: "Learn",
+          phase: "Discover",
+          duration: "1 training block",
+          internOutput: getTrainingModules(intern)[0],
+          managerCheckpoint: "Check that training connects to the active deliverable."
+        },
+        {
+          label: "Build",
+          phase: "Build",
+          duration: workload.label,
+          internOutput: assignmentSuggestion(intern, hours),
+          managerCheckpoint: workload.checkpoint
+        },
+        {
+          label: "Validate",
+          phase: "Validate",
+          duration: "1 review cycle",
+          internOutput: areaInfo.typicalOutputs[0],
+          managerCheckpoint: reviewStep
+        },
+        {
+          label: "Share",
+          phase: "Readout",
+          duration: "Final checkpoint",
+          internOutput: "Concise readout with assumptions, decisions, and next steps",
+          managerCheckpoint: "Approve final narrative and connect it to Intern10 evidence."
+        }
+      ].map(step => ({
+        ...step,
+        current: step.phase === phase || (phase === "Plan" && step.label === "Scope")
+      }));
+    }
+
+    function assignmentDetails(intern, hours = getHoursPerWeek(intern)) {
+      const workload = getWorkloadTier(hours);
+      const nextIntern10 = getNextIntern10Requirement(intern);
+      const skills = getSkillRecommendations(intern).slice(0, 4);
+      const training = getTrainingModules(intern).slice(0, 3);
+      const managerTraining = getManagerTrainingModules(intern).slice(0, 3);
+
+      return [
+        `Functional area: ${getFunctionalArea(intern)} - ${getFunctionalAreaInfo(intern).label}`,
+        `Sub-practice: ${getSubPractice(intern)}`,
+        `Phase and timeline: ${getProjectPhase(intern)} phase across ${getTimelineWeeks(intern)} weeks`,
+        `Client interaction: ${getClientInteraction(intern)}`,
+        `Scaled workload: ${workload.label} for ${hours} hrs/week. ${workload.scope}`,
+        `Deliverable: ${assignmentSuggestion(intern, hours)}`,
+        `Success criteria: include assumptions, evidence, open questions, manager review notes, and a clear definition of done.`,
+        `Skills to learn: ${skills.join("; ")}`,
+        `Intern training: ${training.join("; ")}`,
+        `Manager training: ${managerTraining.join("; ")}`,
+        `Intern10 alignment: ${nextIntern10.label} - ${nextIntern10.assignment}`,
+        `Recommended call: ${nextIntern10.call}`,
         `Manager support: ${intern.managerAction}`
       ].join("\n");
     }
 
-    function defaultAssignmentDueDate() {
+    function defaultAssignmentDueDate(intern = null, hoursValue = null) {
+      const hours = Number(hoursValue) || (intern ? getHoursPerWeek(intern) : 8);
+      const workload = getWorkloadTier(hours);
       const date = new Date();
-      date.setDate(date.getDate() + 7);
+      date.setDate(date.getDate() + workload.dueDays);
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
@@ -2113,14 +2762,21 @@
       const options = interns.map(intern => `
         <option value="${escapeHtml(intern.name)}"${selectedIntern && intern.name === selectedIntern.name ? " selected" : ""}>${escapeHtml(intern.name)} - ${escapeHtml(intern.role)}</option>
       `).join("");
-      const suggested = selectedIntern ? assignmentSuggestion(selectedIntern) : "";
-      const details = selectedIntern ? assignmentDetails(selectedIntern) : "";
-      const dueDate = defaultAssignmentDueDate();
+      const hours = selectedIntern ? getHoursPerWeek(selectedIntern) : 8;
+      const workload = getWorkloadTier(hours);
+      const suggested = selectedIntern ? assignmentSuggestion(selectedIntern, hours) : "";
+      const details = selectedIntern ? assignmentDetails(selectedIntern, hours) : "";
+      const dueDate = defaultAssignmentDueDate(selectedIntern, hours);
 
       return `
         <div class="inline-note">${selectedIntern ? `New assignment for ${escapeHtml(selectedIntern.name)}` : "New assignment"}</div>
         <div class="section-title">Assign Intern Work</div>
         <div class="assignment-panel">
+          <div class="assignment-insight" data-assignment-insight>
+            <strong>${escapeHtml(workload.label)} for ${escapeHtml(String(hours))} hrs/week</strong>
+            <span>${escapeHtml(workload.scope)}</span>
+            <span>${escapeHtml(workload.checkpoint)}. Suggested due date: ${escapeHtml(dueDate)}.</span>
+          </div>
           <div class="assignment-grid">
             <div class="assignment-field">
               <label>Intern</label>
@@ -2133,6 +2789,10 @@
             <div class="assignment-field">
               <label>Due date</label>
               <input data-assignment-field="dueDate" type="date" value="${escapeHtml(dueDate)}">
+            </div>
+            <div class="assignment-field">
+              <label>Project hrs/week</label>
+              <input data-assignment-field="hoursPerWeek" type="number" min="2" max="40" step="1" value="${escapeHtml(String(hours))}">
             </div>
             <div class="assignment-field full">
               <label>Success criteria / notes</label>
@@ -2151,6 +2811,228 @@
       addAgentMessage(assignmentPanelHtml(selectedInternName), { includeActions: true });
     }
 
+    function selectedOrAllInterns(selectedInternName = "") {
+      const selectedIntern = findInternByName(selectedInternName);
+      return selectedIntern ? [selectedIntern] : getInterns();
+    }
+
+    function skillsHtml(selectedInternName = "") {
+      const interns = selectedOrAllInterns(selectedInternName);
+      const panels = interns.map(intern => {
+        const areaInfo = getFunctionalAreaInfo(intern);
+        return `
+          <section class="recommendation-panel">
+            <h3>${escapeHtml(intern.name)}</h3>
+            <p><strong>${escapeHtml(getFunctionalArea(intern))} / ${escapeHtml(getSubPractice(intern))}</strong></p>
+            <p>${escapeHtml(areaInfo.projectPattern)}</p>
+            ${listItemsHtml(getSkillRecommendations(intern))}
+          </section>
+        `;
+      }).join("");
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="inline-note">Skill recommendations</div>
+        <div class="section-title">${selectedInternName ? "Skills This Intern Should Learn" : "Skills Interns Should Learn"}</div>
+        <div class="recommendation-grid">${panels}</div>
+      `;
+    }
+
+    function showSkills(selectedInternName = "") {
+      addAgentMessage(skillsHtml(selectedInternName), { includeActions: true });
+    }
+
+    function trainingHtml(selectedInternName = "") {
+      const interns = selectedOrAllInterns(selectedInternName);
+      const panels = interns.map(intern => `
+        <section class="recommendation-panel">
+          <h3>${escapeHtml(intern.name)}</h3>
+          <p><strong>Intern modules</strong></p>
+          ${listItemsHtml(getTrainingModules(intern))}
+          <p><strong>Manager enablement</strong></p>
+          ${listItemsHtml(getManagerTrainingModules(intern))}
+        </section>
+      `).join("");
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="inline-note">Training recommendations by sub-practice</div>
+        <div class="section-title">${selectedInternName ? "Training Plan for Intern and Manager" : "Training Plans for Interns and Managers"}</div>
+        <div class="recommendation-grid">${panels}</div>
+      `;
+    }
+
+    function showTraining(selectedInternName = "") {
+      addAgentMessage(trainingHtml(selectedInternName), { includeActions: true });
+    }
+
+    function lifecycleHtml(selectedInternName = "") {
+      const selectedIntern = findInternByName(selectedInternName);
+
+      if (!selectedIntern) {
+        const panels = getInterns().map(intern => {
+          const currentStep = getLifecycleSteps(intern).find(step => step.current) || getLifecycleSteps(intern)[0];
+          return `
+            <section class="recommendation-panel">
+              <h3>${escapeHtml(intern.name)}</h3>
+              <p><strong>${escapeHtml(getProjectPhase(intern))} phase:</strong> ${escapeHtml(currentStep.label)}</p>
+              <p>${escapeHtml(currentStep.managerCheckpoint)}</p>
+              <p><strong>Process:</strong> Scope, learn, build, validate, share.</p>
+            </section>
+          `;
+        }).join("");
+
+        return `
+          ${managerSummaryHtml()}
+          <div class="inline-note">Task lifecycle overview</div>
+          <div class="section-title">Process to Completion by Intern</div>
+          <div class="recommendation-grid">${panels}</div>
+        `;
+      }
+
+      const steps = getLifecycleSteps(selectedIntern);
+      const stepCards = steps.map((step, index) => `
+        <section class="lifecycle-step ${step.current ? "current" : ""}">
+          <span class="step-kicker">Step ${index + 1} - ${escapeHtml(step.phase)}</span>
+          <h3>${escapeHtml(step.label)}</h3>
+          <ul>
+            <li><strong>Duration:</strong> ${escapeHtml(step.duration)}</li>
+            <li><strong>Intern output:</strong> ${escapeHtml(step.internOutput)}</li>
+            <li><strong>Manager checkpoint:</strong> ${escapeHtml(step.managerCheckpoint)}</li>
+          </ul>
+        </section>
+      `).join("");
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="inline-note">Task lifecycle for ${escapeHtml(selectedIntern.name)}</div>
+        <div class="section-title">Process to Completion</div>
+        <div class="manager-summary">
+          <span>${escapeHtml(getFunctionalArea(selectedIntern))}</span>
+          <span>${escapeHtml(getSubPractice(selectedIntern))}</span>
+          <span>${escapeHtml(getTimelineWeeks(selectedIntern).toString())} weeks</span>
+          <span>${escapeHtml(getClientInteraction(selectedIntern))} client interaction</span>
+          <span>${escapeHtml(getHoursPerWeek(selectedIntern).toString())} hrs/week</span>
+        </div>
+        <div class="lifecycle-grid">${stepCards}</div>
+      `;
+    }
+
+    function showLifecycle(selectedInternName = "") {
+      addAgentMessage(lifecycleHtml(selectedInternName), { includeActions: true });
+    }
+
+    function intern10RowsHtml(intern) {
+      const completed = new Set(getIntern10Completed(intern));
+      return intern10Requirements.map((item, index) => {
+        const done = completed.has(item.key);
+        return `
+          <div class="intern10-row">
+            <span class="intern10-status ${done ? "done" : ""}">${done ? "OK" : index + 1}</span>
+            <div>
+              <p><strong>${escapeHtml(item.label)}</strong> ${done ? "Completed" : "Recommended next evidence: " + escapeHtml(item.evidence)}</p>
+              <ul class="intern10-list">
+                <li><strong>Call:</strong> ${escapeHtml(item.call)}</li>
+                <li><strong>Assignment:</strong> ${escapeHtml(item.assignment)}</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function intern10Html(selectedInternName = "") {
+      const selectedIntern = findInternByName(selectedInternName);
+
+      if (!selectedIntern) {
+        const panels = getInterns().map(intern => {
+          const next = getNextIntern10Requirement(intern);
+          const completed = getIntern10Completed(intern).length;
+          return `
+            <section class="recommendation-panel">
+              <h3>${escapeHtml(intern.name)}</h3>
+              <p><strong>${completed}/10 completed</strong></p>
+              <p><strong>Next:</strong> ${escapeHtml(next.label)}</p>
+              <p>${escapeHtml(next.assignment)}</p>
+              <p>${escapeHtml(next.call)}</p>
+            </section>
+          `;
+        }).join("");
+
+        return `
+          ${managerSummaryHtml()}
+          <div class="inline-note">Intern10 challenge planning</div>
+          <div class="section-title">Recommended Calls and Assignments</div>
+          <div class="recommendation-grid">${panels}</div>
+        `;
+      }
+
+      return `
+        ${managerSummaryHtml()}
+        <div class="inline-note">Intern10 challenge for ${escapeHtml(selectedIntern.name)}</div>
+        <div class="section-title">Calls, Assignments, and Evidence</div>
+        <div class="recommendation-panel">${intern10RowsHtml(selectedIntern)}</div>
+      `;
+    }
+
+    function showIntern10(selectedInternName = "") {
+      addAgentMessage(intern10Html(selectedInternName), { includeActions: true });
+    }
+
+    function autoAssignWork(selectedInternName = "") {
+      const interns = selectedOrAllInterns(selectedInternName);
+      const rows = interns.map(intern => {
+        const hours = getHoursPerWeek(intern);
+        const dueDate = defaultAssignmentDueDate(intern, hours);
+        const title = assignmentSuggestion(intern, hours);
+        const details = assignmentDetails(intern, hours);
+
+        state.assignments[intern.name] = {
+          title,
+          details,
+          dueDate,
+          hoursPerWeek: hours,
+          projectPhase: getProjectPhase(intern),
+          clientInteraction: getClientInteraction(intern),
+          timelineWeeks: getTimelineWeeks(intern)
+        };
+
+        return `
+          <tr>
+            <td>
+              <div class="intern-name">${escapeHtml(intern.name)}</div>
+              <div class="role">${escapeHtml(getSubPractice(intern))}</div>
+            </td>
+            <td>${escapeHtml(String(hours))} hrs/week</td>
+            <td>${escapeHtml(getWorkloadTier(hours).label)}</td>
+            <td>${escapeHtml(title)}</td>
+            <td>${escapeHtml(dueDate)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      addAgentMessage(`
+        ${managerSummaryHtml()}
+        <div class="inline-note">Auto assigned by expected project hours</div>
+        <div class="section-title">${selectedInternName ? "Scaled Assignment Created" : "Scaled Assignments Created"}</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Intern</th>
+                <th>Hours</th>
+                <th>Scale</th>
+                <th>Assignment</th>
+                <th>Due</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `);
+      showDashboard();
+    }
+
     function capstoneHtml(selectedInternName = "") {
       const selectedIntern = findInternByName(selectedInternName);
       const interns = selectedIntern ? [selectedIntern] : getInterns();
@@ -2158,9 +3040,9 @@
         <tr>
           <td>
             <div class="intern-name">${escapeHtml(intern.name)}</div>
-            <div class="role">${escapeHtml(intern.role)}</div>
+            <div class="role">${escapeHtml(intern.role)} - ${escapeHtml(getFunctionalArea(intern))} / ${escapeHtml(getSubPractice(intern))}</div>
           </td>
-          <td>${escapeHtml(capstoneIdeas[getInternTrack(intern)] || "Create a focused project that turns current internship work into a practical team asset.")}</td>
+          <td>${escapeHtml(getCapstoneIdea(intern))}</td>
           <td>${escapeHtml(getCapstoneManagerAction(intern))}</td>
         </tr>
       `).join("");
@@ -2188,16 +3070,23 @@
       `);
     }
 
+    function getCapstoneIdea(intern) {
+      return capstoneIdeas[getSubPractice(intern)]
+        || capstoneIdeas[getFunctionalArea(intern)]
+        || "Create a focused project that turns current internship work into a practical team asset.";
+    }
+
     function getCapstoneManagerAction(intern) {
-      if (intern.progress >= 85) return "Give autonomy on final structure and schedule a readout with the ERP process stakeholders.";
-      if (intern.progress >= 65) return "Clarify Oracle Cloud ERP scope, define success criteria, and set one mid-point checkpoint.";
-      return "Narrow the ERP project to one meaningful deliverable and provide weekly feedback until blockers are resolved.";
+      const area = getFunctionalArea(intern);
+      if (intern.progress >= 85) return `Give autonomy on final structure and schedule a readout with the ${area} process stakeholders.`;
+      if (intern.progress >= 65) return `Clarify ${area} scope, define success criteria, and set one mid-point checkpoint.`;
+      return `Narrow the ${area} project to one meaningful deliverable and provide weekly feedback until blockers are resolved.`;
     }
 
     function generalHelp() {
       addAgentMessage(`
-        <p>I can help with intern tracking, new assignments, recommendations, capstone ideas, and follow-up email drafts.</p>
-        <p>Try: <strong>assign new work</strong>, <strong>draft follow-up emails</strong>, <strong>recommend capstones</strong>, or <strong>show dashboard</strong>.</p>
+        <p>I can help with intern tracking, skill recommendations, training plans, hour-scaled assignments, task lifecycles, Intern10 planning, capstone ideas, and follow-up email drafts.</p>
+        <p>Try: <strong>recommend skills</strong>, <strong>recommend training</strong>, <strong>task lifecycle</strong>, <strong>auto assign by hours</strong>, <strong>Intern10 plan</strong>, or <strong>show dashboard</strong>.</p>
       `);
     }
 
@@ -2223,8 +3112,36 @@
         return;
       }
 
+      const selectedInterns = internsMentionedInText(text);
+      const selectedInternName = selectedInterns[0]?.name || "";
+
+      if (/\b(auto[- ]?assign|auto assign|assign by hours|scale work|scaled assignment|hours)\b/i.test(lower)) {
+        autoAssignWork(selectedInternName);
+        return;
+      }
+
+      if (/\b(skill|skills|learn|capabilit|growth area|gap)\b/i.test(lower)) {
+        showSkills(selectedInternName);
+        return;
+      }
+
+      if (/\b(training|module|modules|learning|enablement|sub[- ]?practice)\b/i.test(lower)) {
+        showTraining(selectedInternName);
+        return;
+      }
+
+      if (/\b(lifecycle|life cycle|process to completion|completion process|phase|timeline|milestone)\b/i.test(lower)) {
+        showLifecycle(selectedInternName);
+        return;
+      }
+
+      if (/\b(intern10|intern 10|challenge|shadow call|sme chat)\b/i.test(lower)) {
+        showIntern10(selectedInternName);
+        return;
+      }
+
       if (/\b(assign|assignment|new work|new task|task)\b/i.test(lower)) {
-        showAssignmentPanel();
+        showAssignmentPanel(selectedInternName);
         return;
       }
 
@@ -2234,7 +3151,7 @@
       }
 
       if (/\b(capstone|final project|portfolio project)\b/i.test(lower)) {
-        capstoneHtml();
+        capstoneHtml(selectedInternName);
         return;
       }
 
@@ -2263,7 +3180,7 @@
     function boot() {
       addAgentMessage(`
         <p><strong>Welcome to AskBlue.</strong></p>
-        <p>I&rsquo;m here to help you keep intern teams aligned with clear progress visibility, practical next-step recommendations, and follow-up support.</p>
+        <p>I&rsquo;m here to help you keep intern teams aligned with clear progress visibility, skill recommendations, training plans, scaled project work, task lifecycles, and follow-up support.</p>
         <p>To begin manager verification, please enter your Employee ID:</p>
       `);
     }
@@ -2339,11 +3256,18 @@
     }
 
     function assignmentValues(panel) {
+      const internName = (panel.querySelector('[data-assignment-field="intern"]')?.value || "").trim();
+      const intern = findInternByName(internName);
+      const hours = Number(panel.querySelector('[data-assignment-field="hoursPerWeek"]')?.value || "");
       return {
-        internName: (panel.querySelector('[data-assignment-field="intern"]')?.value || "").trim(),
+        internName,
         title: (panel.querySelector('[data-assignment-field="title"]')?.value || "").trim(),
         dueDate: (panel.querySelector('[data-assignment-field="dueDate"]')?.value || "").trim(),
-        details: (panel.querySelector('[data-assignment-field="details"]')?.value || "").trim()
+        details: (panel.querySelector('[data-assignment-field="details"]')?.value || "").trim(),
+        hoursPerWeek: Number.isFinite(hours) && hours > 0 ? Math.round(hours) : (intern ? getHoursPerWeek(intern) : 8),
+        projectPhase: intern ? getProjectPhase(intern) : "Plan",
+        clientInteraction: intern ? getClientInteraction(intern) : "Medium",
+        timelineWeeks: intern ? getTimelineWeeks(intern) : 4
       };
     }
 
@@ -2373,7 +3297,11 @@
       state.assignments[values.internName] = {
         title: values.title,
         details: values.details,
-        dueDate: values.dueDate
+        dueDate: values.dueDate,
+        hoursPerWeek: values.hoursPerWeek,
+        projectPhase: values.projectPhase,
+        clientInteraction: values.clientInteraction,
+        timelineWeeks: values.timelineWeeks
       };
 
       button.textContent = "Assigned";
@@ -2386,7 +3314,7 @@
       const dueText = values.dueDate ? ` Due date: ${escapeHtml(values.dueDate)}.` : "";
       addAgentMessage(`
         <p><strong>Assignment added for ${escapeHtml(values.internName)}.</strong></p>
-        <p>${escapeHtml(values.title)}.${dueText}</p>
+        <p>${escapeHtml(values.title)}${dueText} Project work: ${escapeHtml(String(values.hoursPerWeek))} hrs/week.</p>
       `);
       showDashboard();
       scrollToBottom();
@@ -2397,17 +3325,47 @@
       if (!panel) return;
 
       const intern = getInterns().find(candidate => candidate.name === select.value);
+      if (!intern) return;
+      const hoursInput = panel.querySelector('[data-assignment-field="hoursPerWeek"]');
+      if (hoursInput) {
+        hoursInput.value = getHoursPerWeek(intern);
+      }
+      refreshAssignmentScale(panel);
+    }
+
+    function refreshAssignmentScale(panel) {
+      const internName = (panel.querySelector('[data-assignment-field="intern"]')?.value || "").trim();
+      const intern = getInterns().find(candidate => candidate.name === internName);
+      if (!intern) return;
+
+      const hoursInput = panel.querySelector('[data-assignment-field="hoursPerWeek"]');
+      const parsedHours = Number(hoursInput?.value || "");
+      const hours = Number.isFinite(parsedHours) && parsedHours > 0 ? Math.max(2, Math.min(40, Math.round(parsedHours))) : getHoursPerWeek(intern);
+      const workload = getWorkloadTier(hours);
       const titleInput = panel.querySelector('[data-assignment-field="title"]');
       const detailsInput = panel.querySelector('[data-assignment-field="details"]');
       const dueDateInput = panel.querySelector('[data-assignment-field="dueDate"]');
-      if (intern && titleInput) {
-        titleInput.value = assignmentSuggestion(intern);
+      const insight = panel.querySelector("[data-assignment-insight]");
+
+      if (hoursInput) {
+        hoursInput.value = hours;
       }
-      if (intern && detailsInput) {
-        detailsInput.value = assignmentDetails(intern);
+      if (titleInput) {
+        titleInput.value = assignmentSuggestion(intern, hours);
       }
-      if (dueDateInput && !dueDateInput.value) {
-        dueDateInput.value = defaultAssignmentDueDate();
+      if (detailsInput) {
+        detailsInput.value = assignmentDetails(intern, hours);
+      }
+      if (dueDateInput) {
+        dueDateInput.value = defaultAssignmentDueDate(intern, hours);
+      }
+      if (insight) {
+        const dueDate = dueDateInput?.value || defaultAssignmentDueDate(intern, hours);
+        insight.innerHTML = `
+          <strong>${escapeHtml(workload.label)} for ${escapeHtml(String(hours))} hrs/week</strong>
+          <span>${escapeHtml(workload.scope)}</span>
+          <span>${escapeHtml(workload.checkpoint)}. Suggested due date: ${escapeHtml(dueDate)}.</span>
+        `;
       }
     }
 
@@ -2441,9 +3399,14 @@
 
       const action = button.dataset.internAction;
       if (action === "details") showInternDetail(intern.name);
+      if (action === "skills") showSkills(intern.name);
+      if (action === "training") showTraining(intern.name);
+      if (action === "lifecycle") showLifecycle(intern.name);
       if (action === "assign") showAssignmentPanel(intern.name);
+      if (action === "autoAssign") autoAssignWork(intern.name);
       if (action === "email") draftEmailsForInterns([intern]);
       if (action === "followup") draftEmailsForInterns([intern], "followup");
+      if (action === "intern10") showIntern10(intern.name);
       if (action === "capstone") capstoneHtml(intern.name);
     }
 
@@ -2490,8 +3453,13 @@
       if (!button) return;
 
       const action = button.dataset.action;
+      if (action === "skills") showSkills();
+      if (action === "training") showTraining();
+      if (action === "lifecycle") showLifecycle();
+      if (action === "intern10") showIntern10();
       if (action === "emails") draftEmails("draft follow-up emails");
       if (action === "assignments") showAssignmentPanel();
+      if (action === "autoAssign") autoAssignWork();
       if (action === "capstones") capstoneHtml();
       if (action === "dashboard") showDashboard();
     });
@@ -2506,6 +3474,13 @@
       const internSelect = event.target.closest('select[data-assignment-field="intern"]');
       if (internSelect) {
         handleAssignmentInternChange(internSelect);
+        return;
+      }
+
+      const hoursInput = event.target.closest('input[data-assignment-field="hoursPerWeek"]');
+      if (hoursInput) {
+        const panel = hoursInput.closest(".assignment-panel");
+        if (panel) refreshAssignmentScale(panel);
       }
     });
 
